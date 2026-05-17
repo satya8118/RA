@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lecture 2 - Upper Bounds, Bounded Above Sets</title>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --bg: #f4f7f6; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--primary);
+            background: var(--bg);
+            padding: 20px 20px 100px 20px; /* bottom padding for fixed controls bar */
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3, h4 { color: var(--primary); border-bottom: 2px solid var(--secondary); padding-bottom: 10px; }
+
+        .math-box {
+            background: #e8f4fd;
+            border-left: 5px solid var(--secondary);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; }
+
+        /* ── tcolorbox ───────────────────────────────────────── */
+        .tcolorbox { border-radius: 6px; margin: 14px 0; overflow: hidden; border: 1px solid #ccc; }
+        .tcolorbox-header { padding: 8px 15px; font-weight: bold; font-size: 1rem; background-color: #2c3e50; color: white; }
+        .tcolorbox-content { padding: 15px; background-color: #eaf0fb; }
+
+        .tcolorbox.blue   .tcolorbox-header  { background-color: #1565c0; }
+        .tcolorbox.blue   .tcolorbox-content { background-color: #e3f2fd; }
+        .tcolorbox.green  .tcolorbox-header  { background-color: #2e7d32; }
+        .tcolorbox.green  .tcolorbox-content { background-color: #e8f5e9; }
+        .tcolorbox.orange .tcolorbox-header  { background-color: #e65100; }
+        .tcolorbox.orange .tcolorbox-content { background-color: #fff3e0; }
+        .tcolorbox.purple .tcolorbox-header  { background-color: #6a1b9a; }
+        .tcolorbox.purple .tcolorbox-content { background-color: #f3e5f5; }
+        .tcolorbox.red    .tcolorbox-header  { background-color: #c62828; }
+        .tcolorbox.red    .tcolorbox-content { background-color: #ffebee; }
+        .tcolorbox.teal   .tcolorbox-header  { background-color: #00695c; }
+        .tcolorbox.teal   .tcolorbox-content { background-color: #e0f2f1; }
+        .tcolorbox.indigo .tcolorbox-header  { background-color: #283593; }
+        .tcolorbox.indigo .tcolorbox-content { background-color: #e8eaf6; }
+        .tcolorbox.pink   .tcolorbox-header  { background-color: #ad1457; }
+        .tcolorbox.pink   .tcolorbox-content { background-color: #fce4ec; }
+        .tcolorbox.brown  .tcolorbox-header  { background-color: #4e342e; }
+        .tcolorbox.brown  .tcolorbox-content { background-color: #efebe9; }
+        .tcolorbox.cyan   .tcolorbox-header  { background-color: #00838f; }
+        .tcolorbox.cyan   .tcolorbox-content { background-color: #e0f7fa; }
+        .tcolorbox.lime   .tcolorbox-header  { background-color: #558b2f; }
+        .tcolorbox.lime   .tcolorbox-content { background-color: #f1f8e9; }
+        .tcolorbox.amber  .tcolorbox-header  { background-color: #f57f17; }
+        .tcolorbox.amber  .tcolorbox-content { background-color: #fff8e1; }
+        .tcolorbox.grey   .tcolorbox-header  { background-color: #424242; }
+        .tcolorbox.grey   .tcolorbox-content { background-color: #f5f5f5; }
+        .tcolorbox.deep-orange .tcolorbox-header  { background-color: #bf360c; }
+        .tcolorbox.deep-orange .tcolorbox-content { background-color: #fbe9e7; }
+        .tcolorbox.deep-purple .tcolorbox-header  { background-color: #4527a0; }
+        .tcolorbox.deep-purple .tcolorbox-content { background-color: #ede7f6; }
+        .tcolorbox.olive  .tcolorbox-header  { background-color: #827717; }
+        .tcolorbox.olive  .tcolorbox-content { background-color: #f9fbe7; }
+        .tcolorbox.slate  .tcolorbox-header  { background-color: #37474f; }
+        .tcolorbox.slate  .tcolorbox-content { background-color: #eceff1; }
+
+        /* ── STEP REVEAL SYSTEM ─────────────────────────────── */
+        .step {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.4s ease, max-height 0.5s ease;
+        }
+        .step.visible {
+            opacity: 1;
+            max-height: 3000px;
+            margin-bottom: 6px;
+        }
+
+        /* ── FIXED CONTROLS BAR ─────────────────────────────── */
+        .controls {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: #ede5d8;
+            border-top: 2px solid #c8b99a;
+            padding: 12px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            z-index: 1000;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+        }
+
+        .progress-wrap {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .progress-bar-bg {
+            flex: 1;
+            height: 5px;
+            background: #c8b99a;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: #8b2500;
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .progress-label {
+            font-size: 14px;
+            color: #8b2500;
+            font-weight: bold;
+            white-space: nowrap;
+            min-width: 55px;
+            text-align: right;
+        }
+
+        .btn-next {
+            background: #2c3e50;
+            color: white;
+            border: none;
+            padding: 10px 28px;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 15px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s;
+            letter-spacing: 0.03em;
+        }
+        .btn-next:hover:not(:disabled) { background: #3498db; }
+        .btn-next:disabled { background: #c8b99a; cursor: default; }
+
+        .key-hint {
+            font-size: 13px;
+            color: #7a6e64;
+            font-style: italic;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+    <nav><a href="index.html">← Back to Course Home</a> &nbsp;|&nbsp; <a href="L3.html">Next Lecture →</a></nav>
+
+    <div class="container">
+        <h1>Lecture 2: Upper Bounds, Bounded Above</h1>
+
+        <!-- ═══ STEP 1 ═══ -->
+        <div class="step">
+            <div class="tcolorbox green">
+                <div class="tcolorbox-header">Comment on the following sets</div>
+                <div class="tcolorbox-content">
+                    <table>
+                        <tr><td>$\{1,2,3,4,5\}$</td>    <td>$\{1,2,3,4,5,6\}$</td> </tr>
+                        <tr><td>$[-10,5]$</td>          <td>$[1,9]$</td>           </tr>
+                        <tr><td>$(3,5]$</td>           <td>$[6,10)$</td>           </tr>
+                        <tr><td>$(-2,5)$</td>           <td>$\{5\}\cup \{1,6,7\}$</td>       </tr>
+                        <tr><td>$(-\infty,5]$</td>      <td>$[5,\infty)$</td>       </tr>
+                        <tr><td>$(-\infty,5)$</td>      <td>$(-\infty,5.2)$</td>    </tr>
+                        <tr><td>$[2,3]\cup [4,5]$</td>    <td>$\mathbb{R}$</td>      </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ STEP 2 ═══ -->
+        <div class="step">
+            <h3>1. Understanding Upper Bounds</h3>
+            <div class="tcolorbox pink">
+                <div class="tcolorbox-header">Definition: Upper Bound</div>
+                <div class="tcolorbox-content">
+                    Let $S$ be a non-empty set of real numbers. A number $\alpha\in \mathbb{R}$ is called an <strong>upper bound</strong> for $S$ if:
+                    $$\forall\, x \in S,\quad x \leq \alpha.$$
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ STEP 3 ═══ -->
+        <div class="step">
+            <h4>Examples</h4>
+            <ul>
+                <li>For $S = \{1, 2, 3\}$, the numbers $3,\, 4,\, 100$ are all upper bounds.</li>
+                <li>For $(0, 1)$, the number $1$ is an upper bound even though $1 \notin (0,1)$.</li>
+            </ul>
+        </div>
+
+        <!-- ═══ STEP 4 ═══ -->
+        <div class="step">
+            <div class="tcolorbox slate">
+                <div class="tcolorbox-header">What does it mean for $\alpha\in \mathbb{R}$ to <em>not</em> be an upper bound for $S$?</div>
+                <div class="tcolorbox-content">
+                    $\exists\, x \in S$ such that $x > \alpha.$
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ STEP 5 ═══ -->
+        <div class="step">
+            <div class="tcolorbox pink">
+                <div class="tcolorbox-header">Let $S$ be a nonempty set. What you mean by $S$ has a maximum. </div>
+                <div class="tcolorbox-content">
+                    $\alpha\in \mathbb{R}$ is maxixum for $S$ means that $\alpha$ satisfies two properties. 
+                    <ol>
+                        <li> $\alpha\in S.$ </li>
+                        <li> $\alpha$ is an upper bound for $S.$ </li>
+                    </ol>
+
+                </div>
+            </div>
+        </div>
+
+<!-- ═══ STEP 6 ═══ -->
+        <div class="step">
+            <div class="tcolorbox slate ">
+                <div class="tcolorbox-header">Let $S$ be a nonempty set and $\alpha \in \mathbb{R}.$ What you mean by $\alpha$ is not maximum of $S.$  </div>
+                <div class="tcolorbox-content">
+                    <div style="border: 2px solid #2c3e50; padding: 15px; border-radius: 8px;">
+    Either $\alpha \notin S$ or $\alpha$ is not an upperbound of $S.$
+</div>
+                    
+                    Why $5$ is not maximum of $S=(1,5)?$<br>
+                    Why $5$ is not maximum of $S=(1,6)?$<br>
+                    Q: If maximum of a set $S$ exsits, is it unique?<br>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ═══ STEP 7 ═══ -->
+        <div class="step">
+            <div class="tcolorbox blue ">
+                <div class="tcolorbox-header">Is true that every finite set has a maximum? </div>
+                <div class="tcolorbox-content">
+                    <ol>
+                    <li>Yes. (How do you prove? By Mathematical Induction. </li>
+                    <li>$P(n):$ Every set $S$ with $n$ elements has a maximum. </li>
+                    <li>How to show $P(1)$ is true?</li>
+                    <li>Suppose $P(k)$ is true. What do you mean by that? Any set with $k$ elements has a maximum. </li>
+                    <li>Consider a set $S=\{a_1,a_2,\ldots,a_k\}\cup \{a_{k+1}\}.$ </li>
+                    <li> By Indction $T=\{a_1,a_2,\ldots,a_k\}$ has maximim say $\beta.$ Recall what do you mean by $\beta$ is amximum of $T.$?  </li>
+                    <li>Let $\gamma=\max\{\beta, a_{k+1}\}.$ Show that <br> 1. $\gamma \in S$ and <br> 2. $\gamma$ is an upper bound of $S.$</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ═══ STEP 8 ═══ -->
+        <div class="step">
+            <div class="tcolorbox blue">
+                <div class="tcolorbox-header">Is $3.5$ an upper bound for $S = \{1,2,3,4,5\}$?</div>
+                <div class="tcolorbox-content">
+                    No, because $4 \in S$ and $4 > 3.5.$ Hence $3.5$ is not maximum of $S.$
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ STEP 9 ═══ -->
+        <div class="step">
+            <div class="tcolorbox amber">
+                <div class="tcolorbox-header">Proposition: If $\alpha$ is an upper bound for $S$ and $\beta > \alpha$, then $\beta$ is also an upper bound for $S.$</div>
+                <div class="tcolorbox-content">
+                    <strong>Proof.</strong> Let $x \in S.$ Since $\alpha$ is an upper bound, $x \leq \alpha.$ Since $\beta > \alpha,$ we get $x \leq \alpha < \beta,$ so $x < \beta.$ As $x$ was arbitrary, $\beta$ is an upper bound for $S.$ $\square$
+                    <br><br>
+                    <strong>Consequence:</strong> 
+                    <div style="border-left: 5px solid #3498db; padding: 15px; background: #e8f4fd;">
+   If $U$ is the set of all upper bounds of $S$ and $\alpha \in U,$ then $[\alpha, \infty) \subseteq U.$
+</div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ STEP 10 ═══ -->
+        <div class="step">
+            <div class="tcolorbox pink">
+                <div class="tcolorbox-header">Definition: Bounded Above</div>
+                <div class="tcolorbox-content">
+                    Let $A$ be a nonempty subset of $\mathbb{R}.$ Then $A$ is <strong>bounded above in $\mathbb{R}$</strong> if $A$ has an upper bound, i.e.,
+                    $\exists \alpha in \mathbb{R}$ such that $\alpha$ is an upper bound of $A.$<br>
+                    $$\exists\, \alpha \in \mathbb{R} \text{ such that } \forall\, x \in A,\quad x \leq \alpha.$$
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ STEP 11 ═══ -->
+        <div class="step">
+            <div class="tcolorbox blue">
+                <div class="tcolorbox-header">Which of the following sets are bounded above: $A=[1,2], B=(2,5), C=[1,\infty), D=\{1,2,3\}, \mathbb{R},\mathbb{R}^+.$</div>
+                <div class="tcolorbox-content">                  
+<ul>
+<li>$A$ is bouded above by $2$,<br> $B$ is bounded above by $5,$ <br> $D$ is bounded above by $3,$ <br> Remaining sets are not bounded above.</li>
+<li>What do you mean a set $S$ is not bounded above?</li>
+It means $S$ does not have an upper bound. <br> That is whatever $\alpha\in \mathbb{R}$ you take, there is an $x\in S$ such that $x>\alpha.$<br>
+<li>For example, $\alpha\in \mathbb{R}$ then $\alpha<\alpha+1\in \mathbb{R}.$ </li>
+<li>But note, we cannot apply same procedure for $\mathbb{R}^{+}=(0,\infty)$ as $-99\in \mathbb{R}$ but $-99+1=-98\not \in \mathbb{R}^{+}.$ We prove in two different ways.<br>
+<Method:1> <div style="border: 2px solid black; padding: 15px;">By cases: If $\alpha \le 0,$ then $1\in\mathbb{R}^{+},$ will work. If $\alpha>0,$ then $\alpha+1\in \mathbb{R}^{+}.$</Method:1> 
+</div>  <div style="border: 2px solid red; padding: 15px;">Without cases: If $\alpha\in \mathbb{R},$ then $|\alpha|+1\in \mathbb{R}^{+}.$</div>
+</li>
+</ul>  </div>
+            </div>
+        </div>
+        
+
+        <!-- ═══ STEP 12 ═══ -->
+        <div class="step">
+            <div class="tcolorbox teal">
+                <div class="tcolorbox-header">Proposition: Subsets of bounded-above sets are bounded above.</div>
+                <div class="tcolorbox-content">
+                    Let $\emptyset \neq A \subseteq B \subseteq \mathbb{R}.$ If $B$ is bounded above, then $A$ is bounded above.
+                    <br><br>
+                    <strong>Proof.</strong> Since $B$ is bounded above, $\exists\, \alpha \in \mathbb{R}$ such that $\forall\, x \in B,\; x \leq \alpha.$
+                    Let $y \in A.$ Then $y \in B$ (since $A \subseteq B$), so $y \leq \alpha.$ Hence $\alpha$ is an upper bound for $A.$ $\square$
+                <div style="border: 2px solid #1565c0; padding: 15px; border-radius: 8px; background-color: #e3f2fd;">
+    Are you able to prove  that if $\emptyset \neq A \subseteq B \subseteq \mathbb{R}$ and $A$ is not bounded above, then $B$ is not bounded above.
+</div>
+
+                
+                </div>
+            </div>
+        </div>
+<!-- ═══ STEP 10: Self Assessment Quiz ═══ -->
+        <div class="step">
+            <div class="tcolorbox purple">
+                <div class="tcolorbox-header">Self Assessment Quiz</div>
+                <div class="tcolorbox-content">
+
+                    <div class="mb-3">
+                        <p class="fw-bold">Q1: Prove that $S=(0,1)$ has no maximum.</p>
+                        <details>
+                            <summary>Show Hint</summary>
+                            <div class="alert-secondary">
+                                Hint: Show that if $\alpha\in S,$ then $\alpha$ is not an upper bound.
+                                                        </div>
+                        </details>
+                        <details>
+                            <summary>Show Answer</summary>
+                            <div class="alert-secondary">
+                                Suppose $\alpha\in S,$ then $\frac{\alpha+1}{2}\in S$ and $\alpha<\frac{\alpha+1}{2}.$<br>
+                                We showed that $S$ does contain none of its upperbounds.
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="mb-3">
+                        <p class="fw-bold">Q2: If an upper bound belongs to $S$, then that is the maximum.</p>
+                        <details>
+                            <summary>Show Hint</summary>
+                            <div class="alert-secondary">
+                                Hint: Recall the  definition of maximum of a set.
+                            </div>
+                        </details>
+                        <details>
+                            <summary>Show Answer</summary>
+                            <div class="alert-secondary">
+                                Let $\alpha\in S$ and an upper bound for $S.$ Then by defition $\alpha$ satisifies both the conditions.<br>
+                                <div style="border: 2px solid #1565c0; padding: 15px; border-radius: 8px; background-color: #e3f2fd;">
+    If $\beta$ is an upper bound of $S,$ then $\alpha\le \beta$ as $\alpha\in S.$ That is out of all upperbounds $\alpha$ is the least.
+</div>
+                                
+                                 
+                                
+                            </div>
+                        </details>
+                    </div>
+                                        <div class="mb-3">
+                        <p class="fw-bold">Q3: If $\alpha\in S$ is the maximum, then $\alpha-\epsilon$ is not an upper bound for $S,$ where $\epsilon$ is a postive real number.</p>
+                        <details>
+                            <summary>Show Hint</summary>
+                            <div class="alert-secondary">
+                                Hint: Find an element in $S$ bigger than $\alpha-\epsilon.$
+                            </div>
+                        </details>
+                        <details>
+                            <summary>Show Answer</summary>
+                            <div class="alert-secondary">
+                                It is clear that $\alpha-\epsilon<\alpha\in S.$
+                            </div>
+                        </details>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+        
+    </div><!-- /.container -->
+
+    <!-- ══════════════════════════════════════════
+         FIXED CONTROLS BAR
+    ══════════════════════════════════════════ -->
+    <div class="controls">
+        <span class="key-hint">Press <kbd>Enter</kbd> or <kbd>→</kbd> to advance</span>
+        <div class="progress-wrap">
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progressFill"></div>
+            </div>
+            <span class="progress-label" id="progressLabel">0 / 0</span>
+        </div>
+        <button class="btn-next" id="btnNext" onclick="revealNext()">Next &#9654;</button>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         STEP REVEAL JAVASCRIPT
+         (must be at end of body, NOT inside <style>)
+    ══════════════════════════════════════════ -->
+    <script>
+        const steps   = document.querySelectorAll('.step');
+        const fill    = document.getElementById('progressFill');
+        const label   = document.getElementById('progressLabel');
+        const btn     = document.getElementById('btnNext');
+        let   current = 0;
+
+        function updateUI() {
+            const pct = (current / steps.length) * 100;
+            fill.style.width           = pct + '%';
+            label.textContent          = current + ' / ' + steps.length;
+            btn.disabled               = current >= steps.length;
+            btn.textContent            = current >= steps.length ? 'Done ✓' : 'Next ▶';
+        }
+
+        function revealNext() {
+            if (current >= steps.length) return;
+            const el = steps[current];
+            el.classList.add('visible');
+            // Re-typeset MathJax for the newly revealed block
+            if (window.MathJax) MathJax.typesetPromise([el]);
+            current++;
+            updateUI();
+            // Scroll the new step into view smoothly
+            setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+        }
+
+        // Keyboard: Enter, Space, or → arrow
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight') {
+                e.preventDefault();
+                revealNext();
+            }
+        });
+
+        // Initialise on page load: show step count then reveal step 1
+        window.addEventListener('load', function() {
+            updateUI();
+            revealNext();
+        });
+    </script>
+
+</body>
+</html>

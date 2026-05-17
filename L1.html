@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lecture 1 - The Number Line, Few properties of real numbers</title>
+
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --bg: #f4f7f6; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--primary);
+            background: var(--bg);
+            padding: 20px 20px 100px 20px; /* bottom padding for fixed controls bar */
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 10px;
+        }
+
+        .math-box {
+            background: #e8f4fd;
+            border-left: 5px solid var(--secondary);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        /* ── Number Line ───────────────────────────────────── */
+        .number-line-container { position: relative; height: 100px; margin: 40px 0; }
+        .line { width: 100%; height: 2px; background: black; position: absolute; top: 50%; }
+        .point {
+            width: 10px; height: 10px; background: red; border-radius: 50%;
+            position: absolute; top: 45%; transform: translateX(-50%);
+            transition: all 0.5s ease-in-out;
+        }
+        .point:hover { transform: translateX(-50%) scale(1.5); cursor: pointer; }
+
+        /* ── Table ─────────────────────────────────────────── */
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; }
+
+        /* ── Real Numbers Diagram ──────────────────────────── */
+        .real-numbers-box {
+            width: 100%; max-width: 700px; margin: 30px auto;
+            border: 2px solid #4a3080; border-radius: 10px;
+            background-color: #d1c4e9; overflow: hidden; line-height: 1.2;
+        }
+        .diag-title { padding: 10px; font-style: italic; font-weight: bold; font-size: 20px; color: #002c3e; border-bottom: 1px solid #4a3080; }
+        .diag-container { display: flex; min-height: 450px; }
+        .diag-section { flex: 1; padding: 20px; position: relative; }
+        .diag-rational { border-right: 2px solid #7c4dff; }
+        .diag-section h4 { text-align: center; color: #311b92; margin-top: 0; border: none; }
+        .integers-circle {
+            background-color: #007bff; border: 2px solid #000; border-radius: 50%;
+            width: 280px; height: 200px; margin: 40px auto;
+            position: relative; display: flex; align-items: center; justify-content: center;
+        }
+        .whole-numbers-circle {
+            background-color: #28a745; border: 2px solid #000; border-radius: 50%;
+            width: 200px; height: 130px; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center;
+        }
+        .num { position: absolute; font-size: 16px; font-weight: bold; color: black; }
+        .frac-78  { top: 80px; left: 20px; }
+        .frac-13  { top: 50px; left: 140px; }
+        .dec-097  { top: 40px; right: 20px; }
+        .dec-021  { top: 90px; right: 30px; }
+        .sqrt-169 { bottom: 20px; right: 20px; }
+        .neg-3    { top: 20px; left: 30px; }
+        .neg-82   { bottom: 40px; right: 10px; }
+        .irr-list { display: flex; flex-direction: column; gap: 20px; align-items: center; margin-top: 30px; font-size: 20px; color: black; }
+        .fraction { display: inline-block; text-align: center; vertical-align: middle; }
+        .fraction span { display: block; padding: 0 5px; }
+        .fraction .bottom { border-top: 2px solid black; }
+        .overline { text-decoration: overline; }
+
+        /* ── tcolorbox ─────────────────────────────────────── */
+        .tcolorbox { border-radius: 6px; margin: 14px 0; overflow: hidden; border: 1px solid #ccc; }
+        .tcolorbox-header { padding: 8px 15px; font-weight: bold; font-size: 1rem; background-color: #2c3e50; color: white; }
+        .tcolorbox-content { padding: 15px; background-color: #eaf0fb; }
+
+        .tcolorbox.blue        .tcolorbox-header  { background-color: #1565c0; }
+        .tcolorbox.blue        .tcolorbox-content { background-color: #e3f2fd; }
+        .tcolorbox.green       .tcolorbox-header  { background-color: #2e7d32; }
+        .tcolorbox.green       .tcolorbox-content { background-color: #e8f5e9; }
+        .tcolorbox.orange      .tcolorbox-header  { background-color: #e65100; }
+        .tcolorbox.orange      .tcolorbox-content { background-color: #fff3e0; }
+        .tcolorbox.purple      .tcolorbox-header  { background-color: #6a1b9a; }
+        .tcolorbox.purple      .tcolorbox-content { background-color: #f3e5f5; }
+        .tcolorbox.red         .tcolorbox-header  { background-color: #c62828; }
+        .tcolorbox.red         .tcolorbox-content { background-color: #ffebee; }
+        .tcolorbox.teal        .tcolorbox-header  { background-color: #00695c; }
+        .tcolorbox.teal        .tcolorbox-content { background-color: #e0f2f1; }
+        .tcolorbox.indigo      .tcolorbox-header  { background-color: #283593; }
+        .tcolorbox.indigo      .tcolorbox-content { background-color: #e8eaf6; }
+        .tcolorbox.pink        .tcolorbox-header  { background-color: #ad1457; }
+        .tcolorbox.pink        .tcolorbox-content { background-color: #fce4ec; }
+        .tcolorbox.brown       .tcolorbox-header  { background-color: #4e342e; }
+        .tcolorbox.brown       .tcolorbox-content { background-color: #efebe9; }
+        .tcolorbox.cyan        .tcolorbox-header  { background-color: #00838f; }
+        .tcolorbox.cyan        .tcolorbox-content { background-color: #e0f7fa; }
+        .tcolorbox.lime        .tcolorbox-header  { background-color: #558b2f; }
+        .tcolorbox.lime        .tcolorbox-content { background-color: #f1f8e9; }
+        .tcolorbox.amber       .tcolorbox-header  { background-color: #f57f17; }
+        .tcolorbox.amber       .tcolorbox-content { background-color: #fff8e1; }
+        .tcolorbox.grey        .tcolorbox-header  { background-color: #424242; }
+        .tcolorbox.grey        .tcolorbox-content { background-color: #f5f5f5; }
+        .tcolorbox.deep-orange .tcolorbox-header  { background-color: #bf360c; }
+        .tcolorbox.deep-orange .tcolorbox-content { background-color: #fbe9e7; }
+        .tcolorbox.deep-purple .tcolorbox-header  { background-color: #4527a0; }
+        .tcolorbox.deep-purple .tcolorbox-content { background-color: #ede7f6; }
+        .tcolorbox.olive       .tcolorbox-header  { background-color: #827717; }
+        .tcolorbox.olive       .tcolorbox-content { background-color: #f9fbe7; }
+        .tcolorbox.slate       .tcolorbox-header  { background-color: #37474f; }
+        .tcolorbox.slate       .tcolorbox-content { background-color: #eceff1; }
+
+        /* ── Quiz details styling ──────────────────────────── */
+        details { margin: 8px 0; }
+        summary {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #e0e0e0;
+            border: 1px solid #bbb;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+        summary:hover { background: #cfcfcf; }
+        .alert-secondary {
+            background: #f8f9fa;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px 14px;
+            margin-top: 6px;
+            font-size: 0.95rem;
+        }
+        .fw-bold { font-weight: bold; }
+        .mb-3 { margin-bottom: 16px; }
+
+        /* ── STEP REVEAL SYSTEM ────────────────────────────── */
+        .step {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.4s ease, max-height 0.5s ease;
+        }
+        .step.visible {
+            opacity: 1;
+            max-height: 3000px;
+            margin-bottom: 6px;
+        }
+
+        /* ── FIXED CONTROLS BAR ────────────────────────────── */
+        .controls {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: #ede5d8;
+            border-top: 2px solid #c8b99a;
+            padding: 12px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            z-index: 1000;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+        }
+        .progress-wrap { flex: 1; display: flex; align-items: center; gap: 12px; }
+        .progress-bar-bg {
+            flex: 1; height: 5px; background: #c8b99a;
+            border-radius: 3px; overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%; background: #8b2500;
+            border-radius: 3px; width: 0%;
+            transition: width 0.4s ease;
+        }
+        .progress-label {
+            font-size: 14px; color: #8b2500; font-weight: bold;
+            white-space: nowrap; min-width: 55px; text-align: right;
+        }
+        .btn-next {
+            background: #2c3e50; color: white; border: none;
+            padding: 10px 28px; font-family: 'Segoe UI', sans-serif;
+            font-size: 15px; cursor: pointer; border-radius: 4px;
+            transition: background 0.2s; letter-spacing: 0.03em;
+        }
+        .btn-next:hover:not(:disabled) { background: #3498db; }
+        .btn-next:disabled { background: #c8b99a; cursor: default; }
+        .key-hint { font-size: 13px; color: #7a6e64; font-style: italic; white-space: nowrap; }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="index.html">← Back to Course Home</a>
+        &nbsp;|&nbsp;
+        <a href="L2.html">Next Lecture →</a>
+    </nav>
+
+    <div class="container">
+        <h1>Lecture 1: The Number Line, Absolute Values, and Inequalities</h1>
+
+        <div class="step">
+            <h3>1. The Hierarchy of Real Numbers</h3>
+            <p>Real numbers ($\mathbb{R}$) are built in layers. Imagine a set of nesting dolls:</p>
+        </div>
+
+        <div class="step">
+            <div class="real-numbers-box">
+                <div class="diag-title">Real Numbers</div>
+                <div class="diag-container">
+                    <div class="diag-section diag-rational">
+                        <h4>Rational Numbers</h4>
+                        <div class="num frac-78"><div class="fraction"><span>7</span><span class="bottom">8</span></div></div>
+                        <div class="num frac-13"><div class="fraction"><span>1</span><span class="bottom">3</span></div></div>
+                        <div class="num dec-097">0.97</div>
+                        <div class="num dec-021">0.<span class="overline">21</span></div>
+                        <div class="integers-circle">
+                            <span class="num" style="top: 10px; font-size: 18px;">Integers</span>
+                            <span class="num neg-3">-3</span>
+                            <span class="num neg-82">-<div class="fraction"><span>8</span><span class="bottom">2</span></div></span>
+                            <div class="whole-numbers-circle">
+                                <div style="font-size: 16px; font-weight: bold;">Whole Numbers</div>
+                                <div style="margin-top: 5px;">
+                                    <span style="margin-right: 10px;">5</span>
+                                    <span class="fraction" style="margin-right: 10px;"><span>8</span><span class="bottom">2</span></span>
+                                    <span>&radic;9</span>
+                                </div>
+                                <div>0</div>
+                            </div>
+                        </div>
+                        <div class="num sqrt-169">&radic;<div class="fraction"><span>16</span><span class="bottom">9</span></div></div>
+                    </div>
+                    <div class="diag-section">
+                        <h4>Irrational Numbers</h4>
+                        <div class="irr-list">
+                            <div>&radic;8</div>
+                            <div style="margin-right: -60px;">-&radic;11</div>
+                            <div>&radic;1.6</div>
+                            <div style="font-size: 24px;">&pi;</div>
+                            <div>&radic;<div class="fraction"><span>2</span><span class="bottom">5</span></div></div>
+                            <div style="font-size: 14px;">0.3030030003...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <ul>
+                <li><strong>Natural Numbers ($\mathbb{N}$):</strong> $\{1, 2, 3, \dots\}$</li>
+                <li><strong>Whole Numbers ($\mathbb{W}$):</strong> $\{0, 1, 2, 3, \dots\}$</li>
+                <li><strong>Integers ($\mathbb{Z}$):</strong> $\{\dots, -2, -1, 0, 1, 2, \dots\}$</li>
+                <li><strong>Rational Numbers ($\mathbb{Q}$):</strong> Any number $p/q$ where $q \neq 0$.</li>
+                <li><strong>Irrational Numbers:</strong> Numbers like $\pi$, $e$, and $\sqrt{2}$ that cannot be expressed as fractions.</li>
+            </ul>
+            <div class="tcolorbox indigo">
+                <div class="tcolorbox-header">Subset Chain</div>
+                <div class="tcolorbox-content">
+                    $$\mathbb{N} \subseteq \mathbb{W}\subseteq \mathbb{Z} \subseteq \mathbb{Q} \subseteq \mathbb{R}.$$
+                </div>
+            </div>
+        </div>
+ <div class="step">
+            <h3> Interactive Snapshot: Subsets of Real Numbers</h3>
+            <p>Let's review how these subset layers serve as crucial upgrades to handle complex mathematical challenges. <strong>Click each cell under 'Interactive Insight' to discover their core motivations!</strong></p>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Subset &amp; Symbol</th>
+                        <th style="width: 25%;">Core Elements / Form</th>
+                        <th style="width: 50%;">Interactive Insight &amp; Motivation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Natural Numbers</strong> ($\mathbb{N}$)</td>
+                        <td>$\{1, 2, 3, 4, \dots\}$</td>
+                        <td>
+                            <details>
+                                <summary>Why isn't this enough? 🤔</summary>
+                                <div class="alert-secondary">
+                                    Perfect for elementary counting! However, if you attempt to solve a simple algebraic problem like $x + 5 = 2$, no natural number can satisfy it. To fix this gap, mathematics needed to expand!
+                                </div>
+                            </details>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Whole Numbers</strong> ($\mathbb{W}$)</td>
+                        <td>$\{0, 1, 2, 3, \dots\}$</td>
+                        <td>
+                            <details>
+                                <summary>The Power of Nothingness 💡</summary>
+                                <div class="alert-secondary">
+                                    Adds the element <strong>$0$</strong>, providing an <em>additive identity</em> ($a + 0 = a$). Positional numbering systems and modern computing architecture couldn't exist without this abstract concept of zero.
+                                </div>
+                            </details>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Integers</strong> ($\mathbb{Z}$)</td>
+                        <td>$\{\dots, -2, -1, 0, 1, 2, \dots\}$</td>
+                        <td>
+                            <details>
+                                <summary>The Symmetry of Balance ⚖️</summary>
+                                <div class="alert-secondary">
+                                    The symbol comes from the German word <em>Zahlen</em> ("numbers"). It introduces <strong>negative numbers</strong> (additive inverses), which let us mathematically evaluate debts, opposing directions, and elegantly resolve equations like $x + 5 = 2 \implies x = -3$.
+                                </div>
+                            </details>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Rational Numbers</strong> ($\mathbb{Q}$)</td>
+                        <td>$\left\{\dfrac{p}{q} \;\middle|\; p, q \in \mathbb{Z}, q \neq 0\right\}$</td>
+                        <td>
+                            <details>
+                                <summary>The Infinite Dense Ribbon 📈</summary>
+                                <div class="alert-secondary">
+                                    Represented by $\mathbb{Q}$ for <strong>Quotient</strong>. Their decimal expansions either terminate ($1/4 = 0.25$) or periodically repeat ($1/3 = 0.\overline{3}$). They are beautifully dense: between <em>any</em> two rational numbers, an infinite number of other rationals exist!
+                                </div>
+                            </details>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Irrational Numbers</strong> ($\mathbb{I}$ or $\mathbb{R} \setminus \mathbb{Q}$)</td>
+                        <td>$\sqrt{2}, \pi, e, \text{etc.}$</td>
+                        <td>
+                            <details>
+                                <summary>A Dangerous Ancient Scandal 🌊</summary>
+                                <div class="alert-secondary">
+                                    These numbers feature infinite, completely non-repeating decimal paths. Legend says Hippasus was thrown off a boat by his fellow Pythagoreans because his rigorous proof that $\sqrt{2}$ is irrational shattered their dogmatic philosophy that the entire universe was composed strictly of clean ratios of whole numbers!
+                                </div>
+                            </details>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+       
+        <div class="step">
+            <h3>2. Visualizing the Real Line</h3>
+            <p>Every real number corresponds to exactly one point on a line. The "Origin" is $0$.</p>
+            <div class="number-line-container">
+                <div class="line"></div>
+                <div class="point" style="left: 20%;" title="-3"></div>
+                <div class="point" style="left: 50%;" title="0"></div>
+                <div class="point" style="left: 60%;" title="2/3"></div>
+                <div class="point" style="left: 77%;" title="e (~2.71)"></div>
+                <div class="point" style="left: 81%;" title="pi (~3.14)"></div>
+            </div>
+            <p><em>Hover over the dots to see values like $-3,\; 0,\; 2/3,\; e,\; \pi$.</em></p>
+        </div>
+
+        <div class="step">
+            <h3>3. Real Numbers as a Field</h3>
+            <div class="tcolorbox teal">
+                <div class="tcolorbox-header">The set $\mathbb{R}$ is a field under $+$ and $\cdot$</div>
+                <div class="tcolorbox-content">
+                    For all $a, b, c \in \mathbb{R}$, the following properties hold:
+                    <ul style="list-style-type: none; margin-top: 10px;">
+                        <li><strong>Associativity:</strong> $(a + b) + c = a + (b + c)$ and $(a \cdot b) \cdot c = a \cdot (b \cdot c)$</li>
+                        <li><strong>Commutativity:</strong> $a + b = b + a$ and $a \cdot b = b \cdot a$</li>
+                        <li><strong>Identities:</strong> $\exists\, 0, 1 \in \mathbb{R}$ s.t. $a + 0 = a$ and $a \cdot 1 = a.$</li>
+                        <li><strong>Inverses:</strong>
+                            <ul>
+                                <li>$\forall\, a \in \mathbb{R},\; \exists\, (-a) \in \mathbb{R}$ s.t. $a + (-a) = 0.$</li>
+                                <li>$\forall\, a \in \mathbb{R} \setminus \{0\},\; \exists\, a^{-1} \in \mathbb{R}$ s.t. $a \cdot a^{-1} = 1.$</li>
+                            </ul>
+                        </li>
+                        <li><strong>Distributivity:</strong> $a \cdot (b + c) = (a \cdot b) + (a \cdot c).$</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>4. Fundamental Order Properties</h3>
+            <div class="tcolorbox orange">
+                <div class="tcolorbox-header">Law of Trichotomy</div>
+                <div class="tcolorbox-content">
+                    Given any two real numbers $a$ and $b$, exactly one of the following holds:
+                    <div style="text-align: center; margin-top: 10px; font-size: 1.2rem;">
+                        $a = b \quad$ or $\quad a > b \quad$ or $\quad a &lt; b.$
+                    </div>
+                </div>
+            </div>
+            <div class="tcolorbox green">
+                <div class="tcolorbox-header">How to prove $a > b$?</div>
+                <div class="tcolorbox-content">
+                    Show that $a - b > 0.$
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <p>Calculus relies on the "Order Properties" of real numbers. For any $a, b, c \in \mathbb{R}$:</p>
+            <div class="math-box">
+                <ul>
+                    <li><strong>Positivity:</strong> $a > b \iff a - b > 0.$</li>
+                    <li><strong>Addition:</strong> If $a > b$, then $a + c > b + c$ for any $c.$
+                        <br><em>Proof:</em> $(a+c)-(b+c) = a-b > 0.$
+                    </li>
+                    <li><strong>Multiplication:</strong>
+                        <ul>
+                            <li>If $a > b$ and $c > 0$, then $ac > bc.$
+                                <br><em>Proof:</em> $ac - bc = c(a-b).$ Since $c > 0$ and $a - b > 0$, we get $ac - bc > 0.$
+                            </li>
+                            <li>If $a > b$ and $c &lt; 0$, then $ac &lt; bc$ (the inequality flips!).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Powers:</strong> If $a > b > 0$, then $a^n > b^n$ for any $n \in \mathbb{N}.$
+                        <br><em>Proof:</em> $a^n - b^n = (a-b)(a^{n-1} + a^{n-2}b + \cdots + ab^{n-2} + b^{n-1}) > 0.$
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="tcolorbox purple">
+                <div class="tcolorbox-header">Exercise: Let $a, b \in \mathbb{R}.$ Show that $ab = 0 \iff a = 0$ or $b = 0.$</div>
+                <div class="tcolorbox-content">
+                    <strong>($\Leftarrow$)</strong> If $a = 0$ or $b = 0$, then clearly $ab = 0.$ <br><br>
+                    <strong>($\Rightarrow$)</strong> Suppose $ab = 0.$ If $a = 0$, we are done. Suppose $a \neq 0.$
+                    We need to show $b = 0.$ <br>
+                    <em>Hint: Since $a \neq 0$, the inverse $a^{-1}$ exists. Multiply both sides of $ab = 0$ by $a^{-1}.$</em>
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="tcolorbox orange">
+                <div class="tcolorbox-header">Exercise: Let $a, b \in \mathbb{R}.$ Show that $a^2 + b^2 = 0 \iff a = 0$ and $b = 0.$</div>
+                <div class="tcolorbox-content">
+                    <strong>($\Leftarrow$)</strong> If $a = 0$ and $b = 0$, then clearly $a^2 + b^2 = 0.$ <br><br>
+                    <strong>($\Rightarrow$)</strong> Suppose $a^2 + b^2 = 0.$ Note that
+                    $$0 = a^2 + b^2 \geq a^2 \geq 0,$$
+                    so $a^2 = 0,$ which gives $a = 0.$ <em>Can you complete the argument for $b = 0$?</em>
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="tcolorbox purple">
+                <div class="tcolorbox-header">Self Assessment Quiz</div>
+                <div class="tcolorbox-content">
+
+                    <div class="mb-3">
+                        <p class="fw-bold">Q1: If $a > b > 0$, prove that $0 &lt; \dfrac{1}{a} &lt; \dfrac{1}{b}.$</p>
+                        <details>
+                            <summary>Show Hint</summary>
+                            <div class="alert-secondary">
+                                Hint: Show that $\dfrac{1}{b} - \dfrac{1}{a} > 0.$
+                            </div>
+                        </details>
+                        <details>
+                            <summary>Show Answer</summary>
+                            <div class="alert-secondary">
+                                $\dfrac{1}{b} - \dfrac{1}{a} = \dfrac{a - b}{ab}.$ Since $a > b > 0$, we have $a - b > 0$ and $ab > 0$, so $\dfrac{a-b}{ab} > 0.$
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="mb-3">
+                        <p class="fw-bold">Q2: If $a^2 = a$, prove that either $a = 0$ or $a = 1.$</p>
+                        <details>
+                            <summary>Show Hint</summary>
+                            <div class="alert-secondary">
+                                Hint: Recall that if $ab = 0$, then either $a = 0$ or $b = 0.$
+                            </div>
+                        </details>
+                        <details>
+                            <summary>Show Answer</summary>
+                            <div class="alert-secondary">
+                                $a^2 = a \Rightarrow a^2 - a = 0 \Rightarrow a(a - 1) = 0 \Rightarrow a = 0$ or $a = 1.$
+                            </div>
+                        </details>
+                    </div>
+                                        <div class="mb-3">
+                        <p class="fw-bold">Q3: If $a>b$ and $b>c$,  then $a>c$</p>
+                        <details>
+                            <summary>Show Hint</summary>
+                            <div class="alert-secondary">
+                                Hint: Consider $a-c.$ How to bring $b$?
+                            </div>
+                        </details>
+                        <details>
+                            <summary>Show Answer</summary>
+                            <div class="alert-secondary">
+                                $a-c=a-b+b-c=(a-b)+(b-c)>0$ as $a-b>0$ and $b-c>0.$
+                            </div>
+                        </details>
+                    </div>
+                    <div class="mb-3">
+                        <p class="fw-bold">Q4: Let $a,b\in \mathbb{R}$ and  $a < b.$ Then there exists $c\in \mathbb{R}$ such that $a < c < b.$<br>
+                        Suppose we proved this result, from this can we deduce:
+                        <ul>
+                        <li>There are infinite number of real numbers between two real numbers.</li>
+                        <li>There are infinite number of rational numbers between two rational numbers. </li>
+                        </ul>                         
+             
+                        </p>
+                        <details>
+                            <summary>Show Hint</summary>
+                            <div class="alert-secondary">
+                                Hint: Check is $\frac{a+b}{2}$ will work?                           </div>
+                        </details>
+                        <details>
+                            <summary>Show Answer</summary>
+                            <div class="alert-secondary">
+                                It is easy to see that $\frac{a+b}{2}-a=\frac{b-a}{2}=b-\frac{a+b}{2}.$ Since $b>a,$\;\; we have\;\; $\frac{b-a}{2}>0.$<br>
+                                That is $a < \frac{a+b}{2} < b.$ We proved more than required. The distance between $a$ and $b$ is $b-a.$<br>
+                                $ \frac{a+b}{2}$ is equidistant from $a$ and $b$ which is $\frac{b-a}{2}.$
+                                    </div>
+                        </details>
+                    </div>
+
+                    <div class="mb-3">
+    <p class="fw-bold">Q5: Let $a$ be a rational number and $b$ is irrational. Then
+    <ul>
+    <li>$a+b$ is irrational.</li>
+    <li>if $a\ne 0$, then $ab$ is also irrational.</li>
+    </ul>         
+    </p>
+    <details>
+        <summary>Show Hint</summary>
+        <div class="alert-secondary">
+              Proof by contradiction.               
+        </div>
+    </details>
+    <details>
+        <summary>Show Answer</summary>
+        <div class="alert-secondary">
+            The proof is by contradiction. Let $a+b$ is rational. Then<br>
+            $a+b=\frac{m}{n}$, where $m,n\in\mathbb{Z}, n\ne 0$. So if we write<br>
+            $a=\frac{p}{q}$, where $p,q\in\mathbb{Z}, q\ne 0$, then<br>
+            $b=\frac{m}{n}-\frac{p}{q}$ which is false as $b$ is irrational.<br>
+            Similarly we can prove $ab$ is irrational.
+        </div>
+    </details>
+</div>
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>5. Intervals and Bounds</h3>
+            <p>We use intervals to describe "neighborhoods" around points.</p>
+            <table>
+                <tr>
+                    <th>Notation</th><th>Type</th><th>Condition</th><th>Visual</th>
+                </tr>
+                <tr>
+                    <td>$[a,\, b]$</td><td>Closed</td><td>$a \leq x \leq b$</td><td>Solid dots at both ends</td>
+                </tr>
+                <tr>
+                    <td>$(a,\, b)$</td><td>Open</td><td>$a &lt; x &lt; b$</td><td>Hollow circles at both ends</td>
+                </tr>
+                <tr>
+                    <td>$[a,\, \infty)$</td><td>Unbounded above</td><td>$x \geq a$</td><td>Solid dot at $a$, arrow right</td>
+                </tr>
+                <tr>
+                    <td>$(-\infty,\, b]$</td><td>Unbounded below</td><td>$x \leq b$</td><td>Arrow left, solid dot at $b$</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="step">
+            <div class="tcolorbox cyan">
+                <div class="tcolorbox-header">Looking Ahead to Lecture 2</div>
+                <div class="tcolorbox-content">
+                    An interval like $(-\infty, b]$ is <em>bounded above</em> by $b$ — no number in the set exceeds $b$.
+                    In Lecture 2 we will ask: among all upper bounds of a set, is there a <strong>smallest</strong> one?
+                    That is the <strong>Least Upper Bound</strong> (supremum).
+                </div>
+            </div>
+        </div>
+
+    </div><div class="controls">
+        <span class="key-hint">Press <kbd>Enter</kbd> or <kbd>→</kbd> to advance</span>
+        <div class="progress-wrap">
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progressFill"></div>
+            </div>
+            <span class="progress-label" id="progressLabel">0 / 0</span>
+        </div>
+        <button class="btn-next" id="btnNext" onclick="revealNext()">Next &#9654;</button>
+    </div>
+
+    <script>
+        const steps   = document.querySelectorAll('.step');
+        const fill    = document.getElementById('progressFill');
+        const label   = document.getElementById('progressLabel');
+        const btn     = document.getElementById('btnNext');
+        let   current = 0;
+
+        function updateUI() {
+            const pct = (current / steps.length) * 100;
+            fill.style.width  = pct + '%';
+            label.textContent = current + ' / ' + steps.length;
+            btn.disabled      = current >= steps.length;
+            btn.textContent   = current >= steps.length ? 'Done ✓' : 'Next \u25B6';
+        }
+
+        function revealNext() {
+            if (current >= steps.length) return;
+            const el = steps[current];
+            el.classList.add('visible');
+            if (window.MathJax) MathJax.typesetPromise([el]);
+            current++;
+            updateUI();
+            setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+        }
+
+        // Keyboard: Enter, Space, or → arrow
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight') {
+                e.preventDefault();
+                revealNext();
+            }
+        });
+
+        // Show step count on load, then reveal step 1 automatically
+        window.addEventListener('load', function() {
+            updateUI();
+            revealNext();
+        });
+    </script>
+
+</body>
+</html>

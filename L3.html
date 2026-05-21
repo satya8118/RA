@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lecture 3 – Set Operations, LUB &amp; Boundedness</title>
+
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --bg: #f4f7f6; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: var(--primary);
+            background: var(--bg);
+            padding: 20px 20px 100px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 8px;
+        }
+
+        .math-box {
+            background: #e8f4fd;
+            border-left: 5px solid var(--secondary);
+            padding: 15px 18px;
+            margin: 18px 0;
+            border-radius: 4px;
+        }
+
+        /* ── tcolorbox ─────────────────────────────────────── */
+        .tcolorbox { border-radius: 6px; margin: 14px 0; overflow: hidden; border: 1px solid #ccc; }
+        .tcolorbox-header { padding: 8px 15px; font-weight: bold; font-size: 1rem; color: white; }
+        .tcolorbox-content { padding: 15px 18px; }
+
+        .tcolorbox.blue        .tcolorbox-header  { background-color: #1565c0; }
+        .tcolorbox.blue        .tcolorbox-content { background-color: #e3f2fd; }
+        .tcolorbox.green       .tcolorbox-header  { background-color: #2e7d32; }
+        .tcolorbox.green       .tcolorbox-content { background-color: #e8f5e9; }
+        .tcolorbox.orange      .tcolorbox-header  { background-color: #e65100; }
+        .tcolorbox.orange      .tcolorbox-content { background-color: #fff3e0; }
+        .tcolorbox.purple      .tcolorbox-header  { background-color: #6a1b9a; }
+        .tcolorbox.purple      .tcolorbox-content { background-color: #f3e5f5; }
+        .tcolorbox.red         .tcolorbox-header  { background-color: #c62828; }
+        .tcolorbox.red         .tcolorbox-content { background-color: #ffebee; }
+        .tcolorbox.teal        .tcolorbox-header  { background-color: #00695c; }
+        .tcolorbox.teal        .tcolorbox-content { background-color: #e0f2f1; }
+        .tcolorbox.indigo      .tcolorbox-header  { background-color: #283593; }
+        .tcolorbox.indigo      .tcolorbox-content { background-color: #e8eaf6; }
+        .tcolorbox.pink        .tcolorbox-header  { background-color: #ad1457; }
+        .tcolorbox.pink        .tcolorbox-content { background-color: #fce4ec; }
+        .tcolorbox.brown       .tcolorbox-header  { background-color: #4e342e; }
+        .tcolorbox.brown       .tcolorbox-content { background-color: #efebe9; }
+        .tcolorbox.cyan        .tcolorbox-header  { background-color: #00838f; }
+        .tcolorbox.cyan        .tcolorbox-content { background-color: #e0f7fa; }
+        .tcolorbox.lime        .tcolorbox-header  { background-color: #558b2f; }
+        .tcolorbox.lime        .tcolorbox-content { background-color: #f1f8e9; }
+        .tcolorbox.amber       .tcolorbox-header  { background-color: #f57f17; }
+        .tcolorbox.amber       .tcolorbox-content { background-color: #fff8e1; }
+        .tcolorbox.grey        .tcolorbox-header  { background-color: #424242; }
+        .tcolorbox.grey        .tcolorbox-content { background-color: #f5f5f5; }
+        .tcolorbox.deep-orange .tcolorbox-header  { background-color: #bf360c; }
+        .tcolorbox.deep-orange .tcolorbox-content { background-color: #fbe9e7; }
+        .tcolorbox.deep-purple .tcolorbox-header  { background-color: #4527a0; }
+        .tcolorbox.deep-purple .tcolorbox-content { background-color: #ede7f6; }
+        .tcolorbox.slate       .tcolorbox-header  { background-color: #37474f; }
+        .tcolorbox.slate       .tcolorbox-content { background-color: #eceff1; }
+
+        /* ── Table ─────────────────────────────────────────── */
+        table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+        th, td { border: 1px solid #ddd; padding: 11px 14px; text-align: left; }
+        th { background-color: #f2f2f2; font-weight: 600; }
+
+        /* ── Proof block ────────────────────────────────────── */
+        .proof-block {
+            background: #f9f9f9;
+            border-left: 4px solid #7a6e64;
+            padding: 14px 18px;
+            margin: 12px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .proof-block .proof-label {
+            font-weight: bold;
+            color: #4e342e;
+            margin-bottom: 8px;
+            display: block;
+            font-style: normal;
+        }
+        .qed { float: right; font-weight: bold; font-size: 1.1rem; }
+
+        /* ── Section divider ────────────────────────────────── */
+        .section-rule {
+            border: none;
+            border-top: 2px dashed #c8b99a;
+            margin: 32px 0 24px 0;
+        }
+
+        /* ── Quiz details ───────────────────────────────────── */
+        details { margin: 8px 0; }
+        summary {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #e0e0e0;
+            border: 1px solid #bbb;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+        summary:hover { background: #cfcfcf; }
+        .alert-secondary {
+            background: #f8f9fa;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px 14px;
+            margin-top: 6px;
+            font-size: 0.95rem;
+        }
+        .fw-bold { font-weight: bold; }
+        .mb-3 { margin-bottom: 16px; }
+
+        /* ── STEP REVEAL SYSTEM ────────────────────────────── */
+        .step {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.4s ease, max-height 0.6s ease;
+        }
+        .step.visible {
+            opacity: 1;
+            max-height: 5000px;
+            margin-bottom: 6px;
+        }
+
+        /* ── FIXED CONTROLS BAR ────────────────────────────── */
+        .controls {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: #ede5d8;
+            border-top: 2px solid #c8b99a;
+            padding: 12px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            z-index: 1000;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+        }
+        .progress-wrap { flex: 1; display: flex; align-items: center; gap: 12px; }
+        .progress-bar-bg {
+            flex: 1; height: 5px; background: #c8b99a;
+            border-radius: 3px; overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%; background: #8b2500;
+            border-radius: 3px; width: 0%;
+            transition: width 0.4s ease;
+        }
+        .progress-label {
+            font-size: 14px; color: #8b2500; font-weight: bold;
+            white-space: nowrap; min-width: 55px; text-align: right;
+        }
+        .btn-next {
+            background: #2c3e50; color: white; border: none;
+            padding: 10px 28px; font-family: 'Segoe UI', sans-serif;
+            font-size: 15px; cursor: pointer; border-radius: 4px;
+            transition: background 0.2s; letter-spacing: 0.03em;
+        }
+        .btn-next:hover:not(:disabled) { background: #3498db; }
+        .btn-next:disabled { background: #c8b99a; cursor: default; }
+        .key-hint { font-size: 13px; color: #7a6e64; font-style: italic; white-space: nowrap; }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="index.html">&larr; Back to Course Home</a>
+        &nbsp;|&nbsp;
+        <a href="L4.html">Next Lecture &rarr;</a>
+    </nav>
+
+    <div class="container">
+
+    <!-- ════════════════════════════════════════
+         PART I  —  SET OPERATIONS
+    ════════════════════════════════════════ -->
+
+        <!-- ═══ STEP 1 ═══ -->
+        <div class="step">
+            <h2>Part I &mdash; Set Operations on Subsets of $\mathbb{R}$</h2>
+            <p>
+                Throughout this lecture let $A$ and $B$ be <strong>nonempty</strong> subsets of $\mathbb{R}$
+                and $c\in\mathbb{R}.$ We define three fundamental operations.
+            </p>
+
+            <h3>1. The Sumset $A+B$</h3>
+
+            <div class="tcolorbox blue">
+                <div class="tcolorbox-header">Definition &mdash; Sumset</div>
+                <div class="tcolorbox-content">
+                    $$A+B \;=\; \{\,a+b \;\mid\; a\in A,\; b\in B\,\}$$
+                    $A+B$ is the set of <em>all possible sums</em> formed by choosing one element
+                    from $A$ and one from $B.$
+                </div>
+            </div>
+
+            <h4>Examples with Finite Sets</h4>
+            <table>
+                <tr><th>$A$</th><th>$B$</th><th>$A+B$</th><th>Remark</th></tr>
+                <tr>
+                    <td>$\{1,2\}$</td><td>$\{3,4\}$</td><td>$\{4,5,6\}$</td>
+                    <td>$|A+B|$ can be less than $|A|\cdot|B|$</td>
+                </tr>
+                <tr>
+                    <td>$\{0,1\}$</td><td>$\{-1,0,1\}$</td><td>$\{-1,0,1,2\}$</td>
+                    <td>Collisions: $0+1=1+0=1$</td>
+                </tr>
+                <tr>
+                    <td>$\{1,3\}$</td><td>$\{2,4\}$</td><td>$\{3,5,7\}$</td>
+                    <td>$1+4=3+2=5,$ only 3 distinct elements</td>
+                </tr>
+            </table>
+
+            <div class="tcolorbox orange">
+                <div class="tcolorbox-header">Example with Intervals</div>
+                <div class="tcolorbox-content">
+                    $A=[0,1],\; B=[2,3]\;\Longrightarrow\; A+B=[2,4].$
+                    <br>In general, $[a_1,a_2]+[b_1,b_2]=[a_1+b_1,\;a_2+b_2].$
+                </div>
+            </div>
+
+            <hr class="section-rule">
+            <h4>Questions &mdash; Think Before Clicking!</h4>
+
+            <div class="mb-3">
+                <p class="fw-bold">Q1. &nbsp;Find a nonempty $A\subseteq\mathbb{R}$ with $A+A=A.$</p>
+                <details><summary>Hint</summary>
+                    <div class="alert-secondary">
+                        Try a set large enough to absorb every sum it produces.
+                    </div>
+                </details>
+                <details><summary>Solution</summary>
+                    <div class="alert-secondary">
+                        <strong>Two examples:</strong>
+                        <ul>
+                            <li>$A=\{0\}$: $\;A+A=\{0+0\}=\{0\}=A.$ &#10003;</li>
+                            <li>$A=(-\infty,0]$: every sum $a_1+a_2\le 0,$ and every $x\le 0$ equals $x+0\in A+A,$
+                                so $A+A=(-\infty,0]=A.$ &#10003;</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+
+            <div class="mb-3">
+                <p class="fw-bold">Q2. &nbsp;Find a nonempty $A\subseteq\mathbb{R}$ with
+                    $A+A\subsetneq A$ (a <em>proper</em> subset).</p>
+                <details><summary>Hint</summary>
+                    <div class="alert-secondary">
+                        Try $A=\mathbb{N}=\{1,2,3,\ldots\}.$ What is the smallest possible sum?
+                    </div>
+                </details>
+                <details><summary>Solution</summary>
+                    <div class="alert-secondary">
+                        $A=\{1,2,3,\ldots\}$:
+                        $A+A=\{n+m\mid n,m\ge 1\}=\{2,3,4,\ldots\}.$
+                        Since $1\in A$ but $1\notin A+A,$ we get $A+A\subsetneq A.$ &#10003;
+                    </div>
+                </details>
+            </div>
+
+            <div class="mb-3">
+                <p class="fw-bold">Q3. &nbsp;Find a nonempty $A\subseteq\mathbb{R}$ with
+                    $A\subsetneq A+A.$</p>
+                <details><summary>Hint</summary>
+                    <div class="alert-secondary">
+                        Try $A=\{0,1\}$ and compute $A+A.$
+                    </div>
+                </details>
+                <details><summary>Solution</summary>
+                    <div class="alert-secondary">
+                        $A=\{0,1\}$: $A+A=\{0,1,2\}.$
+                        Since $2\in A+A$ but $2\notin A$, we get $A\subsetneq A+A.$ &#10003;
+                        <br>Interval version: $A=(0,1)$ gives $A+A=(0,2)\supsetneq A.$ &#10003;
+                    </div>
+                </details>
+            </div>
+
+            <div class="mb-3">
+                <p class="fw-bold">Q4. &nbsp;Can $A+B=\emptyset$?</p>
+                <details><summary>Solution</summary>
+                    <div class="alert-secondary">
+                        <strong>No.</strong> Since $A$ and $B$ are both nonempty there exist $a\in A$
+                        and $b\in B,$ so $a+b\in A+B.$ Hence $A+B$ is always nonempty.
+                    </div>
+                </details>
+            </div>
+        </div><!-- /step 1 -->
+
+        <!-- ═══ STEP 2 ═══ -->
+        <div class="step">
+            <h3>2. The Translation $c+A$</h3>
+            <div class="tcolorbox teal">
+                <div class="tcolorbox-header">Definition &mdash; Translation</div>
+                <div class="tcolorbox-content">
+                    $$c+A \;=\; \{\,c+a \;\mid\; a\in A\,\}$$
+                    Geometrically this is a <em>rigid shift</em> of $A$ by $c$ units along the number line.
+                </div>
+            </div>
+            <div class="math-box">
+                <strong>Observation:</strong> $c+A$ is the special case of $A+B$ with $B=\{c\},$
+                i.e., $c+A=A+\{c\}.$
+            </div>
+            <table>
+                <tr><th>$A$</th><th>$c$</th><th>$c+A$</th><th>Remark</th></tr>
+                <tr><td>$\{1,2,3\}$</td><td>$5$</td><td>$\{6,7,8\}$</td><td>Every element shifted right by 5</td></tr>
+                <tr><td>$[0,1]$</td><td>$-2$</td><td>$[-2,-1]$</td><td>Interval shifted left by 2</td></tr>
+                <tr><td>$(0,\infty)$</td><td>$3$</td><td>$(3,\infty)$</td><td>Half-line shifted right</td></tr>
+                <tr>
+                    <td>$\mathbb{Z}$</td><td>$\tfrac{1}{2}$</td>
+                    <td>$\{\ldots,-\tfrac{3}{2},-\tfrac{1}{2},\tfrac{1}{2},\tfrac{3}{2},\ldots\}$</td>
+                    <td>The half-integers</td>
+                </tr>
+                <tr><td>Any nonempty $A$</td><td>$0$</td><td>$A$</td><td>Zero shift leaves $A$ unchanged</td></tr>
+            </table>
+        </div><!-- /step 2 -->
+
+        <!-- ═══ STEP 3 ═══ -->
+        <div class="step">
+            <h3>3. The Scaling $cA$</h3>
+            <div class="tcolorbox purple">
+                <div class="tcolorbox-header">Definition &mdash; Scalar Multiple</div>
+                <div class="tcolorbox-content">
+                    $$cA \;=\; \{\,ca \;\mid\; a\in A\,\}$$
+                    Geometrically this <em>stretches</em> or <em>reflects</em> $A$ about the origin.
+                </div>
+            </div>
+            <table>
+                <tr><th>$A$</th><th>$c$</th><th>$cA$</th><th>Remark</th></tr>
+                <tr><td>$\{1,2,3\}$</td><td>$2$</td><td>$\{2,4,6\}$</td><td>Doubles every element</td></tr>
+                <tr><td>$[1,2]$</td><td>$3$</td><td>$[3,6]$</td><td>Interval scales proportionally</td></tr>
+                <tr><td>$[-1,1]$</td><td>$-1$</td><td>$[-1,1]$</td><td>Symmetric set &mdash; unchanged by reflection!</td></tr>
+                <tr><td>$[1,2]$</td><td>$-1$</td><td>$[-2,-1]$</td><td>Negative $c$ reverses the interval</td></tr>
+                <tr><td>Any nonempty $A$</td><td>$0$</td><td>$\{0\}$</td><td>Collapses to a single point</td></tr>
+                <tr><td>$(0,\infty)$</td><td>$-2$</td><td>$(-\infty,0)$</td><td>Reflects to the negative half-line</td></tr>
+            </table>
+            <div class="math-box">
+                <strong>Key contrast with $c+A$:</strong>
+                $c+A$ is a rigid shift (no distortion). $cA$ stretches ($|c|>1$), compresses ($0<|c|<1$),
+                or reflects ($c<0$) about the origin. Setting $c=0$ collapses everything to $\{0\}.$
+            </div>
+        </div><!-- /step 3 -->
+
+    <!-- ════════════════════════════════════════
+         PART II  —  THE LEAST UPPER BOUND
+    ════════════════════════════════════════ -->
+
+        <!-- ═══ STEP 4 ═══ -->
+        <div class="step">
+            <hr class="section-rule">
+            <h2>Part II &mdash; The Least Upper Bound</h2>
+
+            <h3>1. Upper and Lower Bounds &mdash; A Quick Recall</h3>
+
+            <div class="tcolorbox grey">
+                <div class="tcolorbox-header">Recall &mdash; Bounded Above / Bounded Below</div>
+                <div class="tcolorbox-content">
+                    A nonempty set $S\subseteq\mathbb{R}$ is:
+                    <ul>
+                        <li>
+                            <strong>Bounded above</strong> if $\exists\,M\in\mathbb{R}$ with
+                            $s\le M$ for all $s\in S.$ Any such $M$ is an <em>upper bound</em> of $S.$
+                        </li>
+                        <li>
+                            <strong>Bounded below</strong> if $\exists\,m\in\mathbb{R}$ with
+                            $m\le s$ for all $s\in S.$ Any such $m$ is a <em>lower bound</em> of $S.$
+                        </li>
+                    </ul>
+                    Upper and lower bounds are <em>never unique</em>: if $M$ is an upper bound, so is
+                    $M+1,\;M+100,\;\ldots$
+                </div>
+            </div>
+
+            <h3>2. Definition of the Least Upper Bound</h3>
+            <p>
+                Among all the upper bounds of $S$ we single out the <em>smallest</em> one.
+            </p>
+
+            <div class="tcolorbox purple">
+                <div class="tcolorbox-header">Definition &mdash; Least Upper Bound (LUB)</div>
+                <div class="tcolorbox-content">
+                    A number $L$ is called the <strong>least upper bound</strong> of $S$ if:
+                    <ol>
+                        <li>$L$ is an upper bound of $S:$ &nbsp;$s\le L$ for all $s\in S.$</li>
+                        <li>$L$ is the <em>smallest</em> upper bound: &nbsp;if $M$ is any upper bound
+                            of $S,$ then $L\le M.$</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="tcolorbox brown">
+                <div class="tcolorbox-header">Definition &mdash; Greatest Lower Bound (GLB)</div>
+                <div class="tcolorbox-content">
+                    A number $l$ is called the <strong>greatest lower bound</strong> of $S$ if:
+                    <ol>
+                        <li>$l$ is a lower bound of $S:$ &nbsp;$l\le s$ for all $s\in S.$</li>
+                        <li>$l$ is the <em>largest</em> lower bound: &nbsp;if $m$ is any lower bound
+                            of $S,$ then $m\le l.$</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /step 4 -->
+
+        <!-- ═══ STEP 5 ═══ -->
+        <div class="step">
+            <h3>3. Alternate Definition of LUB &mdash; Contrapositive Form</h3>
+            <p>
+                Condition&nbsp;(2) of the original definition says: <em>every upper bound of $S$
+                is $\ge L.$</em> Taking the <strong>contrapositive</strong>:
+                any number <em>strictly less than</em> $L$ is <em>not</em> an upper bound of $S.$
+                This leads to an equivalent &mdash; and often more useful &mdash; characterisation.
+            </p>
+
+            <div class="tcolorbox indigo">
+                <div class="tcolorbox-header">Alternate Definition &mdash; LUB (Contrapositive Form)</div>
+                <div class="tcolorbox-content">
+                    $L$ is the least upper bound of $S$ if and only if:
+                    <ol>
+                        <li>$L$ is an upper bound of $S.$</li>
+                        <li>For every $\epsilon >0,$ there exists $s\in S$ such that
+                            $\;s>L-\epsilon.$</li>
+                    </ol>
+                    Condition (2) says: no number strictly smaller than $L$ can serve as an upper bound of $S.$
+                    Equivalently, elements of $S$ can get <em>arbitrarily close</em> to $L$ from below.
+                </div>
+            </div>
+
+            <div class="proof-block">
+                <span class="proof-label">Why are the two definitions equivalent?</span>
+                <strong>Original $\Rightarrow$ Alternate.</strong>
+                Assume $L$ is the least upper bound. Let $\epsilon > 0.$
+                Then $L-\epsilon < L,$ so $L-\epsilon$ is <em>not</em> an upper bound.
+                (since $L$ is the <em>smallest</em> upper bound).
+                Hence there exists $s\in S$ with $s>L-\epsilon.$
+                <br><br>
+                <strong>Alternate $\Rightarrow$ Original.</strong>
+                Suppose (1) and (2) hold. Let $M$ be any upper bound of $S.$
+                We want $L\le M.$ Suppose for contradiction $M < L.$
+                Set $\epsilon=L-M >0.$ By (2), there exists $s\in S$ with $s>L-\epsilon=M,$
+                contradicting the fact that $M$ is an upper bound.
+                Hence $L\le M,$ so $L$ is the least upper bound.
+                <span class="qed">$\blacksquare$</span>
+            </div>
+
+            <div class="math-box">
+                <strong>Intuition:</strong>
+                The alternate form captures the idea that the least upper bound has
+                <em>no gap</em> between itself and the set: however small an $\varepsilon$ you choose,
+                some element of $S$ lies within $\varepsilon$ of $L.$
+            </div>
+        </div><!-- /step 5 -->
+
+        <!-- ═══ STEP 6 ═══ -->
+        <div class="step">
+            <h3>4. The LUB is Unique &mdash; Notation $\text{lub}(A)$</h3>
+
+            <div class="tcolorbox green">
+                <div class="tcolorbox-header">Theorem &mdash; Uniqueness of the Least Upper Bound</div>
+                <div class="tcolorbox-content">
+                    A set $S$ can have <strong>at most one</strong> least upper bound.
+                    That is, if $L_1$ and $L_2$ are both least upper bounds of $S,$ then $L_1=L_2.$
+                </div>
+            </div>
+
+            <div class="proof-block">
+                <span class="proof-label">Proof.</span>
+                Since $L_1$ is the least upper bound and $L_2$ is an upper bound,
+                condition (2) gives $L_1\le L_2.$
+                <br>
+                Since $L_2$ is the least upper bound and $L_1$ is an upper bound,
+                condition (2) gives $L_2\le L_1.$
+                <br>
+                Together, $L_1=L_2.$
+                <span class="qed">$\blacksquare$</span>
+            </div>
+
+            <div class="math-box">
+                Because the least upper bound is <strong>unique</strong> when it exists,
+                we write
+                $$\text{lub}(S) \qquad\text{or}\qquad \text{lub}\,S$$
+                for <em>the</em> least upper bound of $S.$ Similarly,
+                $\text{glb}(S)$ denotes the greatest lower bound.
+                <br><br>
+                These are well-defined objects — there is no ambiguity in the notation.
+            </div>
+        </div><!-- /step 6 -->
+
+        <!-- ═══ STEP 7 ═══ -->
+        <div class="step">
+            <h3>5. Maximum as a Least Upper Bound</h3>
+
+            <div class="tcolorbox teal">
+                <div class="tcolorbox-header">Proposition &mdash; $\max(S)=\text{lub}(S)$ when the maximum exists</div>
+                <div class="tcolorbox-content">
+                    If $S$ has a maximum element $M^*$ (meaning $M^*\in S$ and $s\le M^*$ for all $s\in S$),
+                    then $M^*$ is the least upper bound of $S$:
+                    $$\max(S)\;\text{exists}\;\Longrightarrow\;\text{lub}(S)=\max(S).$$
+                </div>
+            </div>
+
+            <div class="proof-block">
+                <span class="proof-label">Proof.</span>
+                (i) $M^*$ is an upper bound of $S$ by definition of maximum.
+                <br>
+                (ii) Let $M$ be any upper bound of $S.$ Since $M^*\in S,$ we have $M^*\le M.$
+                <br><br>
+                Both conditions are satisfied, so $\text{lub}(S)=M^*=\max(S).$
+                <span class="qed">$\blacksquare$</span>
+            </div>
+
+            <h4>Examples where $\max(S)$ exists</h4>
+            <table>
+                <tr><th>Set $S$</th><th>$\max(S)$</th><th>$\text{lub}(S)$</th></tr>
+                <tr><td>$\{1,3,5,7\}$</td><td>$7$</td><td>$7$</td></tr>
+                <tr><td>$[0,2]$</td><td>$2$</td><td>$2$</td></tr>
+                <tr>
+                    <td>$\!\left\{1-\tfrac{1}{n}\;\middle|\;n\in\mathbb{N}\right\}\cup\{1\}$</td>
+                    <td>$1$</td><td>$1$</td>
+                </tr>
+            </table>
+
+            <div class="math-box">
+                <strong>The converse fails:</strong>
+                $\text{lub}(S)$ can exist even when $S$ has no maximum element.
+                This is the content of the next step.
+            </div>
+        </div><!-- /step 7 -->
+
+        <!-- ═══ STEP 8 ═══ -->
+        <div class="step">
+            <h3>6. The LUB Need Not Belong to the Set</h3>
+            <p>
+                Unlike a maximum, $\text{lub}(S)$ does <em>not</em> have to be an element of $S.$
+            </p>
+
+            <table>
+                <tr>
+                    <th>Set $S$</th>
+                    <th>$\text{lub}(S)$</th>
+                    <th>In $S$?</th>
+                    <th>Remark</th>
+                </tr>
+                <tr>
+                    <td>$(0,1)$</td><td>$1$</td><td>No</td>
+                    <td>Open interval: $1$ is approached but never reached</td>
+                </tr>
+                <tr>
+                    <td>$[0,1)$</td><td>$1$</td><td>No</td>
+                    <td>Half-open interval</td>
+                </tr>
+                <tr>
+                    <td>$\!\left\{1-\dfrac{1}{n}\;\middle|\;n\in\mathbb{N}\right\}$</td>
+                    <td>$1$</td><td>No</td>
+                    <td>Sequence approaching $1$ but never equalling $1$</td>
+                </tr>
+                <tr>
+                    <td>$\mathbb{Q}\cap[0,\sqrt{2}\,)$</td>
+                    <td>$\sqrt{2}$</td><td>No</td>
+                    <td>$\sqrt{2}\notin\mathbb{Q}$, so not in the set</td>
+                </tr>
+                <tr>
+                    <td>$[0,1]$</td><td>$1$</td><td>Yes (= $\max$)</td>
+                    <td>Closed interval: least upper bound is attained</td>
+                </tr>
+            </table>
+
+            <div class="tcolorbox amber">
+                <div class="tcolorbox-header">Key Insight</div>
+                <div class="tcolorbox-content">
+                    $\text{lub}(S)\in S \;\Longleftrightarrow\; S\text{ has a maximum and }\text{lub}(S)=\max(S).$
+                    <br><br>
+                    When $\text{lub}(S)\notin S,$ the set has no maximum &mdash; but the least upper bound
+                    still exists in $\mathbb{R}$ (guaranteed by the Completeness Axiom, coming shortly).
+                </div>
+            </div>
+        </div><!-- /step 8 -->
+
+        <!-- ═══ STEP 9 ═══ -->
+        <div class="step">
+            <h3>7. Using the LUB to Describe All Upper Bounds</h3>
+            <p>
+                Knowing $\text{lub}(S)$ lets us immediately write down the <em>complete set</em>
+                of all upper bounds.
+            </p>
+
+            <div class="tcolorbox cyan">
+                <div class="tcolorbox-header">Proposition &mdash; Complete Set of Upper Bounds</div>
+                <div class="tcolorbox-content">
+                    If $S$ is bounded above, then
+                    $$\bigl\{\,M\in\mathbb{R}\;\mid\; M\text{ is an upper bound of }S\,\bigr\}
+                      \;=\; [\,\text{lub}(S),\,\infty).$$
+                    In words: the upper bounds of $S$ are precisely all real numbers
+                    greater than or equal to $\text{lub}(S).$
+                </div>
+            </div>
+
+            <div class="proof-block">
+                <span class="proof-label">Proof.</span>
+                Let $L=\text{lub}(S).$
+                <br><br>
+                <strong>Every $M\ge L$ is an upper bound.</strong>
+                For any $s\in S$: $s\le L\le M.$ So $M$ is an upper bound.
+                Hence $[L,\infty)\subseteq\{\text{upper bounds of }S\}.$
+                <br><br>
+                <strong>Every upper bound $M$ satisfies $M\ge L.$</strong>
+                Since $L$ is the <em>least</em> upper bound, $L\le M.$
+                Hence $\{\text{upper bounds of }S\}\subseteq[L,\infty).$
+                <br><br>
+                The two inclusions give equality.
+                <span class="qed">$\blacksquare$</span>
+            </div>
+
+            <h4>Worked Examples</h4>
+            <table>
+                <tr>
+                    <th>Set $S$</th>
+                    <th>$\text{lub}(S)$</th>
+                    <th>All upper bounds of $S$</th>
+                </tr>
+                <tr><td>$(0,1)$</td><td>$1$</td><td>$[1,\infty)$</td></tr>
+                <tr><td>$\{1,3,5,7\}$</td><td>$7$</td><td>$[7,\infty)$</td></tr>
+                <tr>
+                    <td>$\left\{1-\tfrac{1}{n}\mid n\in\mathbb{N}\right\}$</td>
+                    <td>$1$</td><td>$[1,\infty)$</td>
+                </tr>
+                <tr><td>$(-\infty,4)$</td><td>$4$</td><td>$[4,\infty)$</td></tr>
+            </table>
+            <div class="math-box">
+            <ul>
+                 <li> If $A$ is bounded above, then comment on $A^c.$ </li>
+                 <li> If $\max(A)=M, \max(B)=N$ Comment on $A^c\cup B^c, A^c\cap B^c.$</li>
+            </ul>
+                
+            </div>
+            <div class="math-box">
+                <strong>Analogously for lower bounds:</strong>
+                If $S$ is bounded below, then the set of all lower bounds of $S$
+                equals $(-\infty,\,\text{glb}(S)].$
+            </div>
+        </div><!-- /step 9 -->
+
+    <!-- ════════════════════════════════════════
+         PART III  —  BOUNDEDNESS RESULTS
+    ════════════════════════════════════════ -->
+
+        <!-- ═══ STEP 10 ═══ -->
+        <div class="step">
+            <hr class="section-rule">
+            <h2>Part III &mdash; Boundedness Results for Set Operations</h2>
+            <p>
+                We now assume $A$ and $B$ are bounded above and show that several natural operations
+                preserve this property. We also compute the least upper bound of each resulting set.
+            </p>
+
+            <div class="tcolorbox green">
+                <div class="tcolorbox-header">Proposition 1 &mdash; Union</div>
+                <div class="tcolorbox-content">
+                    If $A$ and $B$ are bounded above, then $A\cup B$ is bounded above and
+                    $$\text{lub}(A\cup B) \;=\; \max\!\bigl(\text{lub}(A),\;\text{lub}(B)\bigr).$$
+                </div>
+            </div>
+
+            <div class="proof-block">
+                <span class="proof-label">Proof &mdash; bounded above.</span>
+                Let $M_1=\text{lub}(A)$ and $M_2=\text{lub}(B).$ Set $M=\max(M_1,M_2).$
+                For any $x\in A\cup B$:
+                if $x\in A$ then $x\le M_1\le M$;
+                if $x\in B$ then $x\le M_2\le M.$
+                In either case $x\le M,$ so $M$ is an upper bound for $A\cup B.$<br>
+                Let $N$ be an upper bound for $A\cup B.$ Then $M_1\le N$ and $M_2\le N.$ Hence $M\le N.$
+                <span class="qed">$\blacksquare$</span>
+            </div>
+
+            <div class="math-box">
+                <strong>Why $\text{lub}(A\cup B)=\max(\text{lub}(A),\text{lub}(B))$?</strong>
+                <br>
+                Let $L_1=\text{lub}(A),\;L_2=\text{lub}(B),\;L=\max(L_1,L_2).$
+                Suppose WLOG $L=L_1.$
+                (i) $L$ is an upper bound (shown above).
+                (ii) Any upper bound $M$ of $A\cup B$ is in particular an upper bound of $A,$
+                so $M\ge L_1=L.$
+                Hence $L=\text{lub}(A\cup B).$
+            </div>
+        </div><!-- /step 10 -->
+
+        <!-- ═══ STEP 11 ═══ -->
+        <div class="step">
+            <div class="tcolorbox cyan">
+                <div class="tcolorbox-header">Proposition 2 &mdash; Intersection (assuming $A\cap B\neq\emptyset$)</div>
+                <div class="tcolorbox-content">
+                    If $A$ and $B$ are bounded above and $A\cap B\neq\emptyset,$
+                    then $A\cap B$ is bounded above and
+                    $$\text{lub}(A\cap B) \;\le\; \min\!\bigl(\text{lub}(A),\;\text{lub}(B)\bigr).$$
+                </div>
+            </div>
+
+            <div class="proof-block">
+                <span class="proof-label">Proof &mdash; bounded above.</span>
+                Let $M_1=\text{lub}(A).$ Since $A\cap B\subseteq A,$
+                every $x\in A\cap B$ satisfies $x\le M_1.$
+                Hence $M_1$ is an upper bound for $A\cap B.$
+                (The same argument using $\text{lub}(B)$ works equally well.)
+                <span class="qed">$\blacksquare$</span>
+            </div>
+
+            <div class="tcolorbox amber">
+                <div class="tcolorbox-header">The inequality can be strict</div>
+                <div class="tcolorbox-content">
+                    $A=[0,2],\;B=[0.5,\,5]$:
+                    $A\cap B=[0.5,2],$ so $\text{lub}(A\cap B)=2.$
+                    Here $\min(\text{lub}(A),\text{lub}(B))=\min(2,5)=2$ &mdash; equality.
+                    <br><br>
+                    But $\text{lub}(A\cap B)=2<5=\text{lub}(B),$
+                    showing the inequality is strict on the $B$-side.
+                    In general $\text{lub}(A\cap B)\le\min(\text{lub}(A),\text{lub}(B)),$
+                    and either equality or strict inequality is possible.
+                </div>
+            </div>
+        </div><!-- /step 11 -->
+
+        <!-- ═══ STEP 12 ═══ -->
+        <div class="step">
+            <div class="tcolorbox indigo">
+                <div class="tcolorbox-header">Proposition 3 &mdash; Sumset $A+B$</div>
+                <div class="tcolorbox-content">
+                    If $A$ and $B$ are bounded above, then $A+B$ is bounded above and
+                    $$\text{lub}(A+B) \;=\; \text{lub}(A)+\text{lub}(B).$$
+                </div>
+            </div>
+
+            <div class="proof-block">
+                <span class="proof-label">Proof &mdash; bounded above.</span>
+                Let $M_1=\text{lub}(A)$ and $M_2=\text{lub}(B).$ Set $M=M_1+M_2.$
+                For any $x\in A+B$ write $x=a+b$ with $a\in A,\;b\in B.$
+                Then $x=a+b\le M_1+M_2=M.$ So $M$ is an upper bound for $A+B.$
+                <span class="qed">$\blacksquare$</span>
+            </div>
+
+            <div class="proof-block">
+                <span class="proof-label">Why $\text{lub}(A+B)=\text{lub}(A)+\text{lub}(B)$?</span>
+                Let $L_1=\text{lub}(A),\;L_2=\text{lub}(B),\;L=L_1+L_2.$
+                We have shown $L$ is an upper bound for $A+B.$
+                It remains to show it is the <em>least</em> upper bound.
+                <br><br>
+                Let $\varepsilon>0.$ By the alternate definition of least upper bound:
+                there exists $a\in A$ with $a>L_1-\tfrac{\varepsilon}{2},$ and
+                there exists $b\in B$ with $b>L_2-\tfrac{\varepsilon}{2}.$
+                Then $a+b\in A+B$ and
+                $$a+b \;>\; \Bigl(L_1-\tfrac{\varepsilon}{2}\Bigr)+\Bigl(L_2-\tfrac{\varepsilon}{2}\Bigr)
+                  = L-\varepsilon.$$
+                Since $\varepsilon>0$ was arbitrary, $L$ is the least upper bound of $A+B.$<br>
+                <h3>We look for an alternating proof.</h3>
+                It is clear that $L_1+L_2$ is an upper bound of $A+B.$<br>
+                Let $M$ be an upper bound of $A+B.$ <br>
+                Let us fix $b\in B.$ Then $\forall a\in A\; a+b\le M.$ That is $a\le M-b.$<br>
+                This shows that $M-b$ is an upperbound for $A.$ But $L_1$ is least upperbound for $A.$ Hence $L_1\le M-b.$<br>
+                Equivalently $b\le M-L_1.$ Since $b$ is arbitrary, $M-L_1$ is upper bound for $B.$ Hence $L_1+L_2\le M.$
+                <span class="qed">$\blacksquare$</span>
+            </div>
+
+            <div class="math-box">
+                <strong>Example:</strong> $A=[0,1],\;B=[-1,2].$
+                $\text{lub}(A)=1,\;\text{lub}(B)=2,$ so $\text{lub}(A+B)=3.$
+                Indeed $A+B=[-1,3],$ confirming $\text{lub}(A+B)=3.$ &#10003;
+            </div>
+        </div><!-- /step 12 -->
+
+        <!-- ═══ STEP 13 ═══  (c+A) -->
+        <div class="step">
+            <div class="tcolorbox teal">
+                <div class="tcolorbox-header">Proposition 4 &mdash; Translation $c+A$</div>
+                <div class="tcolorbox-content">
+                    If $A$ is bounded above, then $c+A$ is bounded above for every $c\in\mathbb{R},$ and
+                    $$\text{lub}(c+A) \;=\; c+\text{lub}(A).$$
+                </div>
+            </div>
+
+            <div class="proof-block">
+                <span class="proof-label">Proof.</span>
+                Let $M=\text{lub}(A).$ For any $x=c+a\in c+A$ (with $a\in A$):
+                $x=c+a\le c+M.$ So $c+M$ is an upper bound for $c+A.$
+                <br><br>
+                <strong>Minimality.</strong>
+                Let $\varepsilon>0.$ By the alternate definition, there exists $a\in A$ with
+                $a>M-\varepsilon,$ so $c+a\in c+A$ and $c+a>c+M-\varepsilon.$
+                Hence $c+M$ is the least upper bound of $c+A.$
+                <span class="qed">$\blacksquare$</span>
+            </div>
+
+            <div class="math-box">
+                <strong>Consistency with Proposition 3:</strong>
+                Since $c+A=A+\{c\}$ and $\text{lub}(\{c\})=c,$
+                Proposition 3 gives $\text{lub}(c+A)=\text{lub}(A)+c,$ confirming the formula.
+                <br><br>
+                <strong>Example:</strong> $A=(0,1),\;c=-3.$
+                $\text{lub}(A)=1,$ so $\text{lub}(c+A)=-3+1=-2.$
+                Indeed $c+A=(-3,-2),$ so $\text{lub}(c+A)=-2.$ &#10003;
+            </div>
+        </div><!-- /step 13 -->
+
+        <!-- ═══ STEP 14 ═══  (cA, c > 0) -->
+        <div class="step">
+            <div class="tcolorbox purple">
+                <div class="tcolorbox-header">Proposition 5 &mdash; Scaling $cA$ with $c>0$</div>
+                <div class="tcolorbox-content">
+                    If $A$ is bounded above and $c>0,$ then $cA$ is bounded above and
+                    $$\text{lub}(cA) \;=\; c\cdot\text{lub}(A).$$
+                </div>
+            </div>
+
+            <div class="proof-block">
+                <span class="proof-label">Proof.</span>
+                Let $M=\text{lub}(A).$ For any $x=ca\in cA$ (with $a\in A$):
+                since $c>0,$ $x=ca\le cM.$ So $cM$ is an upper bound for $cA.$
+                <br><br>
+                <strong>Minimality.</strong>
+                Let $\varepsilon>0.$ There exists $a\in A$ with $a>M-\tfrac{\varepsilon}{c},$
+                so $ca\in cA$ and $ca>cM-\varepsilon.$
+                Hence $cM$ is the least upper bound of $cA.$
+                <span class="qed">$\blacksquare$</span>
+            </div>
+
+            <div class="tcolorbox red">
+                <div class="tcolorbox-header">&#9888; What if $c&lt;0$?</div>
+                <div class="tcolorbox-content">
+                    Multiplying by $c<0$ <em>reverses</em> the inequality: $a\le M\;\Rightarrow\;ca\ge cM.$
+                    So $cA$ is bounded <strong>below</strong>, not above, and
+                    $$\text{glb}(cA) \;=\; c\cdot\text{lub}(A)\quad(c<0).$$
+                    <strong>Example:</strong> $A=[0,1],\;c=-2.$
+                    $\text{lub}(A)=1,$ so $\text{glb}(cA)=(-2)(1)=-2.$
+                    Indeed $cA=[-2,0],$ confirming $\text{glb}(cA)=-2.$ &#10003;
+                </div>
+            </div>
+
+            <div class="math-box">
+                <strong>Summary Table</strong> &mdash; Assume $A$ is bounded above, $L=\text{lub}(A)$:
+                <table>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Bounded above?</th>
+                        <th>Least upper bound</th>
+                    </tr>
+                    <tr><td>$c+A$ (any $c$)</td><td>Yes</td><td>$c+L$</td></tr>
+                    <tr><td>$cA,\;c>0$</td><td>Yes</td><td>$cL$</td></tr>
+                    <tr><td>$cA,\;c=0$</td><td>Yes &nbsp;($cA=\{0\}$)</td><td>$0$</td></tr>
+                    <tr><td>$cA,\;c<0$</td><td>Bounded below</td><td>$\text{glb}(cA)=cL$</td></tr>
+                </table>
+            </div>
+        </div><!-- /step 14 -->
+
+    
+    </div><!-- /.container -->
+
+    <!-- ═══════════════════════════════════════
+         FIXED CONTROLS BAR
+    ═══════════════════════════════════════ -->
+    <div class="controls">
+        <span class="key-hint">Press <kbd>Enter</kbd> or <kbd>&rarr;</kbd> to advance</span>
+        <div class="progress-wrap">
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progressFill"></div>
+            </div>
+            <span class="progress-label" id="progressLabel">0 / 0</span>
+        </div>
+        <button class="btn-next" id="btnNext" onclick="revealNext()">Next &#9654;</button>
+    </div>
+
+    <script>
+        const steps   = document.querySelectorAll('.step');
+        const fill    = document.getElementById('progressFill');
+        const label   = document.getElementById('progressLabel');
+        const btn     = document.getElementById('btnNext');
+        let   current = 0;
+
+        function updateUI() {
+            const pct = (current / steps.length) * 100;
+            fill.style.width  = pct + '%';
+            label.textContent = current + ' / ' + steps.length;
+            btn.disabled      = current >= steps.length;
+            btn.textContent   = current >= steps.length ? 'Done \u2713' : 'Next \u25ba';
+        }
+
+        function revealNext() {
+            if (current >= steps.length) return;
+            const el = steps[current];
+            el.classList.add('visible');
+            if (window.MathJax) MathJax.typesetPromise([el]);
+            current++;
+            updateUI();
+            setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight') {
+                e.preventDefault();
+                revealNext();
+            }
+        });
+
+        window.addEventListener('load', function() {
+            updateUI();
+            revealNext();
+        });
+    </script>
+
+</body>
+</html>

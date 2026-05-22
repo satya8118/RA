@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lecture 4 - LUB Property and applications of Archimedean Property</title>
+
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\$', '\$']], displayMath: [['$$', '$$']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --bg: #f4f7f6; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--primary);
+            background: var(--bg);
+            padding: 20px 20px 100px 20px; /* bottom padding for fixed controls bar */
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 10px;
+        }
+
+        .math-box {
+            background: #e8f4fd;
+            border-left: 5px solid var(--secondary);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        /* ── Number Line ───────────────────────────────────── */
+        .number-line-container { position: relative; height: 100px; margin: 40px 0; }
+        .line { width: 100%; height: 2px; background: black; position: absolute; top: 50%; }
+        .point {
+            width: 10px; height: 10px; background: red; border-radius: 50%;
+            position: absolute; top: 45%; transform: translateX(-50%);
+            transition: all 0.5s ease-in-out;
+        }
+        .point:hover { transform: translateX(-50%) scale(1.5); cursor: pointer; }
+
+        /* ── Table ─────────────────────────────────────────── */
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; }
+
+        /* ── Real Numbers Diagram ──────────────────────────── */
+        .real-numbers-box {
+            width: 100%; max-width: 700px; margin: 30px auto;
+            border: 2px solid #4a3080; border-radius: 10px;
+            background-color: #d1c4e9; overflow: hidden; line-height: 1.2;
+        }
+        .diag-title { padding: 10px; font-style: italic; font-weight: bold; font-size: 20px; color: #002c3e; border-bottom: 1px solid #4a3080; }
+        .diag-container { display: flex; min-height: 450px; }
+        .diag-section { flex: 1; padding: 20px; position: relative; }
+        .diag-rational { border-right: 2px solid #7c4dff; }
+        .diag-section h4 { text-align: center; color: #311b92; margin-top: 0; border: none; }
+        .integers-circle {
+            background-color: #007bff; border: 2px solid #000; border-radius: 50%;
+            width: 280px; height: 200px; margin: 40px auto;
+            position: relative; display: flex; align-items: center; justify-content: center;
+        }
+        .whole-numbers-circle {
+            background-color: #28a745; border: 2px solid #000; border-radius: 50%;
+            width: 200px; height: 130px; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center;
+        }
+        .num { position: absolute; font-size: 16px; font-weight: bold; color: black; }
+        .frac-78  { top: 80px; left: 20px; }
+        .frac-13  { top: 50px; left: 140px; }
+        .dec-097  { top: 40px; right: 20px; }
+        .dec-021  { top: 90px; right: 30px; }
+        .sqrt-169 { bottom: 20px; right: 20px; }
+        .neg-3    { top: 20px; left: 30px; }
+        .neg-82   { bottom: 40px; right: 10px; }
+        .irr-list { display: flex; flex-direction: column; gap: 20px; align-items: center; margin-top: 30px; font-size: 20px; color: black; }
+        .fraction { display: inline-block; text-align: center; vertical-align: middle; }
+        .fraction span { display: block; padding: 0 5px; }
+        .fraction .bottom { border-top: 2px solid black; }
+        .overline { text-decoration: overline; }
+
+        /* ── tcolorbox ─────────────────────────────────────── */
+        .tcolorbox { border-radius: 6px; margin: 14px 0; overflow: hidden; border: 1px solid #ccc; }
+        .tcolorbox-header { padding: 8px 15px; font-weight: bold; font-size: 1rem; background-color: #2c3e50; color: white; }
+        .tcolorbox-content { padding: 15px; background-color: #eaf0fb; }
+
+        .tcolorbox.blue        .tcolorbox-header  { background-color: #1565c0; }
+        .tcolorbox.blue        .tcolorbox-content { background-color: #e3f2fd; }
+        .tcolorbox.green       .tcolorbox-header  { background-color: #2e7d32; }
+        .tcolorbox.green       .tcolorbox-content { background-color: #e8f5e9; }
+        .tcolorbox.orange      .tcolorbox-header  { background-color: #e65100; }
+        .tcolorbox.orange      .tcolorbox-content { background-color: #fff3e0; }
+        .tcolorbox.purple      .tcolorbox-header  { background-color: #6a1b9a; }
+        .tcolorbox.purple      .tcolorbox-content { background-color: #f3e5f5; }
+        .tcolorbox.red         .tcolorbox-header  { background-color: #c62828; }
+        .tcolorbox.red         .tcolorbox-content { background-color: #ffebee; }
+        .tcolorbox.teal        .tcolorbox-header  { background-color: #00695c; }
+        .tcolorbox.teal        .tcolorbox-content { background-color: #e0f2f1; }
+        .tcolorbox.indigo      .tcolorbox-header  { background-color: #283593; }
+        .tcolorbox.indigo      .tcolorbox-content { background-color: #e8eaf6; }
+        .tcolorbox.pink        .tcolorbox-header  { background-color: #ad1457; }
+        .tcolorbox.pink        .tcolorbox-content { background-color: #fce4ec; }
+        .tcolorbox.brown       .tcolorbox-header  { background-color: #4e342e; }
+        .tcolorbox.brown       .tcolorbox-content { background-color: #efebe9; }
+        .tcolorbox.cyan        .tcolorbox-header  { background-color: #00838f; }
+        .tcolorbox.cyan        .tcolorbox-content { background-color: #e0f7fa; }
+        .tcolorbox.lime        .tcolorbox-header  { background-color: #558b2f; }
+        .tcolorbox.lime        .tcolorbox-content { background-color: #f1f8e9; }
+        .tcolorbox.amber       .tcolorbox-header  { background-color: #f57f17; }
+        .tcolorbox.amber       .tcolorbox-content { background-color: #fff8e1; }
+        .tcolorbox.grey        .tcolorbox-header  { background-color: #424242; }
+        .tcolorbox.grey        .tcolorbox-content { background-color: #f5f5f5; }
+        .tcolorbox.deep-orange .tcolorbox-header  { background-color: #bf360c; }
+        .tcolorbox.deep-orange .tcolorbox-content { background-color: #fbe9e7; }
+        .tcolorbox.deep-purple .tcolorbox-header  { background-color: #4527a0; }
+        .tcolorbox.deep-purple .tcolorbox-content { background-color: #ede7f6; }
+        .tcolorbox.olive       .tcolorbox-header  { background-color: #827717; }
+        .tcolorbox.olive       .tcolorbox-content { background-color: #f9fbe7; }
+        .tcolorbox.slate       .tcolorbox-header  { background-color: #37474f; }
+        .tcolorbox.slate       .tcolorbox-content { background-color: #eceff1; }
+
+        /* ── Quiz details styling ──────────────────────────── */
+        details { margin: 8px 0; }
+        summary {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #e0e0e0;
+            border: 1px solid #bbb;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+        summary:hover { background: #cfcfcf; }
+        .alert-secondary {
+            background: #f8f9fa;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px 14px;
+            margin-top: 6px;
+            font-size: 0.95rem;
+        }
+        .fw-bold { font-weight: bold; }
+        .mb-3 { margin-bottom: 16px; }
+
+        /* ── STEP REVEAL SYSTEM ────────────────────────────── */
+        .step {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.4s ease, max-height 0.5s ease;
+        }
+        .step.visible {
+            opacity: 1;
+            max-height: 3000px;
+            margin-bottom: 6px;
+        }
+
+        /* ── FIXED CONTROLS BAR ────────────────────────────── */
+        .controls {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: #ede5d8;
+            border-top: 2px solid #c8b99a;
+            padding: 12px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            z-index: 1000;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+        }
+        .progress-wrap { flex: 1; display: flex; align-items: center; gap: 12px; }
+        .progress-bar-bg {
+            flex: 1; height: 5px; background: #c8b99a;
+            border-radius: 3px; overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%; background: #8b2500;
+            border-radius: 3px; width: 0%;
+            transition: width 0.4s ease;
+        }
+        .progress-label {
+            font-size: 14px; color: #8b2500; font-weight: bold;
+            white-space: nowrap; min-width: 55px; text-align: right;
+        }
+        .btn-next {
+            background: #2c3e50; color: white; border: none;
+            padding: 10px 28px; font-family: 'Segoe UI', sans-serif;
+            font-size: 15px; cursor: pointer; border-radius: 4px;
+            transition: background 0.2s; letter-spacing: 0.03em;
+        }
+        .btn-next:hover:not(:disabled) { background: #3498db; }
+        .btn-next:disabled { background: #c8b99a; cursor: default; }
+        .key-hint { font-size: 13px; color: #7a6e64; font-style: italic; white-space: nowrap; }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a href="index.html">← Back to Course Home</a>
+        &nbsp;|&nbsp;
+        <a href="L5.html">Next Lecture →</a>
+    </nav>
+<!-- ═══ STEP 0 ═══ -->
+        <div class="step">
+            <hr class="section-rule">
+            <h2>Part IV &mdash; The LUB Property</h2>
+
+            <div class="math-box">
+                <strong>The LUB Axiom (Completeness of $\mathbb{R}$):</strong>
+                Every nonempty set of real numbers that is bounded above has a least upper bound in $\mathbb{R}.$<br>
+                $\forall S\in \mathcal{B},$ where $\mathcal{B}$ is the set of all nonempty bounded above subsets of $\mathbb{R},$ there exist $\alpha\in \mathbb{R}$ such that $lub(S)=\alpha.$ 
+            </div>
+
+            <div class="tcolorbox red">
+                <div class="tcolorbox-header">Why do we need an axiom?</div>
+                <div class="tcolorbox-content">
+                    $\mathbb{Q}$ does <em>not</em> satisfy this property.
+                    The set $S=\{q\in\mathbb{Q}\mid q^2<2\}$ is bounded above in $\mathbb{Q}$ (by $2$, say),
+                    but its least upper bound would be $\sqrt{2},$ and $\sqrt{2}\notin\mathbb{Q}.$                     So no least upper bound of $S$ exists within $\mathbb{Q}$ — $\mathbb{Q}$ has
+                    <em>gaps.</em>
+                    <br><br>
+                    The Completeness Axiom is exactly what distinguishes $\mathbb{R}$ from $\mathbb{Q}$:
+                    in $\mathbb{R}$ there are <em>no gaps.</em>
+                </div>
+            </div>
+        </div>
+<div class="step">         
+    <h2>Proof: LUB Property implies GLB Property</h2>
+    <article class="theorem-card">
+        <div class="card-content">
+            <p><strong>Theorem:</strong> If the Least Upper Bound Property holds, then the Greatest Lower Bound Property holds.</p>
+            
+            <p><strong>Proof:</strong></p>
+            <ol class="definition-list">
+                <li>Let <span class="math">A</span> be a nonempty set bounded below. Let <span class="math">L</span> be the set of all lower bounds of <span class="math">A</span>.</li>
+                <li><span class="math">L</span> is nonempty because <span class="math">A</span> is bounded below.</li>
+                <li><span class="math">L</span> is bounded above: Any element <span class="math">$y \in A$</span> is an upper bound for <span class="math">L</span> because <span class="math">$l \le y$</span> for all <span class="math">$l \in L$</span>.</li>
+                <li>By the LUB property, <span class="math">L</span> has a least upper bound. Let <span class="math">$\alpha = lub(L)$</span>.</li>
+                <li><strong>Show <span class="math">$\alpha$</span> is a lower bound for <span class="math">A</span>:</strong> Assume <span class="math">$\alpha > x$</span> 
+                    for some <span class="math">$x \in A$</span>. Since <span class="math">$x$</span> is an upper bound for <span class="math">L</span> (from step 3), and <span class="math">$\alpha$</span> is the <em>least</em> upper bound, we must have <span class="math">$\alpha \le x$</span>.
+                     This is a contradiction. Thus, <span class="math">$\alpha \le a$</span> for all <span class="math">$a \in A$</span>.</li>
+                <li><strong>Show <span class="math">$\alpha$</span> is greatest:</strong> Let <span class="math">m</span> be any lower bound of <span class="math">A</span>. Then <span class="math">$m \in L$</span>. Since <span class="math">$\alpha$</span> is an upper bound for <span class="math">L</span>, <span class="math">$m \le \alpha$</span>.</li>
+            </ol>
+            <p style="margin-top:1rem;">Therefore, <span class="math">$\alpha = glb(A)$</span>.</p>
+            <p>By using $lub(A)=-glb(-A),$ one may try an alternate proof.  
+        </div>
+    </article> 
+    </div>
+
+<!-- Concept 1: Archimedean Property (1) -->
+ <div class="step">
+<div class="tcolorbox blue">
+    <div class="tcolorbox-header">Theorem &mdash; Archimedean Property (1) (AP1)</div>
+    <div class="tcolorbox-content">
+        Given any real number $x \in \mathbb{R}$, there exists a natural number $n \in \mathbb{N}$ such that $n > x.$         <br><br>
+        <strong>Proof (using LUB Property):</strong> Assume, for contradiction, that $\mathbb{N}$ is bounded above, $1\in \mathbb{N}.$ That is $\mathbb{N}$ is bounded above and nonempty, hence by the Least Upper Bound Property, $s = lub(\mathbb{N})$  exists. Since $s$ is the least upper bound, $s-1$ is not an upper bound. Therefore, there exists an $m \in \mathbb{N}$ such that $m > s-1.$ Adding $1$ to both sides gives $m+1 > s.$ However, $m+1 \in \mathbb{N},$ which contradicts the assumption that $s$ is an upper bound for $\mathbb{N}.$ Hence our assumption $\mathbb{N}$ is bounded above is false. Equivalently $\mathbb{N}$ is not bounded above. 
+        </div>
+</div>
+</div>
+<br>
+
+<!-- Concept 2: Archimedean Property (2) and Equivalence -->
+ <div class="step">
+<div class="tcolorbox red">
+    <div class="tcolorbox-header">Theorem &mdash; Archimedean Property (2) & Equivalence</div>
+    <div class="tcolorbox-content">
+        <strong>Statement:</strong> If $x, y \in \mathbb{R}$ with $x > 0,$ then there exists a natural number $n \in \mathbb{N}$ such that $nx > y.$         <br><br>
+        <strong>Proof of Equivalence:</strong>
+        <ul>
+            <li>
+                <strong>(1) $\implies$ (2):</strong> Since $x > 0,$ the real number $\frac{y}{x}$ exists. By Archimedean Property (1), there exists $n \in \mathbb{N}$ such that $n > \frac{y}{x}.$ Multiplying by $x$ (which is positive) yields $nx > y.$             </li>
+            <li>
+                <strong>(2) $\implies$ (1):</strong> Let $x=1$ and let $y$ be any real number. Property (2) guarantees the existence of $n \in \mathbb{N}$ such that $n \cdot 1 > y,$ {i.e., $n > y.$ This proves Property (1).
+            </li>
+        </ul>
+    </div>
+</div>
+</div>
+<br>
+<!-- ═══ STEP 17 ═══ -->
+        <div class="step">
+            <h4>Key Applications</h4>
+            <div class="tcolorbox lime">
+                <div class="tcolorbox-header">The $1/n$ Rule</div>
+                <div class="tcolorbox-content">
+                    For any $\varepsilon>0,$ there exists $n\in\mathbb{N}$ such that $\dfrac{1}{n}<\varepsilon.$<br>
+                    Proof: Let $x>0.$ By Archimedian property, there exists $n\in \mathbb{N}$                      such that  $n>\frac{1}{x}.$ 
+                    That is $x>\frac{1}{n}.$                     <br><em>This is the foundation of the $\varepsilon$-$\delta$ definition of limits.</em><br>
+                                    </div>
+            </div>
+
+<!-- ═══ STEP: $\mathbb{Z} not bounded below ═══ -->
+        <div class="step">
+            <div class="tcolorbox deep-purple">
+                <div class="tcolorbox-header">Corollary &mdash; $\mathbb{Z}$ is Not Bounded Below</div>
+                <div class="tcolorbox-content">
+                    The set of integers $\mathbb{Z}$ has no lower bound in $\mathbb{R}.$                     That is, for every $m\in\mathbb{R}$ there exists $z\in\mathbb{Z}$ such that $z < m.$                 </div>
+            </div>
+
+            <div class="tcolorbox grey">
+                <div class="tcolorbox-header">Proof &mdash; reducing to the Archimedean Property</div>
+                <div class="tcolorbox-content">
+                    <strong>Recall (Archimedean Property&nbsp;1):</strong>
+                    $\mathbb{N}$ is not bounded above — for every $x\in\mathbb{R}$ there exists
+                    $n\in\mathbb{N}$ with $n > x.$                     <br><br>
+                    <strong>Claim:</strong> $\mathbb{Z}$ is not bounded below.
+                    <br><br>
+                    Let $m\in\mathbb{R}$ be arbitrary. We must find $z\in\mathbb{Z}$ with $z < m.$                     <br><br>
+                    Apply the Archimedean Property with $x := -m \in\mathbb{R}.$                     There exists $n\in\mathbb{N}$ such that
+                    $$n \;>\; -m.$$                     Multiplying both sides by $-1$ (reversing the inequality):
+                    $$-n \;<\; m.$$                     Since $n\in\mathbb{N}\subseteq\mathbb{Z},$ we have $-n\in\mathbb{Z}$ and $-n < m.$                     <br><br>
+                    Since $m\in\mathbb{R}$ was arbitrary, no real number can serve as a lower bound
+                    for $\mathbb{Z}.$ Hence $\mathbb{Z}$ is not bounded below.
+                    <span style="float:right; font-weight:bold;">$\blacksquare$</span><br>
+                    <strong>Another approach:</strong> Recall that if  $A$ is bounded below, then $-A$ is bounded above. If $\mathbb{Z}$ is bounded below, then $\mathbb{Z}=-\mathbb{Z}$ is bounded above. But then $\mathbb{N}$ (as  $\mathbb{N}\subset \mathbb{Z}$) is bounded above. A contradiction.
+                </div>
+            </div>
+
+            <div class="tcolorbox amber">
+                <div class="tcolorbox-header">Why this matters</div>
+                <div class="tcolorbox-content">
+                    The fact that $\mathbb{Z}$ is not bounded below is used immediately in the next
+                    result: to prove that the set $S_x = \{z\in\mathbb{Z}\mid z\le x\}$ is
+                    <em>nonempty</em> for every real $x$ (since we can always find an integer
+                    strictly below $x$). This is a key step in the proof of the <strong>Floor / Integer
+                    Part Lemma</strong>.
+                    <br><br>
+                    <strong>Summary of the logical chain:</strong>
+                    <br>
+                    LUB Property &nbsp;$\Longrightarrow$&nbsp; $\mathbb{N}$ not bounded above
+                    &nbsp;$\Longrightarrow$&nbsp; $\mathbb{Z}$ not bounded below
+                    &nbsp;$\Longrightarrow$&nbsp; Floor Lemma
+                    &nbsp;$\Longrightarrow$&nbsp; Density of $\mathbb{Q}$ in $\mathbb{R}.$                 </div>
+            </div>
+        </div>
+<br>
+
+<!-- Concept 3: Existence (Updated) -->
+        <article class="step">
+            <div class="tcolorbox green">
+                <div class="tcolorbox-header">Lemma 1 &mdash; Existence of Integer Part</div>
+                <div class="tcolorbox-content">
+                    <p>For any real number $ x $, there exists an integer $ m$ such that:</p>
+                    <div class="math-display">$ m \le x < m+1 $</div>
+                    
+                    <strong>Proof:</strong> Define the set $ S_x = \{ z \in \mathbb{Z} \mid z \le x \}.$                     <ol>
+                        <li>$ S_x $ is <strong>non-empty</strong>: Since $\mathbb{Z}$ is not bounded below (Archimedean property), there exists an integer $ k $ such that $k < x $, so $ k \in S_x $.</li>
+                        <li>$ S_x $ is <strong>bounded above</strong>: By definition of $S_x$, $ x$  is an upper bound for $ S_x $.</li>
+                        <li>By the <strong>Least Upper Bound (LUB) property</strong>, let $m = lub(S_x) $.</li>
+                        <li>Since $ m-1$ is not an upper bound for $ S_x $, there exists some $k \in S_x $ such that $k > m-1.$                             <ul>
+                                <li>This implies $ k+1 > m.$ </li>
+                                <li>Since $ m $ is the $lub(S_x)$, $k+1 \notin S_x $, which means $k+1 > x $.</li>
+                                <li>Since $k \le x $ (as $k \in S_x ), m $ must be an integer trapped between $k$ and $k+1$. Thus  $m = k$.</li>
+                            </ul>
+                            Therefore, $m \le x < m+1.$                         </li>
+                    </ol>
+
+                    <div class="diagram-container">
+                        <!-- Static SVG for Existence -->
+                        <svg width="500" height="120" viewBox="0 0 500 120" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Main Axis -->
+                            <line x1="20" y1="60" x2="480" y2="60" stroke="#343a40" stroke-width="2" marker-end="url(#arrow)" />
+                            
+                            <!-- Arrowhead definition -->
+                            <defs>
+                                <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                                    <path d="M0,0 L0,6 L9,3 z" fill="#343a40" />
+                                </marker>
+                            </defs>
+
+                            <!-- Ticks and Integers -->
+                            <!-- k (far left) -->
+                            <line x1="50" y1="50" x2="50" y2="70" stroke="#6c757d" stroke-width="2"/>
+                            <text x="50" y="90" text-anchor="middle" font-family="serif" font-style="italic">k</text>
+                            
+                            <!-- m (immediate left of x) -->
+                            <line x1="200" y1="45" x2="200" y2="75" stroke="#28a745" stroke-width="3"/>
+                            <text x="200" y="95" text-anchor="middle" font-weight="bold" fill="#28a745">m</text>
+
+                            <!-- x -->
+                            <circle cx="280" cy="60" r="5" fill="#dc3545" />
+                            <text x="280" y="40" text-anchor="middle" fill="#dc3545" font-weight="bold">x</text>
+
+                            <!-- m+1 -->
+                            <line x1="350" y1="45" x2="350" y2="75" stroke="#28a745" stroke-width="3"/>
+                            <text x="350" y="95" text-anchor="middle" font-weight="bold" fill="#28a745">m+1</text>
+                            
+                            <!-- Ellipsis for continuity -->
+                            <text x="420" y="65" font-size="20">...</text>
+
+                            <!-- Interval Highlight -->
+                            <rect x="200" y="60" width="150" height="20" fill="#28a745" fill-opacity="0.1" />
+                            
+                            <!-- Brackets -->
+                            <!-- [ at m -->
+                            <path d="M200,80 L200,85 M200,85 L205,85" stroke="#28a745" fill="none"/>
+                            <!-- ) at m+1 -->
+                            <path d="M350,80 L350,85 M345,85 L350,85" stroke="#28a745" fill="none"/>
+                        </svg>
+                        <div class="diagram-caption">
+                            Figure 1: The set $ S_x $ contains all integers $ \le x $ (e.g., $ k, m $). The supremum $ m $ is the largest integer less than or equal to $ x $.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Concept 4: Uniqueness (New Addition) -->
+        <article class="step">
+            <div class="tcolorbox blue">
+                <div class="tcolorbox-header">Theorem &mdash; Uniqueness of the Integer Part</div>
+                <div class="tcolorbox-content">
+                    <p>The integer $ m $ satisfying $ m \le x < m+1 $ is <strong>unique</strong>.</p>
+                    
+                    <strong>Proof:</strong> Assume for contradiction that there are two distinct integers $ m $ and $ n $ such that:
+                    <div class="math-display">
+                        $ m \le x < m+1 \quad \text{and} \quad n \le x < n+1 $                     </div>
+                    Without loss of generality, assume $ n > m $. Since $ m $ and $ n $ are integers, the next integer after $ m $ is $ m+1 $. Therefore:
+                    $ n \ge m+1 $                     
+                    However, applying the property of $ x $ with respect to $ n $ and $ m $:
+                    $ n \le x \quad \text{and} \quad x < m+1 $                     Combining these inequalities yields:
+                    $ n \le x < m+1 \implies n < m+1.$                     
+                    We have arrived at a contradiction: $ n $ cannot be both $ \ge m+1 $ and $ < m+1 $. Thus, our assumption that $ m \neq n $ is false. Therefore, the integer $ m $ is unique.
+
+                    <div class="diagram-container">
+                        <!-- Static SVG for Uniqueness -->
+                        <svg width="500" height="140" viewBox="0 0 500 140" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Main Axis -->
+                            <line x1="20" y1="80" x2="480" y2="80" stroke="#343a40" stroke-width="2" marker-end="url(#arrowBlue)" />
+                            <defs>
+                                <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                                    <path d="M0,0 L0,6 L9,3 z" fill="#343a40" />
+                                </marker>
+                            </defs>
+
+                            <!-- Interval [m, m+1) -->
+                            <rect x="150" y="80" width="100" height="20" fill="#007bff" fill-opacity="0.2" />
+                            <line x1="150" y1="70" x2="150" y2="90" stroke="#007bff" stroke-width="3"/>
+                            <text x="150" y="115" text-anchor="middle" font-weight="bold" fill="#007bff">m</text>
+                            
+                            <line x1="250" y1="70" x2="250" y2="90" stroke="#007bff" stroke-width="3"/>
+                            <text x="250" y="115" text-anchor="middle" font-weight="bold" fill="#007bff">m+1</text>
+
+                            <!-- Interval [n, n+1) -->
+                            <rect x="260" y="80" width="100" height="20" fill="#dc3545" fill-opacity="0.2" />
+                            <line x1="260" y1="70" x2="260" y2="90" stroke="#dc3545" stroke-width="3"/>
+                            <text x="260" y="115" text-anchor="middle" font-weight="bold" fill="#dc3545">n</text>
+
+                            <!-- Visual Logic -->
+                            <text x="300" y="40" text-anchor="middle" font-family="serif" fill="#dc3545">
+                                If $ n > m $, then $ n \ge m+1 $.
+                            </text>
+                            <path d="M260,60 Q250,50 250,70" stroke="#dc3545" stroke-width="1.5" fill="none" marker-end="url(#dotRed)"/>
+                            <defs>
+                                <marker id="dotRed" markerWidth="6" markerHeight="6" refX="3" refY="3">
+                                    <circle cx="3" cy="3" r="2" fill="#dc3545" />
+                                </marker>
+                            </defs>
+
+                            <text x="200" y="130" text-anchor="middle" font-size="12" fill="#6c757d">
+                                Intervals cannot overlap
+                            </text>
+                        </svg>
+                        <div class="diagram-caption">
+                            Figure 2: If two distinct integers $ m $ and $ n $ (where $ n > m $) both satisfied the condition, their corresponding intervals $[m, m+1)$ and $[n, n+1)$ would have to contain the same point $x$. This is impossible because integer intervals are disjoint.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        
+
+
+
+<!-- ═══ STEP: Motivation for Density of Rationals ═══ -->
+<div class="step">
+    <h3>Motivation for the Density of Rationals</h3>
+
+    <div class="tcolorbox slate">
+        <div class="tcolorbox-header">Step 0 &mdash; Integers between real numbers: sufficient but not necessary</div>
+        <div class="tcolorbox-content">
+            <p>
+                Before asking about <em>rationals</em>, let us first think about <em>integers</em>
+                between two real numbers.
+            </p>
+            <strong>Sufficient condition:</strong>
+            If $b - a > 1,$ then there is always at least one integer strictly between $a$ and $b.$             <br><br>
+            <em>Why?</em> Let $m = \lfloor a \rfloor + 1$ (the integer just above $a$). Then
+            $m > a.$ Since $b > a + 1 > m,$ we also have $m < b.$ So $a < m < b.$ &#10003;
+            <br><br>
+            <strong>Not necessary:</strong>
+            The condition $b - a > 1$ is <em>not necessary</em> — an integer can lie between
+            $a$ and $b$ even when $b - a \le 1.$             <br><br>
+            <table>
+                <tr>
+                    <th>$a$</th><th>$b$</th><th>$b - a$</th><th>Integer between?</th><th>Remark</th>
+                </tr>
+                <tr>
+                    <td>$0.3$</td><td>$1.8$</td><td>$1.5 > 1$</td>
+                    <td>Yes &mdash; e.g. $1$</td>
+                    <td>Sufficient condition met</td>
+                </tr>
+                <tr>
+                    <td>$0.7$</td><td>$1.3$</td><td>$0.6 \le 1$</td>
+                    <td>Yes &mdash; $1$ lies in $(0.7, 1.3)$</td>
+                    <td>Integer exists even though $b-a \le 1$</td>
+                </tr>
+                <tr>
+                    <td>$0.2$</td><td>$0.8$</td><td>$0.6 \le 1$</td>
+                    <td>No integer in $(0.2, 0.8)$</td>
+                    <td>Condition $b-a > 1$ is not necessary</td>
+                </tr>
+                <tr>
+                    <td>$1.1$</td><td>$1.9$</td><td>$0.8 \le 1$</td>
+                    <td>No integer in $(1.1, 1.9)$</td>
+                    <td>Integers are at $1$ and $2$, both outside</td>
+                </tr>
+            </table>
+            <div style="margin-top:10px;">
+                <strong>Conclusion:</strong> Whether an integer falls between $a$ and $b$                 depends on the <em>position</em> of $a$ and $b$ relative to $\mathbb{Z}$,
+                not merely on their distance.
+            </div>
+        </div>
+    </div>
+
+    <div class="tcolorbox indigo">
+        <div class="tcolorbox-header">Step 1 &mdash; Reformulating: rational between $a$ and $b$ $\Longleftrightarrow$ integer between $na$ and $nb$</div>
+        <div class="tcolorbox-content">
+            <p>
+                We want to find a rational $\dfrac{m}{n}$ (with $n\in\mathbb{N},\, m\in\mathbb{Z}$)
+                satisfying $a < \dfrac{m}{n} < b.$             </p>
+            Multiplying through by $n > 0$, this is equivalent to:
+            $$na \;<\; m \;<\; nb.$$             So finding a rational between $a$ and $b$ is <strong>exactly</strong> the same as
+            finding an integer $m$ between $na$ and $nb.$             <br><br>
+            Now the question becomes: <em>can we choose $n$ large enough so that an integer
+            is guaranteed to lie between $na$ and $nb$?</em>
+            <br><br>
+            From the sufficient condition above, it is enough to have $nb - na > 1,$ i.e.,
+            $$n(b - a) > 1 \quad\Longleftrightarrow\quad n > \frac{1}{b-a}.$$             Since $b > a,$ we have $b - a > 0,$ so $\dfrac{1}{b-a}$ is a finite positive real number.
+            The <strong>Archimedean Property</strong> guarantees that such an $n\in\mathbb{N}$ exists!
+        </div>
+    </div>
+
+    <div class="tcolorbox green">
+        <div class="tcolorbox-header">Step 2 &mdash; The plan of the proof</div>
+        <div class="tcolorbox-content">
+            <ol>
+                <li>
+                    Use the <strong>Archimedean Property</strong> to find $n\in\mathbb{N}$ with
+                    $n(b-a) > 1,$ i.e., $nb - na > 1.$                 </li>
+                <li>
+                    Use the <strong>Floor / Integer Part Lemma</strong> to find an integer $m$                     with $m \le na < m+1,$ i.e., $m$ is the integer part of $na.$                 </li>
+                <li>
+                    Show that this $m+1$ satisfies $na < m+1 < nb,$ i.e., $\dfrac{m+1}{n}$ lies
+                    strictly between $a$ and $b.$                 </li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- ═══ ZOOM ILLUSTRATION ═══ -->
+    <div style="background:#f0f4fb;border:2px solid #3498db;border-radius:8px;
+                padding:16px 20px;margin:20px 0 4px;font-family:'Segoe UI',sans-serif;">
+
+      <div style="font-size:1.05rem;font-weight:700;color:#1565c0;
+                  text-align:center;margin-bottom:5px;">
+        &#128269; Interactive: The Zoom Effect &mdash;
+        How Multiplying by $n$ Stretches the Gap
+      </div>
+
+      <div style="font-size:0.88rem;color:#444;text-align:center;margin-bottom:12px;">
+        <strong>Example:</strong>
+        $a = 0.35,\quad b = 0.65,\quad b-a = 0.30.$         &emsp;Need $n &gt; \tfrac{1}{0.30} \approx 3.33$,
+        so $n=4$ is Archimedean&rsquo;s guarantee.
+        &emsp;Click each $n$ to watch the gap stretch.
+      </div>
+
+      <!-- SVG canvas -->
+      <svg id="zoomSVG" viewBox="0 0 720 308"
+           xmlns="http://www.w3.org/2000/svg"
+           style="width:100%;max-width:720px;display:block;margin:0 auto 12px;
+                  background:#fafbfc;border-radius:6px;border:1px solid #c5d5e8;">
+      </svg>
+
+      <!-- n buttons -->
+      <div style="display:flex;justify-content:center;align-items:center;
+                  gap:7px;flex-wrap:wrap;margin-bottom:10px;">
+        <span style="font-size:0.9rem;color:#555;">Choose $n$:</span>
+        <button id="zb1" class="zbtn" onclick="zoomSetN(1)">n = 1</button>
+        <button id="zb2" class="zbtn" onclick="zoomSetN(2)">n = 2</button>
+        <button id="zb3" class="zbtn" onclick="zoomSetN(3)">n = 3</button>
+        <button id="zb4" class="zbtn" onclick="zoomSetN(4)">n = 4</button>
+        <button id="zb5" class="zbtn" onclick="zoomSetN(5)">n = 5</button>
+      </div>
+
+      <!-- status panel -->
+      <div id="zoomStatus"
+           style="text-align:center;font-size:0.91rem;padding:9px 16px;
+                  border-radius:5px;min-height:2.6em;line-height:1.75;
+                  border:1px solid #ddd;background:#f9f9f9;color:#333;">
+        &larr; Click a button to begin.
+      </div>
+    </div><!-- /zoom widget -->
+
+    <style>
+      .zbtn{padding:7px 16px;border:2px solid #1565c0;border-radius:5px;cursor:pointer;
+            font-size:.92rem;font-family:inherit;background:#e3f2fd;color:#1565c0;
+            transition:background .15s,color .15s;}
+      .zbtn.zact,.zbtn:hover{background:#1565c0;color:#fff;}
+    </style>
+
+    <script>
+    /* ─────── Zoom Widget ─────── */
+    (function(){
+      var A=0.35, B=0.65;
+      var NS='http://www.w3.org/2000/svg';
+      /* layout */
+      var TY=88,  TL=62, TR=658;              /* top (reference) line y, left, right */
+      var BY=232, BL=62, BR=658;              /* bottom (scaled) line */
+      var BVMIN=-0.15, BVMAX=4.35;           /* bottom viewport */
+      var BSCALE=(BR-BL)/(BVMAX-BVMIN);
+
+      function pxT(x){ return TL + x*(TR-TL); }
+      function pxB(x){ return BL + (x-BVMIN)*BSCALE; }
+
+      var svg=document.getElementById('zoomSVG');
+      function mk(tag,at,txt){
+        var e=document.createElementNS(NS,tag);
+        for(var k in at) e.setAttribute(k,at[k]);
+        if(txt!==undefined) e.textContent=txt;
+        return e;
+      }
+
+      /* ── arrowhead marker ─────────────────── */
+      var defs=mk('defs',{});
+      var mkr=mk('marker',{id:'zhd',markerWidth:'8',markerHeight:'6',
+                            refX:'8',refY:'3',orient:'auto'});
+      mkr.appendChild(mk('polygon',{points:'0 0,8 3,0 6',fill:'#90caf9'}));
+      defs.appendChild(mkr);
+      svg.appendChild(defs);
+
+      /* ── TOP REFERENCE LINE (static, always a & b) ─── */
+      var tg=mk('g',{});
+      /* axis */
+      tg.appendChild(mk('line',{x1:TL,y1:TY,x2:TR,y2:TY,
+        stroke:'#aaa','stroke-width':'2'}));
+      /* section-label left */
+      tg.appendChild(mk('text',{x:TL-8,y:TY+5,'text-anchor':'end',
+        'font-size':'13',fill:'#555','font-style':'italic'},'Reference:'));
+      /* ticks 0, 0.5, 1 */
+      [0,0.5,1].forEach(function(v){
+        var x=pxT(v);
+        tg.appendChild(mk('line',{x1:x,y1:TY-5,x2:x,y2:TY+5,
+          stroke:'#bbb','stroke-width':'1.5'}));
+        tg.appendChild(mk('text',{x:x,y:TY+18,'text-anchor':'middle',
+          'font-size':'11',fill:'#aaa'},v.toFixed(1)));
+      });
+      /* [a,b] shaded rect */
+      var xa0=pxT(A), xb0=pxT(B);
+      tg.appendChild(mk('rect',{x:xa0,y:TY-10,width:xb0-xa0,height:20,
+        fill:'#bbdefb',stroke:'#1565c0','stroke-width':'2',rx:'3'}));
+      /* dots */
+      tg.appendChild(mk('circle',{cx:xa0,cy:TY,r:'6',fill:'#1565c0'}));
+      tg.appendChild(mk('circle',{cx:xb0,cy:TY,r:'6',fill:'#1565c0'}));
+      /* labels a, b */
+      tg.appendChild(mk('text',{x:xa0,y:TY-19,'text-anchor':'middle',
+        'font-size':'14','font-weight':'bold',fill:'#1565c0'},'a'));
+      tg.appendChild(mk('text',{x:xb0,y:TY-19,'text-anchor':'middle',
+        'font-size':'14','font-weight':'bold',fill:'#1565c0'},'b'));
+      /* values below line */
+      tg.appendChild(mk('text',{x:xa0,y:TY+30,'text-anchor':'middle',
+        'font-size':'11',fill:'#1565c0'},'0.35'));
+      tg.appendChild(mk('text',{x:xb0,y:TY+30,'text-anchor':'middle',
+        'font-size':'11',fill:'#1565c0'},'0.65'));
+      /* gap label */
+      tg.appendChild(mk('text',{x:(xa0+xb0)/2,y:TY+44,'text-anchor':'middle',
+        'font-size':'11',fill:'#666'},'gap = 0.30'));
+      svg.appendChild(tg);
+
+      /* ── BOTTOM AXIS (static ticks, dynamic content added per n) ─── */
+      var bg=mk('g',{});
+      bg.appendChild(mk('line',{x1:BL,y1:BY,x2:BR,y2:BY,
+        stroke:'#aaa','stroke-width':'2'}));
+      /* integer ticks 0‒4 */
+      for(var m=0;m<=4;m++){
+        var xm=pxB(m);
+        bg.appendChild(mk('line',{x1:xm,y1:BY-8,x2:xm,y2:BY+8,
+          stroke:'#ccc','stroke-width':'2'}));
+        bg.appendChild(mk('text',{x:xm,y:BY+22,'text-anchor':'middle',
+          'font-size':'13',fill:'#bbb'},m));
+      }
+      /* "n=?:" label (updated dynamically via id) */
+      bg.appendChild(mk('text',{x:BL-8,y:BY+5,'text-anchor':'end',
+        'font-size':'13',fill:'#555','font-style':'italic',id:'zbotlbl'},'n = ?:'));
+      /* integers label on right */
+      bg.appendChild(mk('text',{x:BR+6,y:BY+23,'font-size':'11',fill:'#bbb'},'\u2124'));
+      svg.appendChild(bg);
+
+      /* ── integer-finding helper ─────────────────────── */
+      function intsIn(na,nb){
+        var res=[];
+        for(var m=Math.floor(na)+1; m<=Math.floor(nb); m++)
+          if(m > na+1e-9 && m < nb-1e-9) res.push(m);
+        return res;
+      }
+
+      /* ── main update function ───────────────────────── */
+      window.zoomSetN=function(n){
+        /* button states */
+        document.querySelectorAll('.zbtn').forEach(function(b){
+          b.classList.remove('zact');
+        });
+        var ab=document.getElementById('zb'+n);
+        if(ab) ab.classList.add('zact');
+
+        var na=A*n, nb=B*n, gap=nb-na;
+        var ints=intsIn(na,nb);
+        var hasInt=ints.length>0, gapOk=gap>1-1e-9;
+
+        var cMain=hasInt ? '#2e7d32' : '#c62828';
+        var cFill=hasInt ? '#c8e6c9' : '#ffcdd2';
+
+        /* remove old dynamic layers */
+        ['zdyn0','zdyn1'].forEach(function(id){
+          var e=document.getElementById(id); if(e) e.remove();
+        });
+
+        /* ── bezier connecting curves ── */
+        var d0=mk('g',{id:'zdyn0'});
+        var xna=pxB(na), xnb=pxB(nb);
+        var ymid=Math.round((TY+BY)/2);
+        /* a → na */
+        d0.appendChild(mk('path',{
+          d:'M'+xa0+' '+(TY+11)+' C'+xa0+' '+ymid+','+xna+' '+ymid+','+xna+' '+(BY-13),
+          stroke:'#90caf9','stroke-width':'1.5',fill:'none',
+          'stroke-dasharray':'5 3','marker-end':'url(#zhd)'}));
+        /* b → nb */
+        d0.appendChild(mk('path',{
+          d:'M'+xb0+' '+(TY+11)+' C'+xb0+' '+ymid+','+xnb+' '+ymid+','+xnb+' '+(BY-13),
+          stroke:'#90caf9','stroke-width':'1.5',fill:'none',
+          'stroke-dasharray':'5 3','marker-end':'url(#zhd)'}));
+        /* ×n label at curve midpoint */
+        var lx=Math.round(((xa0+xb0)/2+(xna+xnb)/2)/2);
+        d0.appendChild(mk('text',{x:lx,y:ymid-7,'text-anchor':'middle',
+          'font-size':'13','font-weight':'bold',fill:'#1565c0'},'\u00D7\u2009'+n));
+        svg.appendChild(d0);
+
+        /* ── bottom scaled interval ── */
+        var d1=mk('g',{id:'zdyn1'});
+
+        /* update "n=X:" label */
+        var bl=document.getElementById('zbotlbl');
+        if(bl) bl.textContent='n = '+n+':';
+
+        /* interval rect */
+        d1.appendChild(mk('rect',{x:xna,y:BY-12,
+          width:Math.max(xnb-xna,0),height:24,
+          fill:cFill,stroke:cMain,'stroke-width':'2.5',rx:'4'}));
+
+        /* highlight integers found inside */
+        ints.forEach(function(m){
+          var xm=pxB(m);
+          d1.appendChild(mk('circle',{cx:xm,cy:BY,r:'9',
+            fill:'#2e7d32',opacity:'0.92'}));
+          d1.appendChild(mk('text',{x:xm,y:BY+4,'text-anchor':'middle',
+            'font-size':'12','font-weight':'bold',fill:'white'},m));
+          d1.appendChild(mk('text',{x:xm,y:BY-22,'text-anchor':'middle',
+            'font-size':'12','font-weight':'bold',fill:'#2e7d32'},'\u2713\u2009'+m));
+        });
+
+        /* na and nb dots */
+        d1.appendChild(mk('circle',{cx:xna,cy:BY,r:'7',fill:cMain}));
+        d1.appendChild(mk('circle',{cx:xnb,cy:BY,r:'7',fill:cMain}));
+
+        /* na / nb labels — stagger horizontally if close */
+        var dpx=xnb-xna;
+        var naStr=n+'a\u202F=\u202F'+na.toFixed(2);
+        var nbStr=n+'b\u202F=\u202F'+nb.toFixed(2);
+        if(dpx < 115){
+          d1.appendChild(mk('text',{x:xna-7,y:BY-30,'text-anchor':'end',
+            'font-size':'12','font-weight':'bold',fill:cMain},naStr));
+          d1.appendChild(mk('text',{x:xnb+7,y:BY-30,'text-anchor':'start',
+            'font-size':'12','font-weight':'bold',fill:cMain},nbStr));
+        } else {
+          d1.appendChild(mk('text',{x:xna,y:BY-30,'text-anchor':'middle',
+            'font-size':'12','font-weight':'bold',fill:cMain},naStr));
+          d1.appendChild(mk('text',{x:xnb,y:BY-30,'text-anchor':'middle',
+            'font-size':'12','font-weight':'bold',fill:cMain},nbStr));
+        }
+
+        /* gap label below */
+        var gstr='gap\u202F=\u202F'+gap.toFixed(2)+(gapOk?' > 1\u2009\u2714':'');
+        d1.appendChild(mk('text',{
+          x:Math.round((xna+xnb)/2),y:BY+40,'text-anchor':'middle',
+          'font-size':'12',fill:cMain,'font-weight':gapOk?'bold':'normal'},gstr));
+
+        svg.appendChild(d1);
+
+        /* ── status panel ── */
+        var st=document.getElementById('zoomStatus');
+        var naS=na.toFixed(2), nbS=nb.toFixed(2), gS=gap.toFixed(2);
+        var html='';
+
+        st.style.background = hasInt ? (gapOk ? '#e8f5e9' : '#fff8e1') : '#ffebee';
+        st.style.borderColor = hasInt ? (gapOk ? '#2e7d32' : '#f9a825') : '#c62828';
+        st.style.color       = hasInt ? (gapOk ? '#1b5e20' : '#5d3000') : '#c62828';
+
+        if(!hasInt && !gapOk){
+          html='<b>n\u202F=\u202F'+n+':</b>'
+             +'&ensp; '+n+'a\u202F=\u202F'+naS+','
+             +'&ensp; '+n+'b\u202F=\u202F'+nbS+','
+             +'&ensp; gap\u202F=\u202F'+gS+' &lt; 1.'
+             +'&ensp; No integer strictly between '+naS+' and '+nbS+' \u2014 keep going.';
+        } else if(hasInt && !gapOk){
+          html='<b>n\u202F=\u202F'+n+':</b>'
+             +'&ensp; '+n+'a\u202F=\u202F'+naS+','
+             +'&ensp; '+n+'b\u202F=\u202F'+nbS+','
+             +'&ensp; gap\u202F=\u202F'+gS+' &lt; 1.'
+             +'&ensp; Integer <b>'+ints[0]+'</b> found by lucky position'
+             +' (gap&thinsp;&lt;&thinsp;1 but it worked!). &nbsp;'
+             +'Rational &thinsp;<b>'+ints[0]+'/'+n+'</b>&thinsp; \u2208 (a,\u202Fb). \u2713';
+        } else {
+          var rs=ints.map(function(m){return '<b>'+m+'/'+n+'</b>';}).join(', ');
+          html='<b>n\u202F=\u202F'+n+':</b>'
+             +'&ensp; '+n+'a\u202F=\u202F'+naS+','
+             +'&ensp; '+n+'b\u202F=\u202F'+nbS+','
+             +'&ensp; gap\u202F=\u202F'+gS+' <b>&gt; 1</b>.'
+             +'&ensp; &#127881; Archimedean guarantee!'
+             +' Integer(s) <b>'+ints.join(', ')+'</b> inside.'
+             +'&ensp; Rational(s) '+rs+' \u2208 (a,\u202Fb). \u2713';
+        }
+        st.innerHTML=html;
+        if(window.MathJax) MathJax.typesetPromise([st]).catch(function(){});
+      };
+
+      /* auto-start at n = 1 */
+      zoomSetN(1);
+    })();
+    </script>
+
+</div>
+<br>
+
+<!-- Concept 4: Density of Rationals -->
+ <div class="step">
+<div class="tcolorbox orange">
+    <div class="tcolorbox-header">Theorem &mdash; Density of Rationals in $\mathbb{R}$</div>
+    <div class="tcolorbox-content">
+        If $x, y \in \mathbb{R}$ with $x < y,$ there exists a rational number $r \in \mathbb{Q}$ such that $x < r < y.$         <br><br>
+        <strong>Proof:</strong> Since $y - x > 0,$ by the Archimedean Property (2), there exists $n \in \mathbb{N}$ such that $n(y-x) > 1,$ which implies $nx + 1 < ny.$         <br>
+        By the integer part property (Concept 3), there exists an integer $m$ such that $m \le nx < m+1.$         <br>
+        From $nx < m+1,$ we have $x < \frac{m+1}{n}.$         <br>
+        From $m \le nx,$ we have $m+1 \le nx + 1.$ Since $nx + 1 < ny,$ it follows that $m+1 < ny,$ which implies $\frac{m+1}{n} < y.$         <br>
+        Thus, choosing $r = \frac{m+1}{n},$ we have $x < r < y.$     </div>
+</div>
+</div>
+
+<!-- ═══ STEP: Density of Irrationals ═══ -->
+<div class="step">
+    <div class="tcolorbox purple">
+        <div class="tcolorbox-header">Theorem &mdash; Density of Irrationals in $\mathbb{R}$</div>
+        <div class="tcolorbox-content">
+            If $a, b \in \mathbb{R}$ with $a < b,$ there exists an irrational number
+            $\xi \in \mathbb{R}\setminus\mathbb{Q}$ such that $a < \xi < b.$         </div>
+    </div>
+
+    <div class="tcolorbox grey">
+        <div class="tcolorbox-header">Key idea &mdash; shift by $\sqrt{2}$ to convert the problem</div>
+        <div class="tcolorbox-content">
+            <p>
+                We want an <em>irrational</em> between $a$ and $b.$                 The trick is to shift both endpoints by $-\sqrt{2}$ and apply the
+                Density of Rationals to the shifted interval.
+            </p>
+            Consider the two real numbers $a + \sqrt{2}$ and $b + \sqrt{2}.$             Since $a < b,$ we have $a + \sqrt{2} < b + \sqrt{2}.$             <br><br>
+            By the <strong>Density of Rationals</strong>, there exists a rational number
+            $r\in\mathbb{Q}$ such that
+            $$a + \sqrt{2} \;<\; r \;<\; b + \sqrt{2}.$$             Subtracting $\sqrt{2}$ throughout:
+            $$a \;<\; r - \sqrt{2} \;<\; b.$$             Set $\xi = r - \sqrt{2}.$ Then $a < \xi < b$ and $\xi$ lies strictly between $a$ and $b.$ &#10003;
+        </div>
+    </div>
+
+    <div class="tcolorbox brown">
+        <div class="tcolorbox-header">Proof &mdash; $\xi = r - \sqrt{2}$ is irrational</div>
+        <div class="tcolorbox-content">
+            Suppose for contradiction that $\xi = r - \sqrt{2} \in \mathbb{Q}.$             Then $\sqrt{2} = r - \xi$ would be a difference of two rationals, hence rational.
+            But $\sqrt{2}\notin\mathbb{Q}$ &mdash; contradiction.
+            <br><br>
+            Therefore $\xi = r - \sqrt{2}$ is irrational, and $a < \xi < b.$             <span style="float:right; font-weight:bold;">$\blacksquare$</span>
+        </div>
+    </div>
+
+    <div class="tcolorbox amber">
+        <div class="tcolorbox-header">Worked Examples</div>
+        <div class="tcolorbox-content">
+            <table>
+                <tr>
+                    <th>$a$</th><th>$b$</th><th>Shifted interval</th>
+                    <th>A rational $r$ inside</th><th>Irrational $\xi = r-\sqrt{2}$</th>
+                </tr>
+                <tr>
+                    <td>$0$</td><td>$1$</td>
+                    <td>$(\sqrt{2},\,1+\sqrt{2})\approx(1.414,\,2.414)$</td>
+                    <td>$r = 2$</td>
+                    <td>$2 - \sqrt{2}\approx 0.586\;\in(0,1)$ &#10003;</td>
+                </tr>
+                <tr>
+                    <td>$1$</td><td>$2$</td>
+                    <td>$(1+\sqrt{2},\,2+\sqrt{2})\approx(2.414,\,3.414)$</td>
+                    <td>$r = 3$</td>
+                    <td>$3-\sqrt{2}\approx 1.586\;\in(1,2)$ &#10003;</td>
+                </tr>
+                <tr>
+                    <td>$\sqrt{2}$</td><td>$\sqrt{3}$</td>
+                    <td>$(2\sqrt{2},\,\sqrt{3}+\sqrt{2})\approx(2.828,\,3.146)$</td>
+                    <td>$r = 3$</td>
+                    <td>$3-\sqrt{2}\approx 1.586\;\in(\sqrt{2},\sqrt{3})$ &#10003;</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="tcolorbox teal">
+        <div class="tcolorbox-header">Why $\sqrt{2}$? Could we use any irrational?</div>
+        <div class="tcolorbox-content">
+            Yes — any fixed irrational $\alpha$ works in place of $\sqrt{2}.$             The argument is:
+            <ol>
+                <li>Apply density of rationals to $(a+\alpha, b+\alpha)$ to get $r\in\mathbb{Q}$                     with $a+\alpha < r < b+\alpha.$</li>
+                <li>Then $a < r-\alpha < b.$</li>
+                <li>$r - \alpha$ is irrational because if $r - \alpha \in\mathbb{Q}$ then
+                    $\alpha = r-(r-\alpha)$ would be rational &mdash; contradiction.</li>
+            </ol>
+            $\sqrt{2}$ is the most classical choice.
+            <br><br>
+            <strong>Summary:</strong> Between any two real numbers there is both a
+            <strong>rational</strong> and an <strong>irrational</strong> number.
+            In fact, between any two reals there are <em>infinitely many</em> of each,
+            which follows by applying the two density theorems repeatedly.
+        </div>
+    </div>
+</div>
+
+<!-- ═══ STEP: Nested Interval Theorem (Modified) ═══ -->
+        <div class="step">
+            <hr style="border:none; border-top:2px dashed #c8b99a; margin:32px 0 24px 0;">
+            <h2>The Nested Interval Theorem</h2>
+
+            <div class="tcolorbox blue">
+                <div class="tcolorbox-header">Theorem &mdash; Nested Interval Theorem (via LUB Property)</div>
+                <div class="tcolorbox-content">
+                    For each $n\in\mathbb{N},$ let $I_n = [a_n,\, b_n]$ be a closed bounded interval.
+                    Suppose the intervals are <strong>nested</strong>, meaning
+                    $$I_1 \;\supseteq\; I_2 \;\supseteq\; I_3 \;\supseteq\;\cdots,
+                    \quad\text{i.e.,}\quad
+                    a_n \le a_{n+1} \;\text{ and }\; b_{n+1} \le b_n \;\text{ for all }n.$$                     Then:
+                    <ol>
+                        <li>
+                            The intersection $\displaystyle\bigcap_{n=1}^{\infty} I_n$ is <strong>nonempty</strong>; in fact
+                            $$\bigcap_{n=1}^{\infty} [a_n, b_n] \;=\; [\,\text{lub}\{a_n\},\;\text{glb}\{b_n\}\,].$$                         </li>
+                        <li>
+                            If in addition the lengths become arbitrarily small (i.e., for every $\epsilon > 0$ there exists $n$ such that $b_n - a_n < \epsilon$), then the intersection contains
+                            <strong>exactly one point</strong>:
+                            $$\bigcap_{n=1}^{\infty} [a_n, b_n] \;=\; \{\,c\,\},
+                            \quad\text{where}\quad c = \text{lub}\{a_n\} = \text{glb}\{b_n\}.$$                         </li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="tcolorbox grey">
+                <div class="tcolorbox-header">Proof (Using Only LUB/GLB Properties)</div>
+                <div class="tcolorbox-content">
+
+                    <strong>Step 1 &mdash; Define the sets of endpoints.</strong>
+                    <br><br>
+                    Let $A = \{ a_n \mid n \in \mathbb{N} \}$ be the set of all left endpoints.
+                    Let $B = \{ b_n \mid n \in \mathbb{N} \}$ be the set of all right endpoints.
+                    <br><br>
+
+                    <strong>Step 2 &mdash; Apply LUB and GLB.</strong>
+                    <br><br>
+                    Since the intervals are nested ($a_n \le a_{n+1}$), every $b_k$ (e.g. $b_1$) is an upper bound for $A$.
+                    By the <strong>LUB Property</strong>, let $\alpha = \text{lub}(A).$                     <br><br>
+                    Since the intervals are nested ($b_n \ge b_{n+1}$), every $a_k$ (e.g. $a_1$) is a lower bound for $B$.
+                    By the <strong>GLB Property</strong> (which follows from LUB), let $\beta = \text{glb}(B).$                     <br><br>
+
+                    <strong>Step 3 &mdash; Prove $\alpha \le \beta.$</strong>
+                    <br><br>
+                    We must show that the least upper bound of the lefts does not exceed the greatest lower bound of the rights.
+                    <br>
+                    For any $m, n \in \mathbb{N}$, consider $I_m = [a_m, b_m]$ and $I_n = [a_n, b_n]$.
+                    Let $k = \max(m, n)$. By nesting, $I_k \subseteq I_m$ and $I_k \subseteq I_n$.
+                    This implies $a_m \le a_k \le b_k \le b_n.$                     <br><br>
+                    Thus, for any fixed $n$, $a_n \le b_m$ for <em>all</em> $m$.
+                    This means $a_n$ is a lower bound for the set $B$.
+                    Since $\beta = \text{glb}(B)$ is the greatest lower bound, we must have $a_n \le \beta.$                     <br>
+                    Since this holds for <em>all</em> $a_n \in A$, $\beta$ is an upper bound for $A$.
+                    Since $\alpha = \text{lub}(A)$ is the least upper bound, we conclude $\alpha \le \beta.$                     <br><br>
+
+                    <strong>Step 4 &mdash; Identify the intersection as $[\alpha, \beta].$</strong>
+                    <br><br>
+                    <em>($\supseteq$)</em>
+                    Let $x \in [\alpha, \beta].$ For any $k$, we have $a_k \le \alpha \le x \le \beta \le b_k.$                     Thus $x \in I_k$ for all $k$, so $x \in \bigcap I_k.$                     <br><br>
+                    <em>($\subseteq$)</em>
+                    Let $x \in \bigcap I_k.$ Then $a_k \le x \le b_k$ for all $k.$                     Since $x$ is an upper bound for $A$, $\alpha \le x.$                     Since $x$ is a lower bound for $B$, $x \le \beta.$                     Thus $x \in [\alpha, \beta].$                     <br><br>
+                    Therefore, $\bigcap I_k = [\alpha, \beta] \neq \emptyset.$                     <br><br>
+
+                    <strong>Step 5 &mdash; Uniqueness (Lengths $\to 0$).</strong>
+                    <br><br>
+                    Suppose for every $\epsilon > 0$, there exists $n$ such that $b_n - a_n < \epsilon.$                     Since $a_n \le \alpha \le \beta \le b_n$, we have $0 \le \beta - \alpha \le b_n - a_n.$                     Thus $0 \le \beta - \alpha < \epsilon$ for any $\epsilon > 0.$                     The only non-negative number smaller than all positive numbers is $0$.
+                    Hence $\beta - \alpha = 0$, so $\alpha = \beta = c.$                     The intersection is the singleton $\{c\}.$                     <span style="float:right; font-weight:bold;">$\blacksquare$</span>
+                </div>
+            </div>
+
+            <div class="tcolorbox amber">
+                <div class="tcolorbox-header">Why "closed" and "bounded" are essential</div>
+                <div class="tcolorbox-content">
+                    The theorem <strong>fails for open intervals</strong> and <strong>fails if unbounded</strong>.
+                    <br><br>
+                    <strong>Counterexample 1 (Open):</strong>
+                    $I_n = \left(0,\,\dfrac{1}{n}\right).$                     These are nested and bounded, yet $\displaystyle\bigcap_{n=1}^\infty\!\left(0,\tfrac{1}{n}\right) = \emptyset.$                     (If $x > 0$, pick $n > 1/x$, then $x \notin I_n$.)
+                    <br><br>
+                    <strong>Counterexample 2 (Unbounded):</strong>
+                    $I_n = [n, \infty).$                     These are nested and closed, yet $\bigcap_n [n, \infty) = \emptyset.$                 </div>
+            </div>
+        </div>
+
+<!-- ═══ STEP: Self Assessment ═══ -->
+        <div class="step">
+            <hr style="border:none; border-top:2px solid #c8b99a; margin:32px 0 24px 0;">
+            <h2>Self-Assessment: Applications of the Archimedean Property</h2>
+            <p>Test your understanding of the Archimedean Property and interval properties.</p>
+
+            <!-- Question 1 -->
+            <div class="tcolorbox pink">
+                <div class="tcolorbox-header">Question 1</div>
+                <div class="tcolorbox-content">
+                    <p>Consider the sequence of intervals $J_n = \left(0, \frac{1}{n}\right).$ 
+                    What is the intersection $\bigcap_{n=1}^{\infty} J_n$?</p>
+                    
+                    <details>
+                        <summary class="mb-3">Show Hint</summary>
+                        <div class="alert-secondary">
+                            Assume there is a point $x$ in the intersection. Then $x$ must be in <em>every</em> interval. This implies $0 < x < \frac{1}{n}$ for all $n \in \mathbb{N}$. Use the Archimedean Property to show this is impossible.
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary class="mb-3">Show Solution</summary>
+                        <div class="alert-secondary">
+                            <strong>Answer:</strong> $\emptyset$ (Empty Set).
+                            <br><br>
+                            <strong>Proof:</strong> Suppose, for contradiction, that there exists $x \in \bigcap_{n=1}^{\infty} J_n.$                             Then $x > 0$ and $x < \frac{1}{n}$ for all $n \in \mathbb{N}.$                             Since $x > 0$, $\frac{1}{x}$ is a real number.
+                            By the <strong>Archimedean Property</strong>, there exists an $N \in \mathbb{N}$ such that $N > \frac{1}{x}.$                             This implies $\frac{1}{N} < x.$                             But this contradicts the requirement that $x < \frac{1}{n}$ for <em>all</em> $n$.
+                            Therefore, no such $x$ exists, and the intersection is empty.
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="tcolorbox cyan">
+                <div class="tcolorbox-header">Question 2</div>
+                <div class="tcolorbox-content">
+                    <p>Consider the sequence of intervals $J_n = \left(-\frac{1}{n}, \frac{1}{n}\right).$ 
+                    What is the intersection $\bigcap_{n=1}^{\infty} J_n$?</p>
+                    
+                    <details>
+                        <summary class="mb-3">Show Hint</summary>
+                        <div class="alert-secondary">
+                            Is 0 in every interval? What about any other number $x \neq 0$? If $x \neq 0$, then $|x| > 0$. Apply the Archimedean Property to $|x|$.
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary class="mb-3">Show Solution</summary>
+                        <div class="alert-secondary">
+                            <strong>Answer:</strong> $\{0\}.$                             <br><br>
+                            <strong>Proof:</strong> 
+                            <ol>
+                                <li>For any $n$, $-\frac{1}{n} < 0 < \frac{1}{n}$, so $0 \in J_n$ for all $n$. Thus $0 \in \bigcap J_n.$</li>
+                                <li>Let $x \neq 0$ be any other real number. Then $|x| > 0.$                                     By the Archimedean Property, there exists $N \in \mathbb{N}$ such that $N > \frac{1}{|x|}.$                                     This implies $\frac{1}{N} < |x|.$                                     This means $x > \frac{1}{N}$ or $x < -\frac{1}{N}$.
+                                    In either case, $x \notin \left(-\frac{1}{N}, \frac{1}{N}\right).$</li>
+                            </ol>
+                            Since no non-zero number is in the intersection, $\bigcap J_n = \{0\}.$                         </div>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="tcolorbox lime">
+                <div class="tcolorbox-header">Question 3</div>
+                <div class="tcolorbox-content">
+                    <p>Prove that the real numbers can be written as a disjoint union:
+                    $$ \mathbb{R} = \bigcup_{z \in \mathbb{Z}} (z, z+1] $$                     (i.e., show that every real number falls into exactly one such interval).</p>
+                    
+                    <details>
+                        <summary class="mb-3">Show Hint</summary>
+                        <div class="alert-secondary">
+                            Use the <strong>Existence of the Integer Part</strong> lemma: For any $x \in \mathbb{R}$, there exists a unique integer $m$ such that $m \le x < m+1.$                             Check the cases where $x$ is an integer vs. non-integer.
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary class="mb-3">Show Solution</summary>
+                        <div class="alert-secondary">
+                            <strong>Proof:</strong>
+                            Let $x \in \mathbb{R}$ be arbitrary.
+                            <br><br>
+                            1. <strong>Existence (Coverage):</strong>
+                            By the Integer Part Lemma, there exists an integer $m$ such that $m \le x < m+1.$                             <ul>
+                                <li>If $x$ is <strong>not an integer</strong>, then $m < x < m+1$, so $x \in (m, m+1].$</li>
+                                <li>If $x$ <strong>is an integer</strong>, then $x = m$. Since $m \le m < m+1$, we have $x \in (m-1, m].$</li>
+                            </ul>
+                            In both cases, $x$ belongs to the union.
+                            <br><br>
+                            2. <strong>Disjointness:</strong>
+                            Suppose $x \in (z, z+1] \cap (z', z'+1]$ for some integers $z, z'.$                             Without loss of generality, assume $z < z'.$                             Then $z' \ge z+1$ (since integers are discrete).
+                            We have $z < x \le z+1$ (from first interval) and $z' < x \le z'+1$ (from second).
+                            Combining these: $z' < x \le z+1 \le z'.$                             This implies $z' < z'$, which is a contradiction.
+                            Thus, the intervals are pairwise disjoint.
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /.container -->
+
+    <!-- ══════════════════════════════════════════
+         FIXED CONTROLS BAR
+    ══════════════════════════════════════════ -->
+    <div class="controls">
+        <span class="key-hint">Press <kbd>Enter</kbd> or <kbd>→</kbd> to advance</span>
+        <div class="progress-wrap">
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progressFill"></div>
+            </div>
+            <span class="progress-label" id="progressLabel">0 / 0</span>
+        </div>
+        <button class="btn-next" id="btnNext" onclick="revealNext()">Next &#9654;</button>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         STEP REVEAL JAVASCRIPT
+         (placed at end of body — never inside <style>)
+    ══════════════════════════════════════════ -->
+    <script>
+        const steps   = document.querySelectorAll('.step');
+        const fill    = document.getElementById('progressFill');
+        const label   = document.getElementById('progressLabel');
+        const btn     = document.getElementById('btnNext');
+        let   current = 0;
+
+        function updateUI() {
+            const pct = (current / steps.length) * 100;
+            fill.style.width  = pct + '%';
+            label.textContent = current + ' / ' + steps.length;
+            btn.disabled      = current >= steps.length;
+            btn.textContent   = current >= steps.length ? 'Done ✓' : 'Next \u25B6';
+        }
+
+        function revealNext() {
+            if (current >= steps.length) return;
+            const el = steps[current];
+            el.classList.add('visible');
+            if (window.MathJax) MathJax.typesetPromise([el]);
+            current++;
+            updateUI();
+            setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+        }
+
+        // Keyboard: Enter, Space, or → arrow
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight') {
+                e.preventDefault();
+                revealNext();
+            }
+        });
+
+        // Show step count on load, then reveal step 1 automatically
+        window.addEventListener('load', function() {
+            updateUI();
+            revealNext();
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Existence and Uniqueness of Square Roots</title>
+
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --bg: #f4f7f6; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.75;
+            color: var(--primary);
+            background: var(--bg);
+            padding: 20px 20px 110px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 8px;
+        }
+
+        .math-box {
+            background: #e8f4fd;
+            border-left: 5px solid var(--secondary);
+            padding: 15px 18px;
+            margin: 18px 0;
+            border-radius: 4px;
+        }
+
+        /* ── tcolorbox ─────────────────────────────────────── */
+        .tcolorbox { border-radius: 6px; margin: 14px 0; overflow: hidden; border: 1px solid #ccc; }
+        .tcolorbox-header { padding: 8px 15px; font-weight: bold; font-size: 1rem; color: white; }
+        .tcolorbox-content { padding: 15px 18px; }
+
+        .tcolorbox.blue        .tcolorbox-header  { background-color: #1565c0; }
+        .tcolorbox.blue        .tcolorbox-content { background-color: #e3f2fd; }
+        .tcolorbox.green       .tcolorbox-header  { background-color: #2e7d32; }
+        .tcolorbox.green       .tcolorbox-content { background-color: #e8f5e9; }
+        .tcolorbox.orange      .tcolorbox-header  { background-color: #e65100; }
+        .tcolorbox.orange      .tcolorbox-content { background-color: #fff3e0; }
+        .tcolorbox.purple      .tcolorbox-header  { background-color: #6a1b9a; }
+        .tcolorbox.purple      .tcolorbox-content { background-color: #f3e5f5; }
+        .tcolorbox.red         .tcolorbox-header  { background-color: #c62828; }
+        .tcolorbox.red         .tcolorbox-content { background-color: #ffebee; }
+        .tcolorbox.teal        .tcolorbox-header  { background-color: #00695c; }
+        .tcolorbox.teal        .tcolorbox-content { background-color: #e0f2f1; }
+        .tcolorbox.indigo      .tcolorbox-header  { background-color: #283593; }
+        .tcolorbox.indigo      .tcolorbox-content { background-color: #e8eaf6; }
+        .tcolorbox.brown       .tcolorbox-header  { background-color: #4e342e; }
+        .tcolorbox.brown       .tcolorbox-content { background-color: #efebe9; }
+        .tcolorbox.cyan        .tcolorbox-header  { background-color: #00838f; }
+        .tcolorbox.cyan        .tcolorbox-content { background-color: #e0f7fa; }
+        .tcolorbox.lime        .tcolorbox-header  { background-color: #558b2f; }
+        .tcolorbox.lime        .tcolorbox-content { background-color: #f1f8e9; }
+        .tcolorbox.amber       .tcolorbox-header  { background-color: #f57f17; }
+        .tcolorbox.amber       .tcolorbox-content { background-color: #fff8e1; }
+        .tcolorbox.grey        .tcolorbox-header  { background-color: #424242; }
+        .tcolorbox.grey        .tcolorbox-content { background-color: #f5f5f5; }
+        .tcolorbox.pink        .tcolorbox-header  { background-color: #ad1457; }
+        .tcolorbox.pink        .tcolorbox-content { background-color: #fce4ec; }
+        .tcolorbox.deep-purple .tcolorbox-header  { background-color: #4527a0; }
+        .tcolorbox.deep-purple .tcolorbox-content { background-color: #ede7f6; }
+        .tcolorbox.slate       .tcolorbox-header  { background-color: #37474f; }
+        .tcolorbox.slate       .tcolorbox-content { background-color: #eceff1; }
+
+        /* ── Table ─────────────────────────────────────────── */
+        table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+        th, td { border: 1px solid #ddd; padding: 11px 14px; text-align: left; }
+        th { background-color: #f2f2f2; font-weight: 600; }
+
+        /* ── Proof block ────────────────────────────────────── */
+        .proof-block {
+            background: #f9f9f9;
+            border-left: 4px solid #7a6e64;
+            padding: 14px 20px;
+            margin: 14px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .proof-label {
+            font-weight: bold; color: #4e342e;
+            display: block; margin-bottom: 8px;
+        }
+        .qed { float: right; font-weight: bold; font-size: 1.1rem; }
+
+        /* ── Rough-work box ─────────────────────────────────── */
+        .rough-box {
+            background: #fffde7;
+            border: 2px dashed #f9a825;
+            border-radius: 6px;
+            padding: 14px 18px;
+            margin: 16px 0;
+        }
+        .rough-box-title {
+            font-weight: bold; color: #e65100;
+            margin-bottom: 8px; font-size: 0.95rem;
+            letter-spacing: 0.04em;
+        }
+
+        /* ── Roadmap checklist ──────────────────────────────── */
+        .roadmap {
+            list-style: none; padding: 0; margin: 12px 0;
+        }
+        .roadmap li {
+            padding: 7px 12px; margin: 4px 0;
+            border-radius: 4px; border-left: 4px solid #bbb;
+            background: #f5f5f5; font-size: 0.97rem;
+        }
+        .roadmap li.done {
+            border-left-color: #2e7d32;
+            background: #e8f5e9; color: #1b5e20;
+        }
+        .roadmap li.active {
+            border-left-color: #1565c0;
+            background: #e3f2fd; color: #0d47a1;
+            font-weight: bold;
+        }
+        .roadmap li .badge {
+            display: inline-block; width: 22px; height: 22px;
+            line-height: 22px; text-align: center;
+            border-radius: 50%; font-size: 0.8rem;
+            margin-right: 8px; font-weight: bold;
+        }
+        .roadmap li.done  .badge { background: #2e7d32; color: white; }
+        .roadmap li.active .badge { background: #1565c0; color: white; }
+        .roadmap li:not(.done):not(.active) .badge { background: #bbb; color: white; }
+
+        /* ── Section rule ───────────────────────────────────── */
+        .section-rule {
+            border: none; border-top: 2px dashed #c8b99a;
+            margin: 32px 0 24px 0;
+        }
+
+        /* ── Details ────────────────────────────────────────── */
+        details { margin: 8px 0; }
+        summary {
+            display: inline-block; padding: 4px 12px;
+            background: #e0e0e0; border: 1px solid #bbb;
+            border-radius: 4px; cursor: pointer;
+            font-size: 0.9rem; margin-bottom: 4px;
+        }
+        summary:hover { background: #cfcfcf; }
+        .alert-secondary {
+            background: #f8f9fa; border: 1px solid #ccc;
+            border-radius: 4px; padding: 10px 14px;
+            margin-top: 6px; font-size: 0.95rem;
+        }
+        .fw-bold { font-weight: bold; }
+        .mb-3 { margin-bottom: 16px; }
+
+        /* ── STEP REVEAL ────────────────────────────────────── */
+        .step {
+            opacity: 0; max-height: 0; overflow: hidden;
+            transition: opacity 0.4s ease, max-height 0.65s ease;
+        }
+        .step.visible { opacity: 1; max-height: 7000px; margin-bottom: 6px; }
+
+        /* ── FIXED CONTROLS BAR ─────────────────────────────── */
+        .controls {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: #ede5d8; border-top: 2px solid #c8b99a;
+            padding: 12px 40px;
+            display: flex; align-items: center;
+            justify-content: space-between; gap: 20px;
+            z-index: 1000; box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+        }
+        .progress-wrap { flex: 1; display: flex; align-items: center; gap: 12px; }
+        .progress-bar-bg {
+            flex: 1; height: 5px; background: #c8b99a;
+            border-radius: 3px; overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%; background: #8b2500; border-radius: 3px;
+            width: 0%; transition: width 0.4s ease;
+        }
+        .progress-label {
+            font-size: 14px; color: #8b2500; font-weight: bold;
+            white-space: nowrap; min-width: 55px; text-align: right;
+        }
+        .btn-next {
+            background: #2c3e50; color: white; border: none;
+            padding: 10px 28px; font-family: 'Segoe UI', sans-serif;
+            font-size: 15px; cursor: pointer; border-radius: 4px;
+            transition: background 0.2s; letter-spacing: 0.03em;
+        }
+        .btn-next:hover:not(:disabled) { background: #3498db; }
+        .btn-next:disabled { background: #c8b99a; cursor: default; }
+        .key-hint { font-size: 13px; color: #7a6e64; font-style: italic; white-space: nowrap; }
+    </style>
+</head>
+
+<body>
+<nav style="max-width:900px;margin:0 auto 12px;font-size:0.9rem;">
+    <a href="main.html">&larr; Course Home</a>
+</nav>
+
+<div class="container">
+
+<h1>Existence and Uniqueness of Square Roots</h1>
+<p>
+    This lecture gives a complete, rigorous proof that every non-negative real number has a
+    (unique) non-negative square root. The proof is a beautiful application of the
+    <strong>Least Upper Bound (LUB) Property</strong> of $\mathbb{R}$ combined with the
+    <strong>Archimedean Property</strong>. Before that try to understand  few of following problems related to finding lub and glb of bounded sets.  
+</p>
+
+
+<!-- ═══ STEP 1: Question 1 ═══ -->
+<div class="step">
+    <div class="tcolorbox blue">
+        <div class="tcolorbox-header">Q1: Find lub and glb of $\{1/n \mid n\in \mathbb{N}\}$</div>
+        <div class="tcolorbox-content">
+            The set is $S = \{1, 1/2, 1/3, 1/4, \dots\}$.
+            <br>
+            <strong>1. Least Upper Bound (lub):</strong>
+            The largest element in the set is $1$ (when $n=1$). Since the maximum exists, the supremum (lub) is $1$.
+            $$ \text{lub}(S) = 1 $$
+            
+            <br>
+            <strong>2. Greatest Lower Bound (glb):</strong>
+            All elements are positive, so $0$ is a lower bound.
+            By the Archimedean Property, for any $\epsilon > 0$, there exists $n \in \mathbb{N}$ such that $1/n < \epsilon$.
+            Thus, no number greater than $0$ can be a lower bound.
+            $$ \text{glb}(S) = 0 $$
+        </div>
+    </div>
+</div>
+
+
+
+<!-- ═══ STEP 3: Question 3 ═══ -->
+<div class="step">
+    <div class="tcolorbox blue">
+        <div class="tcolorbox-header">Q3: Find lub and glb of $\{a_n \mid a_1=1, a_2=2, a_{n+2}=\frac{a_n+a_{n+1}}{2}\}$</div>
+        <div class="tcolorbox-content">
+            <strong>1. Analysis of Bounds:</strong>
+            The sequence is the average of the previous two terms. This implies it is bounded by the minimum and maximum of the initial terms.
+            Since $a_1=1$ and $a_2=2$, the sequence is bounded between $1$ and $2$.
+            
+            <br>
+            <strong>2. Checking Extremes:</strong>
+            Calculating the first few terms: $1, 2, 1.5, 1.75, 1.625, 1.6875, \dots$
+            The odd terms $1, 1.5, 1.625, \dots$ form an increasing subsequence starting at $1$.
+            The even terms $2, 1.75, 1.6875, \dots$ form a decreasing subsequence starting at $2$.
+            The value $1$ is actually achieved ($a_1$), so it is the minimum.
+            The value $2$ is actually achieved ($a_2$), so it is the maximum.
+            
+            <br>
+            <strong>3. lub and glb:</strong>
+            Since the maximum and minimum exist in the set, they are equal to the lub and glb respectively.
+            $$ \text{lub} = 2, \quad \text{glb} = 1 $$
+        </div>
+    </div>
+</div>
+<!-- ═══ STEP 1: Question 7 ═══ -->
+<div class="step">
+    <div class="tcolorbox blue">
+        <div class="tcolorbox-header">Q7: Find lub and glb of $A = \left\{\frac{m+n}{mn} \;\middle|\; m,n \in \mathbb{N}\right\}$</div>
+        <div class="tcolorbox-content">
+            <strong>1. Simplify the Expression:</strong>
+            Before finding bounds, we simplify the algebraic expression defining the set. For any $m, n \in \mathbb{N}$:
+            $$ \frac{m+n}{mn} = \frac{m}{mn} + \frac{n}{mn} = \frac{1}{n} + \frac{1}{m} $$             So, the set can be rewritten as $A = \left\{ \frac{1}{m} + \frac{1}{n} \;\middle|\; m,n \in \mathbb{N} \right\}$.
+            
+            <br>
+            <strong>2. Least Upper Bound (lub):</strong>
+            Since $m, n \ge 1$, the maximum possible value for $\frac{1}{m}$ is $1$ (which occurs when $m=1$). 
+            Similarly, the maximum possible value for $\frac{1}{n}$ is $1$ (when $n=1$).
+            <br>
+            Therefore, for any $m, n \in \mathbb{N}$:
+            $$ \frac{1}{m} + \frac{1}{n} \le 1 + 1 = 2 $$             This upper bound is actually achieved when we choose $m=1$ and $n=1$:
+            $$ \frac{1+1}{1 \cdot 1} = 2 \in A $$             Since the maximum element of the set exists and is $2$, the least upper bound is simply the maximum.
+            $$ \text{lub}(A) = 2 $$ 
+            <br>
+            <strong>3. Greatest Lower Bound (glb):</strong>
+            Since $m, n \in \mathbb{N}$, we know $\frac{1}{m} > 0$ and $\frac{1}{n} > 0$. 
+            Thus, every element in $A$ is strictly positive, meaning $0$ is a lower bound for $A$.
+            <br><br>
+            To show $0$ is the <em>greatest</em> lower bound, we must show that no number larger than $0$ can be a lower bound. 
+            Consider choosing $m = n$. The element becomes:
+            $$ \frac{1}{n} + \frac{1}{n} = \frac{2}{n} $$             By the Archimedean Property, for any $\epsilon > 0$, there exists an $n \in \mathbb{N}$ such that $n > \frac{2}{\epsilon}$, which implies $\frac{2}{n} < \epsilon$.
+            <br>
+            Because we can find elements in $A$ arbitrarily close to $0$ (but strictly greater than $0$), no number $\epsilon > 0$ can be a lower bound.
+            $$ \text{glb}(A) = 0 $$             <span style="font-size:0.9rem; color:#555;">*(Note: $0$ is not in $A$ because $m,n \in \mathbb{N}$ guarantees the sum is strictly positive, so $A$ has a glb but no minimum.)*</span>
+        </div>
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     STEP 7 — Statement of the theorem
+════════════════════════════════════════════ -->
+<div class="step">
+    <h2>Step 1 &mdash; The Theorem</h2>
+
+    <div class="tcolorbox blue">
+        <div class="tcolorbox-header">Theorem &mdash; Existence and Uniqueness of Square Roots</div>
+        <div class="tcolorbox-content">
+            <strong>Informal statement:</strong>
+            Every non-negative real number has a square root.
+            <br><br>
+            <strong>Precise statement:</strong>
+            Let $\alpha\in\mathbb{R}$ with $\alpha\ge 0.$
+            Then there exists a <em>unique</em> $a\in\mathbb{R}$ with $a\ge 0$ such that
+            $$a^2 = \alpha.$$
+            We write $a = \sqrt{\alpha}.$
+        </div>
+    </div>
+
+    <div class="math-box">
+        <strong>Two things to prove:</strong> both <em>existence</em> ($a$ exists) and
+        <em>uniqueness</em> ($a$ is the only such non-negative number).
+        These are separate tasks and require separate arguments.
+    </div>
+
+    <div class="tcolorbox amber">
+        <div class="tcolorbox-header">Why is this non-trivial?</div>
+        <div class="tcolorbox-content">
+            In $\mathbb{Q}$ the theorem <strong>fails</strong>: $\alpha=2$ has no rational
+            square root (proved by the classic irrationality of $\sqrt{2}$ argument).
+            The theorem holds in $\mathbb{R}$ precisely because $\mathbb{R}$ is
+            <em>complete</em> — it has the LUB Property.
+            This proof is therefore a direct demonstration of the power of completeness.
+        </div>
+    </div>
+
+    <h3>Proof Roadmap</h3>
+    <ul class="roadmap">
+        <li><span class="badge">1</span> Handle the trivial case $\alpha = 0$ separately.</li>
+        <li><span class="badge">2</span> For $\alpha>0$, construct the set
+            $E_\alpha = \{x\in\mathbb{R}\mid x^2\le\alpha\}.$</li>
+        <li><span class="badge">3</span> Show $E_\alpha$ is nonempty.</li>
+        <li><span class="badge">4</span> Show $E_\alpha$ is bounded above.</li>
+        <li><span class="badge">5</span> Apply the LUB Property: let $a = \text{lub}(E_\alpha).$</li>
+        <li><span class="badge">6</span> Show $a^2 = \alpha$ by ruling out $a^2 &lt; \alpha$ and $a^2 &gt; \alpha.$</li>
+        <li><span class="badge">7</span> Prove uniqueness.</li>
+    </ul>
+</div><!-- /step 1 -->
+
+<!-- ════════════════════════════════════════════
+     STEP 2 — Case alpha = 0
+════════════════════════════════════════════ -->
+<div class="step">
+    <h2>Step 2 &mdash; The Case $\alpha = 0$</h2>
+
+    <ul class="roadmap">
+        <li class="done"><span class="badge">&#10003;</span> Handle the trivial case $\alpha = 0.$</li>
+        <li class="active"><span class="badge">2</span> Construct $E_\alpha.$</li>
+        <li><span class="badge">3</span> $E_\alpha$ nonempty.</li>
+        <li><span class="badge">4</span> $E_\alpha$ bounded above.</li>
+        <li><span class="badge">5</span> Apply LUB Property.</li>
+        <li><span class="badge">6</span> Show $a^2=\alpha.$</li>
+        <li><span class="badge">7</span> Uniqueness.</li>
+    </ul>
+
+    <div class="tcolorbox green">
+        <div class="tcolorbox-header">Case $\alpha = 0$</div>
+        <div class="tcolorbox-content">
+            <strong>Existence:</strong> Take $a = 0.$ Then $a\ge 0$ and $a^2 = 0 = \alpha.$ &#10003;
+            <br><br>
+            <strong>Uniqueness:</strong> Suppose $a\ge 0$ and $a^2 = 0.$
+            Since $a\ge 0$ and $a^2 = a\cdot a = 0,$ we must have $a = 0$
+            (a product of reals is zero only if at least one factor is zero).
+            <br><br>
+            So $a = 0$ is the unique non-negative square root of $0.$ &#10003;
+        </div>
+    </div>
+
+    <div class="math-box">
+        From now on we assume $\alpha &gt; 0$ and prove both existence and uniqueness in this case.
+    </div>
+</div><!-- /step 2 -->
+
+<!-- ════════════════════════════════════════════
+     STEP 3 — Constructing E_alpha
+════════════════════════════════════════════ -->
+<div class="step">
+    <h2>Step 3 &mdash; Constructing the Set $E_\alpha$</h2>
+
+    <ul class="roadmap">
+        <li class="done"><span class="badge">&#10003;</span> $\alpha = 0$ handled.</li>
+        <li class="active"><span class="badge">2</span> Construct $E_\alpha.$ &larr; <strong>Now</strong></li>
+        <li><span class="badge">3</span> $E_\alpha$ nonempty.</li>
+        <li><span class="badge">4</span> $E_\alpha$ bounded above.</li>
+        <li><span class="badge">5</span> Apply LUB Property.</li>
+        <li><span class="badge">6</span> Show $a^2=\alpha.$</li>
+        <li><span class="badge">7</span> Uniqueness.</li>
+    </ul>
+
+    <p>We now assume $\alpha &gt; 0.$ The key idea is to <strong>encode the square root
+    as the least upper bound of a carefully chosen set.</strong></p>
+
+    <div class="tcolorbox purple">
+        <div class="tcolorbox-header">Definition of $E_\alpha$</div>
+        <div class="tcolorbox-content">
+            $$E_\alpha \;=\; \{\,x\in\mathbb{R} \;\mid\; x^2 \le \alpha\,\}.$$
+            This is the set of all real numbers whose square does not exceed $\alpha.$
+        </div>
+    </div>
+
+    <div class="tcolorbox amber">
+        <div class="tcolorbox-header">Strategy &mdash; Why this set?</div>
+        <div class="tcolorbox-content">
+            If $\sqrt{\alpha}$ exists, then the elements of $E_\alpha$ are exactly those $x$
+            with $|x|\le\sqrt{\alpha},$ i.e., $E_\alpha = [-\sqrt{\alpha},\sqrt{\alpha}].$
+            So $\text{lub}(E_\alpha) = \sqrt{\alpha}.$
+            <br><br>
+            We cannot use $\sqrt{\alpha}$ directly (that is what we are trying to prove exists!),
+            but we <em>can</em> use the LUB of $E_\alpha$ — and then prove it equals $\sqrt{\alpha}.$
+            This is the key circular-free construction.
+        </div>
+    </div>
+
+    <p>We need to verify three things before we can apply the LUB Property:</p>
+    <ol>
+        <li>$E_\alpha$ is nonempty.</li>
+        <li>$E_\alpha$ is bounded above.</li>
+        <li>Then the LUB Property guarantees $\text{lub}(E_\alpha)$ exists in $\mathbb{R}.$</li>
+    </ol>
+</div><!-- /step 3 -->
+
+<!-- ════════════════════════════════════════════
+     STEP 4 — E_alpha is nonempty
+════════════════════════════════════════════ -->
+<div class="step">
+    <h2>Step 4 &mdash; $E_\alpha$ is Nonempty</h2>
+
+    <ul class="roadmap">
+        <li class="done"><span class="badge">&#10003;</span> $\alpha = 0$ handled.</li>
+        <li class="done"><span class="badge">&#10003;</span> $E_\alpha$ constructed.</li>
+        <li class="active"><span class="badge">3</span> $E_\alpha$ nonempty. &larr; <strong>Now</strong></li>
+        <li><span class="badge">4</span> $E_\alpha$ bounded above.</li>
+        <li><span class="badge">5</span> Apply LUB Property.</li>
+        <li><span class="badge">6</span> Show $a^2=\alpha.$</li>
+        <li><span class="badge">7</span> Uniqueness.</li>
+    </ul>
+
+    <div class="proof-block">
+        <span class="proof-label">Proof — $E_\alpha$ is nonempty.</span>
+        <strong>Observation 1:</strong>
+        $0^2 = 0 \le \alpha,$ so $0\in E_\alpha.$ Hence $E_\alpha\ne\emptyset.$ &#10003;
+        <br><br>
+        <strong>Observation 2 (stronger):</strong>
+        $E_\alpha$ actually contains a strictly <em>positive</em> element — a fact we will need later.
+        <br><br>
+        Since $\alpha &gt; 0,$ the Archimedean Property gives $n\in\mathbb{N}$ with
+        $\dfrac{1}{n} &lt; \alpha.$
+        Then:
+        $$\frac{1}{n^2} \;\le\; \frac{1}{n} \;&lt;\; \alpha,$$
+        so $\left(\dfrac{1}{n}\right)^2 = \dfrac{1}{n^2} &lt; \alpha,$
+        hence $\dfrac{1}{n}\in E_\alpha.$
+        Since $\dfrac{1}{n} &gt; 0,$ we have found a positive element of $E_\alpha.$ &#10003;
+        <span class="qed">$\blacksquare$</span>
+    </div>
+
+    <div class="tcolorbox teal">
+        <div class="tcolorbox-header">Why the stronger observation matters</div>
+        <div class="tcolorbox-content">
+            Knowing $0\in E_\alpha$ alone would give $\text{lub}(E_\alpha)\ge 0.$
+            But knowing $\tfrac{1}{n}\in E_\alpha$ for some $n&gt;0$ gives
+            $\text{lub}(E_\alpha)\ge\tfrac{1}{n}&gt;0,$ so $a = \text{lub}(E_\alpha)&gt;0.$
+            This strict positivity is needed in Step 6 when we divide by $a.$
+        </div>
+    </div>
+</div><!-- /step 4 -->
+
+<!-- ════════════════════════════════════════════
+     STEP 5 — E_alpha bounded above + LUB exists
+════════════════════════════════════════════ -->
+<div class="step">
+    <h2>Step 5 &mdash; $E_\alpha$ is Bounded Above &amp; the LUB Exists</h2>
+
+    <ul class="roadmap">
+        <li class="done"><span class="badge">&#10003;</span> $\alpha = 0$ handled.</li>
+        <li class="done"><span class="badge">&#10003;</span> $E_\alpha$ constructed.</li>
+        <li class="done"><span class="badge">&#10003;</span> $E_\alpha$ nonempty.</li>
+        <li class="active"><span class="badge">4</span> $E_\alpha$ bounded above. &larr; <strong>Now</strong></li>
+        <li class="active"><span class="badge">5</span> Apply LUB Property. &larr; <strong>Now</strong></li>
+        <li><span class="badge">6</span> Show $a^2=\alpha.$</li>
+        <li><span class="badge">7</span> Uniqueness.</li>
+    </ul>
+
+    <div class="proof-block">
+        <span class="proof-label">Proof — $E_\alpha$ is bounded above.</span>
+        By the Archimedean Property, there exists $N\in\mathbb{N}$ such that $N &gt; \alpha.$
+        <br><br>
+        Since $N\in\mathbb{N}$ and $N\ge 1,$ we have $N^2 \ge N &gt; \alpha.$
+        <br><br>
+        <strong>Claim:</strong> $N$ is an upper bound for $E_\alpha.$
+        <br><br>
+        <em>Proof of claim (by contradiction):</em>
+        Suppose $N$ is not an upper bound. Then there exists $x\in E_\alpha$ with $x &gt; N.$
+        Since $x &gt; N &gt; 0,$ squaring preserves the inequality:
+        $$x^2 \;&gt;\; N^2 \;\ge\; N \;&gt;\; \alpha.$$
+        But $x\in E_\alpha$ means $x^2\le\alpha$ — a contradiction.
+        Hence $N$ is an upper bound for $E_\alpha.$ &#10003;
+        <span class="qed">$\blacksquare$</span>
+    </div>
+
+    <div class="tcolorbox blue">
+        <div class="tcolorbox-header">Applying the LUB Property</div>
+        <div class="tcolorbox-content">
+            $E_\alpha$ is nonempty (Step 4) and bounded above (Step 5).
+            By the <strong>Completeness of $\mathbb{R}$</strong> (LUB Property):
+            $$a \;:=\; \text{lub}(E_\alpha) \;\in\; \mathbb{R} \quad\text{exists.}$$
+            Since $E_\alpha$ contains the positive element $\tfrac{1}{n}$ (Step 4),
+            we have $a \ge \tfrac{1}{n} &gt; 0,$ so $a &gt; 0.$
+        </div>
+    </div>
+
+    <div class="math-box">
+        <strong>Goal from here:</strong>
+        We must show $a^2 = \alpha.$
+        We do this by the Law of Trichotomy:
+        prove $a^2 &lt; \alpha$ is impossible, and $a^2 &gt; \alpha$ is impossible,
+        so $a^2 = \alpha$ is the only remaining option.
+    </div>
+</div><!-- /step 5 -->
+
+<!-- ════════════════════════════════════════════
+     STEP 6 — Ruling out a^2 < alpha
+════════════════════════════════════════════ -->
+<div class="step">
+    <h2>Step 6 &mdash; Ruling Out $a^2 &lt; \alpha$</h2>
+
+    <ul class="roadmap">
+        <li class="done"><span class="badge">&#10003;</span> $\alpha = 0$ handled.</li>
+        <li class="done"><span class="badge">&#10003;</span> $E_\alpha$ nonempty &amp; bounded above.</li>
+        <li class="done"><span class="badge">&#10003;</span> $a = \text{lub}(E_\alpha)$ exists, $a &gt; 0.$</li>
+        <li class="active"><span class="badge">6a</span> Show $a^2 &lt; \alpha$ is impossible. &larr; <strong>Now</strong></li>
+        <li><span class="badge">6b</span> Show $a^2 &gt; \alpha$ is impossible.</li>
+        <li><span class="badge">7</span> Uniqueness.</li>
+    </ul>
+
+    <div class="tcolorbox red">
+        <div class="tcolorbox-header">Claim: $a^2 &lt; \alpha$ is impossible</div>
+        <div class="tcolorbox-content">
+            If $a^2 &lt; \alpha,$ we will find $b\in E_\alpha$ with $b &gt; a,$
+            contradicting $a = \text{lub}(E_\alpha).$
+        </div>
+    </div>
+
+    <div class="rough-box">
+        <div class="rough-box-title">&#9999; Rough Work &mdash; How to find $b$?</div>
+        We try $b = a + \dfrac{1}{n}$ for some $n\in\mathbb{N}$ chosen large enough.
+        We need $b\in E_\alpha,$ i.e., $b^2\le\alpha.$
+        <br><br>
+        Expand:
+        $$b^2 = \left(a+\frac{1}{n}\right)^2 = a^2 + \frac{2a}{n} + \frac{1}{n^2}.$$
+        The term $\dfrac{1}{n^2}$ is harder to control, but note
+        $\dfrac{1}{n^2}\le\dfrac{1}{n}$ for $n\ge 1,$ so:
+        $$b^2 \;\le\; a^2 + \frac{2a}{n} + \frac{1}{n} = a^2 + \frac{2a+1}{n}.$$
+        If we can arrange $a^2 + \dfrac{2a+1}{n} \le\alpha,$ then $b^2\le\alpha.$
+        This requires:
+        $$\frac{2a+1}{n} \;\le\; \alpha - a^2
+        \quad\Longleftrightarrow\quad
+        n \;\ge\; \frac{2a+1}{\alpha - a^2}.$$
+        Since $\alpha - a^2 &gt; 0$ (our assumption), $\dfrac{2a+1}{\alpha-a^2}$ is a
+        finite positive number. The <strong>Archimedean Property</strong> guarantees
+        such an $n\in\mathbb{N}$ exists. &#10003;
+    </div>
+
+    <div class="proof-block">
+        <span class="proof-label">Actual Proof — $a^2 &lt; \alpha$ leads to contradiction.</span>
+        Suppose $a^2 &lt; \alpha,$ so $\alpha - a^2 &gt; 0.$
+        <br><br>
+        Since $2a+1 &gt; 0$ and $\alpha-a^2 &gt; 0,$ by the <strong>Archimedean Property</strong>
+        there exists $n\in\mathbb{N}$ such that:
+        $$n(\alpha - a^2) \;&gt;\; 2a+1,$$
+        equivalently $\dfrac{2a+1}{n} &lt; \alpha - a^2.$
+        <br><br>
+        Set $b = a + \dfrac{1}{n}.$ Then $b &gt; a$ and:
+        $$b^2 = \left(a+\frac{1}{n}\right)^2
+        = a^2 + \frac{2a}{n} + \frac{1}{n^2}
+        \;\le\; a^2 + \frac{2a}{n} + \frac{1}{n}
+        = a^2 + \frac{2a+1}{n}
+        \;&lt;\; a^2 + (\alpha - a^2) = \alpha.$$
+        Therefore $b^2 &lt; \alpha,$ so $b\in E_\alpha.$
+        <br><br>
+        But $b = a + \tfrac{1}{n} &gt; a = \text{lub}(E_\alpha),$ which is a
+        <strong>contradiction</strong> (no element of $E_\alpha$ can exceed the least upper bound).
+        <br><br>
+        Hence $a^2 &lt; \alpha$ is <strong>impossible.</strong>
+        <span class="qed">$\blacksquare$</span>
+    </div>
+
+    <div class="tcolorbox lime">
+        <div class="tcolorbox-header">Why we dropped $1/n^2$</div>
+        <div class="tcolorbox-content">
+            The bound $\dfrac{1}{n^2}\le\dfrac{1}{n}$ (valid for $n\ge 1$) lets us replace
+            the quadratic term $\dfrac{1}{n^2}$ by the linear term $\dfrac{1}{n},$
+            making the algebra clean. The loss is harmless: we only need an <em>upper</em> bound
+            on $b^2,$ and the cruder bound still gives us $b^2 &lt;\alpha.$
+        </div>
+    </div>
+</div><!-- /step 6 -->
+
+<!-- ════════════════════════════════════════════
+     STEP 7 — Ruling out a^2 > alpha
+════════════════════════════════════════════ -->
+<div class="step">
+    <h2>Step 7 &mdash; Ruling Out $a^2 &gt; \alpha$</h2>
+
+    <ul class="roadmap">
+        <li class="done"><span class="badge">&#10003;</span> $\alpha = 0$ handled.</li>
+        <li class="done"><span class="badge">&#10003;</span> $a = \text{lub}(E_\alpha)$ exists, $a &gt; 0.$</li>
+        <li class="done"><span class="badge">&#10003;</span> $a^2 &lt; \alpha$ ruled out.</li>
+        <li class="active"><span class="badge">6b</span> Show $a^2 &gt; \alpha$ is impossible. &larr; <strong>Now</strong></li>
+        <li><span class="badge">7</span> Uniqueness.</li>
+    </ul>
+
+    <div class="tcolorbox red">
+        <div class="tcolorbox-header">Claim: $a^2 &gt; \alpha$ is impossible</div>
+        <div class="tcolorbox-content">
+            If $a^2 &gt; \alpha,$ we will find $c &lt; a$ that is already an upper bound
+            for $E_\alpha,$ contradicting $a$ being the <em>least</em> upper bound.
+        </div>
+    </div>
+
+    <div class="rough-box">
+        <div class="rough-box-title">&#9999; Rough Work &mdash; How to find a smaller upper bound?</div>
+        We try $c = a - \dfrac{1}{n}$ for some $n\in\mathbb{N}.$
+        We need $c &gt; 0$ (so it is a valid upper bound candidate) and $c^2 &gt; \alpha$
+        (so every $x$ with $x^2\le\alpha$ satisfies $x\le c &lt; a$).
+        <br><br>
+        Expand:
+        $$c^2 = \left(a-\frac{1}{n}\right)^2 = a^2 - \frac{2a}{n} + \frac{1}{n^2}
+        \;\ge\; a^2 - \frac{2a}{n}.$$
+        We want $a^2 - \dfrac{2a}{n} &gt; \alpha,$ i.e., $\dfrac{2a}{n} &lt; a^2-\alpha,$ i.e.,
+        $$n \;&gt;\; \frac{2a}{a^2-\alpha}.$$
+        Since $a^2-\alpha &gt; 0$ (our assumption) and $2a &gt; 0,$
+        the Archimedean Property gives such an $n.$ We also need $n &gt; \dfrac{1}{a}$
+        so that $c = a - \tfrac{1}{n} &gt; 0.$ Both conditions can be met simultaneously. &#10003;
+    </div>
+
+    <div class="proof-block">
+        <span class="proof-label">Actual Proof — $a^2 &gt; \alpha$ leads to contradiction.</span>
+        Suppose $a^2 &gt; \alpha,$ so $a^2 - \alpha &gt; 0.$
+        <br><br>
+        Since $2a &gt; 0$ and $a^2-\alpha &gt; 0,$ by the <strong>Archimedean Property</strong>
+        there exists $n\in\mathbb{N}$ such that simultaneously:
+        $$n \;&gt;\; \frac{2a}{a^2-\alpha} \qquad\text{and}\qquad n \;&gt;\; \frac{1}{a}.$$
+        (We can take $n$ larger than both finite quantities.)
+        <br><br>
+        The first condition gives $\dfrac{2a}{n} &lt; a^2-\alpha.$
+        <br>
+        The second condition gives $\dfrac{1}{n} &lt; a,$ so $c:=a-\dfrac{1}{n} &gt; 0.$
+        <br><br>
+        Now estimate $c^2$ from below:
+        $$c^2 = \left(a-\frac{1}{n}\right)^2
+        = a^2 - \frac{2a}{n} + \frac{1}{n^2}
+        \;\ge\; a^2 - \frac{2a}{n}
+        \;&gt;\; a^2 - (a^2-\alpha) = \alpha.$$
+        So $c^2 &gt; \alpha.$
+        <br><br>
+        <strong>We claim $c$ is an upper bound for $E_\alpha.$</strong>
+        Let $x\in E_\alpha,$ so $x^2\le\alpha &lt; c^2.$
+        Since $c &gt; 0,$ taking square roots (which preserve order for non-negatives):
+        $x \le |x| \le c.$
+        (More carefully: if $x &gt; c &gt; 0$ then $x^2 &gt; c^2 &gt; \alpha,$ contradicting $x\in E_\alpha.$)
+        Hence $x\le c$ for all $x\in E_\alpha,$ so $c$ is an upper bound for $E_\alpha.$
+        <br><br>
+        But $c = a - \dfrac{1}{n} &lt; a = \text{lub}(E_\alpha),$ which means $c$ is an upper bound
+        <em>strictly less than</em> the least upper bound — a <strong>contradiction.</strong>
+        <br><br>
+        Hence $a^2 &gt; \alpha$ is <strong>impossible.</strong>
+        <span class="qed">$\blacksquare$</span>
+    </div>
+</div><!-- /step 7 -->
+
+<!-- ════════════════════════════════════════════
+     STEP 8 — Conclusion of existence + uniqueness
+════════════════════════════════════════════ -->
+<div class="step">
+    <h2>Step 8 &mdash; Conclusion: Existence &amp; Uniqueness</h2>
+
+    <ul class="roadmap">
+        <li class="done"><span class="badge">&#10003;</span> $\alpha = 0$ handled.</li>
+        <li class="done"><span class="badge">&#10003;</span> $a = \text{lub}(E_\alpha)$ exists, $a &gt; 0.$</li>
+        <li class="done"><span class="badge">&#10003;</span> $a^2 &lt; \alpha$ ruled out.</li>
+        <li class="done"><span class="badge">&#10003;</span> $a^2 &gt; \alpha$ ruled out.</li>
+        <li class="active"><span class="badge">7</span> Conclude $a^2=\alpha$ and prove uniqueness. &larr; <strong>Now</strong></li>
+    </ul>
+
+    <div class="tcolorbox green">
+        <div class="tcolorbox-header">Existence — $a^2 = \alpha$</div>
+        <div class="tcolorbox-content">
+            We have shown $a^2 &lt; \alpha$ is false and $a^2 &gt; \alpha$ is false.
+            By the <strong>Law of Trichotomy</strong>, exactly one of
+            $a^2 &lt; \alpha,\; a^2 = \alpha,\; a^2 &gt; \alpha$ holds.
+            The only remaining possibility is
+            $$a^2 = \alpha.$$
+            Since $a = \text{lub}(E_\alpha) &gt; 0,$ we have $a\ge 0$ and $a^2=\alpha.$
+            Existence is proved. &#10003;
+        </div>
+    </div>
+
+    <div class="proof-block">
+        <span class="proof-label">Proof of Uniqueness.</span>
+        Suppose $a> 0$ and $b>0$ both satisfy $a^2=\alpha$ and $b^2=\alpha.$
+        Then:
+        $$a^2 - b^2 = \alpha - \alpha = 0
+        \;\Longrightarrow\; (a-b)(a+b) = 0.$$
+        Since $a+b> 0,$ $(a-b) = 0,$ so $a = b.$
+       <br>
+       Hence the non-negative square root is unique. &#10003;
+        <span class="qed">$\blacksquare$</span>
+    </div>
+
+    <div class="tcolorbox blue">
+        <div class="tcolorbox-header">Notation and Convention</div>
+        <div class="tcolorbox-content">
+            The unique non-negative real number $a$ satisfying $a^2=\alpha$ is written
+            $\sqrt{\alpha}$ or $\alpha^{1/2}.$
+            <br><br>
+            Note: the theorem provides a <em>non-negative</em> square root. The equation $x^2=\alpha$
+            has two solutions $x=\pm\sqrt{\alpha}$ for $\alpha&gt;0,$ but $\sqrt{\alpha}$ denotes
+            only the non-negative one by convention.
+        </div>
+    </div>
+</div><!-- /step 8 -->
+
+<!-- ════════════════════════════════════════════
+     STEP 9 — SUMMARY
+════════════════════════════════════════════ -->
+<div class="step">
+    <hr class="section-rule">
+    <h2>Summary</h2>
+
+    <div class="tcolorbox blue">
+        <div class="tcolorbox-header">The Full Proof at a Glance</div>
+        <div class="tcolorbox-content">
+            <table>
+                <tr>
+                    <th>Step</th>
+                    <th>What we did</th>
+                    <th>Tool used</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Stated the theorem (existence &amp; uniqueness of $\sqrt{\alpha}$)</td>
+                    <td>&mdash;</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Handled the case $\alpha=0$: $a=0$ works and is unique</td>
+                    <td>Definition of product</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>For $\alpha&gt;0$: defined $E_\alpha=\{x\in\mathbb{R}\mid x^2\le\alpha\}$</td>
+                    <td>Set construction</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>$E_\alpha$ is nonempty: $0\in E_\alpha$; also $\tfrac{1}{n}\in E_\alpha$ for large $n$</td>
+                    <td>Archimedean Property</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>$E_\alpha$ is bounded above by $N&gt;\alpha$; applied LUB Property to get $a=\text{lub}(E_\alpha)&gt;0$</td>
+                    <td>Archimedean Property + LUB Property</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Ruled out $a^2&lt;\alpha$: found $b=a+\tfrac{1}{n}\in E_\alpha$, contradicting $a$ being an upper bound</td>
+                    <td>Archimedean Property, algebra: $\tfrac{1}{n^2}\le\tfrac{1}{n}$</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>Ruled out $a^2&gt;\alpha$: found $c=a-\tfrac{1}{n}$ an upper bound $&lt;a$, contradicting $a=\text{lub}$</td>
+                    <td>Archimedean Property, algebra: $\tfrac{1}{n^2}\ge 0$</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>Concluded $a^2=\alpha$ by Trichotomy; proved uniqueness via $(a-b)(a+b)=0$</td>
+                    <td>Law of Trichotomy, factoring</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="tcolorbox purple">
+        <div class="tcolorbox-header">The Logical Chain</div>
+        <div class="tcolorbox-content">
+            $$\underbrace{\text{LUB Property}}_{\text{Completeness of }\mathbb{R}}
+            \;\Longrightarrow\;
+            \underbrace{\text{Archimedean Property}}_{\mathbb{N}\text{ unbounded}}
+            \;\Longrightarrow\;
+            \underbrace{\sqrt{\alpha}\text{ exists in }\mathbb{R}}_{\text{this theorem}}$$
+            This theorem would <strong>fail in $\mathbb{Q}$</strong> (e.g. $\sqrt{2}\notin\mathbb{Q}$)
+            because $\mathbb{Q}$ does not have the LUB Property.
+        </div>
+    </div>
+
+    <div class="tcolorbox amber">
+        <div class="tcolorbox-header">Key Technique: The Approximation Argument</div>
+        <div class="tcolorbox-content">
+            The heart of Steps 6 and 7 is the same: to show $a = \text{lub}(E_\alpha)$
+            satisfies $a^2=\alpha,$ we did not compute $a$ explicitly.
+            Instead we used a <strong>perturbation argument</strong>:
+            <ul>
+                <li>If $a^2&lt;\alpha$: nudge $a$ up by $\tfrac{1}{n}$ to get a contradiction.</li>
+                <li>If $a^2&gt;\alpha$: nudge $a$ down by $\tfrac{1}{n}$ to get a contradiction.</li>
+            </ul>
+            The Archimedean Property ensures the nudge $\tfrac{1}{n}$ can be made small enough
+            in each case. Dropping the quadratic term $\tfrac{1}{n^2}$ (either by bounding it
+            above by $\tfrac{1}{n},$ or below by $0$) simplifies the algebra.
+        </div>
+    </div>
+
+    <div class="tcolorbox teal">
+        <div class="tcolorbox-header">Generalisations</div>
+        <div class="tcolorbox-content">
+            The same method (define a set, take its LUB, show the LUB has the required property)
+            proves:
+            <ul>
+                <li>
+                    <strong>$n$-th roots:</strong>
+                    Every $\alpha\ge 0$ has a unique non-negative $n$-th root $\alpha^{1/n}$
+                    for any $n\in\mathbb{N}.$
+                    Use $E_\alpha^{(n)} = \{x\ge 0\mid x^n\le\alpha\}$ and the same LUB argument.
+                </li>
+                <li>
+                    <strong>Intermediate Value Theorem (special case):</strong>
+                    If $f$ is continuous and $f(a)&lt;0&lt;f(b),$ the set
+                    $\{x\in[a,b]\mid f(x)\le 0\}$ is nonempty and bounded above;
+                    its LUB is a zero of $f.$
+                </li>
+                <li>
+                    <strong>Monotone Convergence Theorem:</strong>
+                    A bounded monotone increasing sequence converges; its limit is the LUB
+                    of the set of its terms.
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="tcolorbox lime">
+        <div class="tcolorbox-header">Self-check Questions</div>
+        <div class="tcolorbox-content">
+            <div class="mb-3">
+                <p class="fw-bold">Q1. &nbsp;Where in the proof did we use $a &gt; 0$?</p>
+                <details><summary>Answer</summary>
+                    <div class="alert-secondary">
+                        In Step 7, we needed $c = a - \tfrac{1}{n} &gt; 0$ (to be a valid upper bound
+                        candidate), which required choosing $n &gt; \tfrac{1}{a}.$ Since $a&gt;0,$
+                        $\tfrac{1}{a}$ is finite and the Archimedean Property applies.
+                        Also in Step 6, the bound $a+\tfrac{1}{n}$ being the right candidate
+                        implicitly uses $a&gt;0$ to ensure the contradiction is sharp.
+                    </div>
+                </details>
+            </div>
+            <div class="mb-3">
+                <p class="fw-bold">Q2. &nbsp;Why do we need <em>both</em>
+                    "$a^2&lt;\alpha$ impossible" and "$a^2&gt;\alpha$ impossible"?</p>
+                <details><summary>Answer</summary>
+                    <div class="alert-secondary">
+                        The Law of Trichotomy says exactly one of the three relations holds.
+                        To conclude $a^2=\alpha$ we must eliminate the other two.
+                        Ruling out only one leaves the other as a possibility.
+                    </div>
+                </details>
+            </div>
+            <div class="mb-3">
+                <p class="fw-bold">Q3. &nbsp;Why is the proof that $\sqrt{2}$ is irrational
+                    not a contradiction to this theorem?</p>
+                <details><summary>Answer</summary>
+                    <div class="alert-secondary">
+                        The theorem says $\sqrt{2}\in\mathbb{R}$ exists. The proof that
+                        $\sqrt{2}\notin\mathbb{Q}$ says it is not rational. There is no
+                        contradiction: $\mathbb{Q}\subsetneq\mathbb{R},$ and irrational reals
+                        are perfectly valid real numbers.
+                    </div>
+                </details>
+            </div>
+            <div class="mb-3">
+                <p class="fw-bold">Q4. &nbsp;Modify the proof to show that every $\alpha\ge 0$
+                    has a unique non-negative cube root.</p>
+                <details><summary>Outline</summary>
+                    <div class="alert-secondary">
+                        Define $E_\alpha = \{x\ge 0\mid x^3\le\alpha\}.$ Show nonempty (contains $0$
+                        and $\tfrac{1}{n}$ for large $n$), bounded above (by $N&gt;\alpha$ since
+                        $N^3\ge N&gt;\alpha$). Set $a=\text{lub}(E_\alpha).$
+                        <br>
+                        If $a^3&lt;\alpha$: try $b=a+\tfrac{1}{n}$; expand $b^3$ and bound
+                        $\tfrac{1}{n^2},\tfrac{1}{n^3}$ by $\tfrac{1}{n}$ to get $b^3&lt;\alpha.$
+                        <br>
+                        If $a^3&gt;\alpha$: try $c=a-\tfrac{1}{n}$; bound $c^3$ from below.
+                        Same Archimedean argument closes both cases.
+                    </div>
+                </details>
+            </div>
+        </div>
+    </div>
+</div><!-- /step 9 -->
+
+<!-- ═══ STEP 2: Question 2 ═══ -->
+<div class="step">
+    <div class="tcolorbox blue">
+        <div class="tcolorbox-header">Q2: Find lub and glb of $\{a_n \mid a_1=1, a_{n+1}=3-\frac{1}{a_n}\}$</div>
+        <div class="tcolorbox-content">
+            <strong>1. Monotonicity:</strong>
+            The first few terms are $1, 2, 2.5, 2.6, \dots$
+            We can show the sequence is strictly increasing. Assume $a_n > a_{n-1}.$ Then:
+            $$ a_{n+1} - a_n = \left(3 - \frac{1}{a_n}\right) - \left(3 - \frac{1}{a_{n-1}}\right) = \frac{1}{a_{n-1}} - \frac{1}{a_n} = \frac{a_n - a_{n-1}}{a_n a_{n-1}} > 0 $$
+            
+            <br>
+            <strong>2. Convergence and Limit:</strong>
+            Since it is increasing, let $L = \lim a_n$. Then:
+            $$ L = 3 - \frac{1}{L} \implies L^2 - 3L + 1 = 0 $$
+            $$ L = \frac{3 \pm \sqrt{5}}{2} $$
+            Since terms are $> 1$, we take the positive root $L = \frac{3 + \sqrt{5}}{2} \approx 2.618$.
+            
+            <br>
+            <strong>3. lub and glb:</strong>
+            Since the sequence is increasing, the lub is the limit.
+            The glb is the first term $a_1 = 1$.
+            $$ \text{lub} = \frac{3 + \sqrt{5}}{2}, \quad \text{glb} = 1 $$
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- ═══ STEP 4: Question 4 ═══ -->
+<div class="step">
+    <div class="tcolorbox blue">
+        <div class="tcolorbox-header">Q4: Find lub and glb of $\{a_n \mid a_1=\sqrt{2}, a_{n+1}=\sqrt{2+a_n}\}$</div>
+        <div class="tcolorbox-content">
+            <strong>1. Monotonicity and Boundedness:</strong>
+            We claim the sequence is increasing and bounded above by $2$.
+            <br><em>Proof by Induction:</em>
+            Base: $a_1 = \sqrt{2} < 2$.
+            Assume $a_n < 2$. Then $a_{n+1} = \sqrt{2+a_n} < \sqrt{2+2} = 2$.
+            Also, $a_{n+1}^2 - a_n^2 = (2+a_n) - a_n^2 = -(a_n^2 - a_n - 2) = -(a_n-2)(a_n+1)$.
+            Since $a_n < 2$, this term is positive, so $a_{n+1} > a_n$.
+            
+            <br>
+            <strong>2. Limit:</strong>
+            Let $L = \lim a_n$. Then $L = \sqrt{2+L} \implies L^2 - L - 2 = 0$.
+            $$ (L-2)(L+1) = 0 \implies L = 2 $$
+            
+            <br>
+            <strong>3. lub and glb:</strong>
+            The sequence is increasing, so the glb is the first term $a_1 = \sqrt{2}$.
+            The sequence is bounded above and converges to $2$, so the lub is the limit $2$.
+            $$ \text{lub} = 2, \quad \text{glb} = \sqrt{2} $$
+        </div>
+    </div>
+</div>
+<!-- ═══ STEP 5: Question 5 (Geometric Series) ═══ -->
+<div class="step">
+    <div class="tcolorbox blue">        <div class="tcolorbox-header">Q5: Find lub and glb of $\{a_n \mid a_0=1, a_1=1+1/2, a_2=1+1/2+1/4, \dots\}$</div>
+        <div class="tcolorbox-content">
+            <strong>1. Definition of the Sequence:</strong>
+            The sequence represents the partial sums of a geometric series with ratio $r = 1/2$ and first term $1$.
+            $$ a_n = \sum_{k=0}^{n} \frac{1}{2^k} = 1 + \frac{1}{2} + \frac{1}{2^2} + \dots + \frac{1}{2^n} $$             
+            <br>
+            <strong>2. Closed Form Formula:</strong>
+            Using the geometric series sum formula $S_n = a \frac{1-r^{n+1}}{1-r}$:
+            $$ a_n = 1 \cdot \frac{1 - (1/2)^{n+1}}{1 - 1/2} = 2 \left( 1 - \frac{1}{2^{n+1}} \right) = 2 - \frac{1}{2^n} $$ 
+            <br>
+            <strong>3. Monotonicity and Bounds:</strong>
+            Since each term $\frac{1}{2^n}$ is positive, $a_{n+1} = a_n + \frac{1}{2^{n+1}} > a_n$. The sequence is strictly increasing.
+            From the formula $2 - \frac{1}{2^n}$, we can see that $a_n < 2$ for all $n$, and $a_n > 0$.
+            
+            <br>
+            <strong>4. Limit:</strong>
+            $$ \lim_{n \to \infty} a_n = \lim_{n \to \infty} \left( 2 - \frac{1}{2^n} \right) = 2 $$ 
+            <br>
+            <strong>5. lub and glb:</strong>
+            Since the sequence is increasing and converges to 2, the least upper bound is 2.
+            The smallest value in the set is the first term $a_0 = 1$.
+            $$ \text{lub} = 2, \quad \text{glb} = 1 $$         </div>
+    </div>
+</div>
+
+<!-- ═══ STEP 6: Question 6 (Inscribed Polygons) ═══ -->
+<div class="step">
+    <div class="tcolorbox blue">
+        <div class="tcolorbox-header">Q6: Find lub and glb of $\{a_n \mid a_1=1, a_2=1, a_n = \text{Area of regular polygon inscribed in unit circle}\}$</div>
+        <div class="tcolorbox-content">
+            <strong>1. Geometric Analysis:</strong>
+            Consider a circle of radius $R=1$. A regular polygon with $n$ sides (for $n \ge 3$) can be divided into $n$ isosceles triangles, each with a vertex angle of $\theta = \frac{2\pi}{n}$ and two sides of length 1.
+            <br>
+            The area of one such triangle is $\frac{1}{2} R^2 \sin(\theta) = \frac{1}{2} \sin\left(\frac{2\pi}{n}\right)$.
+            <br>
+            Therefore, the total area is:
+            $$ a_n = n \cdot \frac{1}{2} \sin\left(\frac{2\pi}{n}\right) = \frac{n}{2} \sin\left(\frac{2\pi}{n}\right) \quad (\text{for } n \ge 3) $$             
+            <br>
+            <strong>2. Behavior of the Sequence:</strong>
+            <ul>
+                <li>Given $a_1 = 1$ and $a_2 = 1$ (these are likely defined as base cases or placeholders, as $n$-gons require $n \ge 3$).</li>
+                <li>For $n \ge 3$, as $n$ increases, the polygon "fills" the circle more completely. The sequence is strictly increasing for $n \ge 3$.</li>
+            </ul>
+            
+            <br>
+            <strong>3. The Limit (Archimedes' Method):</strong>
+            Using the limit $\lim_{x \to 0} \frac{\sin x}{x} = 1$, let $x = \frac{2\pi}{n}$. As $n \to \infty$, $x \to 0$.
+            $$ \lim_{n \to \infty} a_n = \lim_{n \to \infty} \frac{n}{2} \sin\left(\frac{2\pi}{n}\right) = \lim_{n \to \infty} \pi \cdot \frac{\sin(2\pi/n)}{2\pi/n} = \pi \cdot 1 = \pi $$             
+            <br>
+            <strong>4. Visual Illustration:</strong>
+            <div class="diagram-container" style="background:#f8f9fa; padding:10px; border-radius:4px;">
+                <svg width="100%" height="200" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- n=3 Triangle -->
+                    <g transform="translate(100, 100)">
+                        <circle r="80" fill="none" stroke="#bdc3c7" stroke-width="2"/>
+                        <polygon points="0,-80 69.28,40 -69.28,40" fill="rgba(52, 152, 219, 0.5)" stroke="#2980b9" stroke-width="2"/>
+                        <text x="0" y="110" text-anchor="middle" font-size="14">n=3 (Triangle)</text>
+                        <text x="0" y="130" text-anchor="middle" font-size="12" fill="#555">Area $\approx 1.3$</text>
+                    </g>
+
+                    <!-- n=4 Square -->
+                    <g transform="translate(300, 100)">
+                        <circle r="80" fill="none" stroke="#bdc3c7" stroke-width="2"/>
+                        <polygon points="56.57,-56.57 56.57,56.57 -56.57,56.57 -56.57,-56.57" fill="rgba(52, 152, 219, 0.6)" stroke="#2980b9" stroke-width="2"/>
+                        <text x="0" y="110" text-anchor="middle" font-size="14">n=4 (Square)</text>
+                        <text x="0" y="130" text-anchor="middle" font-size="12" fill="#555">Area = 2</text>
+                    </g>
+
+                    <!-- n=8 Octagon -->
+                    <g transform="translate(500, 100)">
+                        <circle r="80" fill="none" stroke="#bdc3c7" stroke-width="2"/>
+                        <polygon points="30.6,-73.5 73.5,-30.6 73.5,30.6 30.6,73.5 -30.6,73.5 -73.5,30.6 -73.5,-30.6 -30.6,-73.5" fill="rgba(52, 152, 219, 0.8)" stroke="#2980b9" stroke-width="2"/>
+                        <text x="0" y="110" text-anchor="middle" font-size="14">n=8 (Octagon)</text>
+                        <text x="0" y="130" text-anchor="middle" font-size="12" fill="#555">Area $\approx 2.8$</text>
+                    </g>
+                    
+                    <!-- Arrow -->
+                    <line x1="190" y1="80" x2="210" y2="80" stroke="#333" stroke-width="2" marker-end="url(#arr)"/>
+                    <line x1="390" y1="80" x2="410" y2="80" stroke="#333" stroke-width="2" marker-end="url(#arr)"/>
+                    <defs>
+                        <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#333" />
+                        </marker>
+                    </defs>
+                </svg>
+                <div style="text-align:center; font-size:0.9rem; color:#666; margin-top:5px;">
+                    As $n$ increases, the shaded polygon area approaches the area of the circle ($\pi$).
+                </div>
+            </div>
+
+            <br>
+            <strong>5. lub and glb:</strong>
+            The sequence is bounded above by the area of the circle, $\pi$. Since it is increasing (for $n \ge 3$) and converges to $\pi$, the LUB is $\pi$.
+            Based on the given definition $a_1=1, a_2=1$ and $a_3 \approx 1.3$, the minimum value in the set is 1.
+            $$ \text{lub} = \pi, \quad \text{glb} = 1 $$         </div>
+    </div>
+</div>
+
+</div><!-- /.container -->
+
+<!-- ═══════════════ CONTROLS BAR ═══════════════ -->
+<div class="controls">
+    <span class="key-hint">Press <kbd>Enter</kbd> or <kbd>&rarr;</kbd> to advance</span>
+    <div class="progress-wrap">
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+        <span class="progress-label" id="progressLabel">0 / 0</span>
+    </div>
+    <button class="btn-next" id="btnNext" onclick="revealNext()">Next &#9654;</button>
+</div>
+
+<script>
+    const steps   = document.querySelectorAll('.step');
+    const fill    = document.getElementById('progressFill');
+    const label   = document.getElementById('progressLabel');
+    const btn     = document.getElementById('btnNext');
+    let   current = 0;
+
+    function updateUI() {
+        const pct = (current / steps.length) * 100;
+        fill.style.width  = pct + '%';
+        label.textContent = current + ' / ' + steps.length;
+        btn.disabled      = current >= steps.length;
+        btn.textContent   = current >= steps.length ? 'Done \u2713' : 'Next \u25B6';
+    }
+
+    function revealNext() {
+        if (current >= steps.length) return;
+        const el = steps[current];
+        el.classList.add('visible');
+        if (window.MathJax) MathJax.typesetPromise([el]);
+        current++;
+        updateUI();
+        setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight') {
+            e.preventDefault(); revealNext();
+        }
+    });
+
+    window.addEventListener('load', function() { updateUI(); revealNext(); });
+</script>
+
+</body>
+</html>

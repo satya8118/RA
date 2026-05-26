@@ -38,7 +38,14 @@
             border-bottom: 2px solid var(--secondary);
             padding-bottom: 10px;
         }
-
+       .diagram-container {
+    margin: 20px 0;
+    text-align: center;
+    background: #f8f9fa;
+    border: 1px dashed #ced4da;
+    border-radius: 4px;
+    padding: 15px;
+      }
         .math-box {
             background: #e8f4fd;
             border-left: 5px solid var(--secondary);
@@ -958,6 +965,92 @@
         </div>
     </div>
 </div>
+        <!-- ═══ STEP 1: Question 13 ═══ -->
+<div class="step">
+    <div class="tcolorbox blue">
+        <div class="tcolorbox-header">Q: Find glb of $\{x + x^{-1} \mid x > 0\}$. Is the set bounded above?</div>
+        <div class="tcolorbox-content">
+            Let $S = \left\{x + \frac{1}{x} \;\middle|\; x > 0\right\}.$ We want to find the greatest lower bound and determine if the set is bounded above.
+            
+            <br><br>
+            <strong>1. Greatest Lower Bound (glb):</strong>
+            Since $x > 0$, both $x$ and $\frac{1}{x}$ are strictly positive. We can apply the <strong>Arithmetic Mean-Geometric Mean (AM-GM) Inequality</strong>, which states that for any $a, b > 0$, $\frac{a+b}{2} \ge \sqrt{ab}$.
+            <br>
+            Let $a = x$ and $b = \frac{1}{x}.$ Then:
+            $$ \frac{x + \frac{1}{x}}{2} \ge \sqrt{x \cdot \frac{1}{x}} = \sqrt{1} = 1 $$             Multiplying by 2, we get:
+            $$ x + \frac{1}{x} \ge 2 $$             This shows that $2$ is a lower bound for the set $S.$             <br><br>
+            To show that $2$ is the <em>greatest</em> lower bound, we must show that $2 \in S.$ 
+            If we choose $x = 1$ (which is $> 0$), we get:
+            $$ 1 + \frac{1}{1} = 2 \in S $$             Since the lower bound $2$ is actually an element of the set, it is the minimum of the set, and therefore the greatest lower bound.
+            $$ \text{glb}(S) = 2 $$ 
+            <br>
+            <strong>2. Is the set bounded above?</strong>
+            <strong>No</strong>, the set is not bounded above.
+            <br><br>
+            To see this, consider what happens as $x$ approaches $0$ from the right. Let $x = \frac{1}{n}$ for a large natural number $n.$             $$ x + \frac{1}{x} = \frac{1}{n} + n $$             As $n \to \infty$ (which means $x \to 0^+$), the term $n$ grows arbitrarily large. 
+            <br>
+            By the Archimedean Property, for any real number $M > 0$, we can choose $n > M,$ which means $\frac{1}{n} + n > M.$ 
+            Therefore, no real number can serve as an upper bound for $S.$             
+            <br><br>
+            <strong>3. Visual Illustration:</strong>
+            <div class="diagram-container" style="background:#f8f9fa; padding:10px; border-radius:4px;">
+                <svg width="100%" height="220" viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Axes -->
+                    <line x1="50" y1="200" x2="480" y2="200" stroke="#343a40" stroke-width="2" marker-end="url(#arrQ13)"/>
+                    <line x1="50" y1="200" x2="50" y2="20" stroke="#343a40" stroke-width="2" marker-end="url(#arrQ13)"/>
+                    <defs>
+                        <marker id="arrQ13" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                            <path d="M0,0 L0,6 L9,3 z" fill="#343a40" />
+                        </marker>
+                    </defs>
+                    <!-- Axis Labels -->
+                    <text x="490" y="205" font-size="14" font-style="italic">x</text>
+                    <text x="40" y="15" font-size="14" font-style="italic">y</text>
+                    <text x="35" y="205" text-anchor="end" font-size="12">0</text>
+
+                    <!-- Ticks on x-axis -->
+                    <line x1="130" y1="195" x2="130" y2="205" stroke="#343a40" stroke-width="1.5"/>
+                    <text x="130" y="218" text-anchor="middle" font-size="12">1</text>
+                    
+                    <line x1="210" y1="195" x2="210" y2="205" stroke="#343a40" stroke-width="1.5"/>
+                    <text x="210" y="218" text-anchor="middle" font-size="12">2</text>
+
+                    <!-- Ticks on y-axis -->
+                    <line x1="45" y1="140" x2="55" y2="140" stroke="#343a40" stroke-width="1.5"/>
+                    <text x="38" y="145" text-anchor="end" font-size="12">2</text>
+
+                    <line x1="45" y1="80" x2="55" y2="80" stroke="#343a40" stroke-width="1.5"/>
+                    <text x="38" y="85" text-anchor="end" font-size="12">4</text>
+
+                    <!-- Curve f(x) = x + 1/x -->
+                    <path d="M 60 40 Q 90 130 130 140 Q 200 160 280 125 Q 350 95 470 62" 
+                          fill="none" stroke="#3498db" stroke-width="3" />
+                    
+                    <!-- Minimum Point (1, 2) -->
+                    <circle cx="130" cy="140" r="5" fill="#e74c3c" stroke="white" stroke-width="2"/>
+                    <text x="145" y="135" font-size="13" fill="#e74c3c" font-weight="bold">(1, 2)</text>
+
+                    <!-- Dashed lines to axes for minimum -->
+                    <line x1="130" y1="140" x2="130" y2="200" stroke="#e74c3c" stroke-width="1" stroke-dasharray="4"/>
+                    <line x1="50" y1="140" x2="130" y2="140" stroke="#e74c3c" stroke-width="1" stroke-dasharray="4"/>
+
+                    <!-- Asymptote label near y-axis -->
+                    <path d="M 55 50 L 65 45" stroke="#666" stroke-width="1.5" marker-end="url(#arrGrey)"/>
+                    <text x="70" y="50" font-size="12" fill="#666">Unbounded as $x \to 0^+$</text>
+                    <defs>
+                        <marker id="arrGrey" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L6,3 z" fill="#666" />
+                        </marker>
+                    </defs>
+                </svg>
+                <div style="text-align:center; font-size:0.9rem; color:#666; margin-top:5px;">
+                    Graph of $f(x) = x + \frac{1}{x}$. The global minimum is 2 (the glb), and the curve goes to $+\infty$ near 0 and as $x \to \infty$.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            
 
 <!-- ═══ STEP: Nested Interval Theorem (Modified) ═══ -->
         <div class="step">

@@ -1050,7 +1050,211 @@
         </div>
     </div>
 </div>
-            
+ <!-- ═══ STEP 0: Theorem Statement ═══ -->
+        <div class="step">
+            <div class="tcolorbox blue">
+                <div class="tcolorbox-header">Theorem &mdash; Nested Interval Theorem (NIT) </div>
+                <p> This proof as given in the text book: A basic real analysis course by Prof Ajit Kumar and Prof S. Kumaresan.</p>
+                <div class="tcolorbox-content">
+                    Let $J_n = [a_n, b_n]$ be a sequence of closed bounded intervals such that the intervals are <strong>nested</strong>, i.e.,
+                    $$ J_1 \supseteq J_2 \supseteq J_3 \supseteq \cdots $$                     Then, the intersection of all intervals is nonempty:
+                    $$ \bigcap_{n=1}^{\infty} J_n \neq \emptyset $$                     <div class="diagram-container">
+                        <svg width="100%" height="120" viewBox="0 0 600 120" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                                    <path d="M0,0 L0,6 L9,3 z" fill="#343a40" />
+                                </marker>
+                            </defs>
+                            <!-- J1 -->
+                            <rect x="50" y="30" width="500" height="40" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+                            <text x="25" y="55" text-anchor="end" font-weight="bold" fill="#1565c0">J₁</text>
+                            <!-- J2 -->
+                            <rect x="100" y="40" width="400" height="20" fill="#bbdefb" stroke="#1565c0" stroke-width="2"/>
+                            <text x="75" y="55" text-anchor="end" font-weight="bold" fill="#1565c0">J₂</text>
+                            <!-- J3 -->
+                            <rect x="150" y="45" width="300" height="10" fill="#90caf9" stroke="#1565c0" stroke-width="2"/>
+                            <text x="125" y="55" text-anchor="end" font-weight="bold" fill="#1565c0">J₃</text>
+                        </svg>
+                        <div style="text-align:center; font-size:0.9rem; color:#555;">Visualizing the shrinking intersection.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ STEP 1: Strategy & Definition ═══ -->
+        <div class="step">
+            <div class="tcolorbox grey">
+                <div class="tcolorbox-header">Strategy: Use LUB on the Left Endpoints</div>
+                <div class="tcolorbox-content">
+                    To prove the intersection is nonempty, we need to find a point $c$ such that $c \in [a_n, b_n]$ for <em>every</em> $n.$                     <br>
+                    <strong>Step 1:</strong> Define the set of all left endpoints:
+                    $$ A = \{ a_n \mid n \in \mathbb{N} \} $$                     
+                    <br>
+                    <strong>Step 2 (Crucial):</strong> We will show that <strong>every right endpoint $b_k$ is an upper bound for the set $A$.</strong>
+                    <br>
+                    If we can prove $a_n \le b_k$ for <em>all</em> $n, k \in \mathbb{N}$, then every $b_k$ is an upper bound for $A.$                 </div>
+            </div>
+        </div>
+
+        <!-- ═══ STEP 2: Proof of Bounding (Case 1) ═══ -->
+        <div class="step">
+            <div class="tcolorbox green">
+                <div class="tcolorbox-header">Proof Part 1: Comparing Endpoints (Case $n \le k$)</div>
+                <div class="tcolorbox-content">
+                    Consider any $n \in \mathbb{N}$ and fixed $k\in \mathbb{N}.$ We analyze two cases based on their relative size.
+                    
+                    <br><br>
+                    <strong>Case 1: $n \le k$</strong>
+                    <br>
+                    Since the intervals are nested ($J_{next} \subseteq J_{current}$), a larger index corresponds to a "deeper", smaller interval inside the previous ones.
+                    Therefore, $J_k \subseteq J_n.$                     <br><br>
+                    This implies:
+                    $$ a_n \le a_k \le b_k \le b_n $$                     In particular, $a_n \le b_k.$                     
+                    <div class="diagram-container">
+                        <svg width="100%" height="150" viewBox="0 0 600 150" xmlns="http://www.w3.org/2000/svg">
+                            <!-- J_n (Outer) -->
+                            <rect x="50" y="30" width="500" height="40" fill="none" stroke="#2e7d32" stroke-width="3"/>
+                            <line x1="50" y1="30" x2="50" y2="90" stroke="#2e7d32" stroke-width="3"/>
+                            <line x1="550" y1="30" x2="550" y2="90" stroke="#2e7d32" stroke-width="3"/>
+                            <text x="40" y="65" text-anchor="end" font-weight="bold" fill="#2e7d32">Jₙ</text>
+                            <text x="50" y="105" text-anchor="middle" font-weight="bold" fill="#2e7d32">aₙ</text>
+                            
+                            <!-- J_k (Inner) -->
+                            <rect x="150" y="50" width="300" height="20" fill="rgba(46, 125, 50, 0.1)" stroke="#2e7d32" stroke-width="2"/>
+                            <text x="140" y="65" text-anchor="end" font-size="12" fill="#2e7d32">Jₖ</text>
+                            
+                            <!-- Ticks -->
+                            <line x1="150" y1="40" x2="150" y2="80" stroke="#2e7d32" stroke-width="2"/>
+                            <text x="150" y="95" text-anchor="middle" font-weight="bold" fill="#2e7d32">aₖ</text>
+                            
+                            <line x1="450" y1="40" x2="450" y2="80" stroke="#d32f2f" stroke-width="3"/>
+                            <text x="450" y="95" text-anchor="middle" font-weight="bold" fill="#d32f2f">bₖ</text>
+                            
+                            <line x1="550" y1="40" x2="550" y2="80" stroke="#2e7d32" stroke-width="1"/>
+                            <text x="550" y="95" text-anchor="middle" fill="#2e7d32">bₙ</text>
+
+                            <!-- Highlighting inequality -->
+                            <path d="M 55 100 L 445 100" stroke="#d32f2f" stroke-width="2" marker-end="url(#arr)"/>
+                            <text x="250" y="115" text-anchor="middle" font-size="12" fill="#d32f2f">Clearly aₙ ≤ bₖ</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ STEP 3: Proof of Bounding (Case 2) ═══ -->
+        <div class="step">
+            <div class="tcolorbox green">
+                <div class="tcolorbox-header">Proof Part 1: Comparing Endpoints (Case $n > k$)</div>
+                <div class="tcolorbox-content">
+                    <strong>Case 2: $n > k$</strong>
+                    <br>
+                    In this case, $J_n$ is the "deeper" interval inside $J_k.$                     Therefore, $J_n \subseteq J_k.$                     <br><br>
+                    This implies:
+                    $$ a_k \le a_n \le b_n \le b_k $$                     In particular, $a_n \le b_k.$                     
+                    <div class="diagram-container">
+                        <svg width="100%" height="150" viewBox="0 0 600 150" xmlns="http://www.w3.org/2000/svg">
+                            <!-- J_k (Outer) -->
+                            <rect x="50" y="30" width="500" height="40" fill="none" stroke="#2e7d32" stroke-width="2"/>
+                            <line x1="50" y1="30" x2="50" y2="90" stroke="#2e7d32" stroke-width="2"/>
+                            <line x1="550" y1="30" x2="550" y2="90" stroke="#2e7d32" stroke-width="2"/>
+                            <text x="40" y="65" text-anchor="end" font-size="12" fill="#2e7d32">Jₖ</text>
+                            <text x="50" y="105" text-anchor="middle" fill="#2e7d32">aₖ</text>
+                            
+                            <!-- J_n (Inner) -->
+                            <rect x="150" y="50" width="300" height="20" fill="rgba(46, 125, 50, 0.1)" stroke="#2e7d32" stroke-width="3"/>
+                            <text x="140" y="65" text-anchor="end" font-weight="bold" fill="#2e7d32">Jₙ</text>
+
+                            <!-- Ticks -->
+                            <line x1="150" y1="40" x2="150" y2="80" stroke="#2e7d32" stroke-width="3"/>
+                            <text x="150" y="95" text-anchor="middle" font-weight="bold" fill="#2e7d32">aₙ</text>
+                            
+                            <line x1="450" y1="40" x2="450" y2="80" stroke="#2e7d32" stroke-width="2"/>
+                            <text x="450" y="95" text-anchor="middle" fill="#2e7d32">bₙ</text>
+                            
+                            <line x1="550" y1="40" x2="550" y2="80" stroke="#d32f2f" stroke-width="3"/>
+                            <text x="550" y="95" text-anchor="middle" font-weight="bold" fill="#d32f2f">bₖ</text>
+
+                            <!-- Highlighting inequality -->
+                            <path d="M 155 100 L 545 100" stroke="#d32f2f" stroke-width="2" marker-end="url(#arr)"/>
+                            <text x="350" y="115" text-anchor="middle" font-size="12" fill="#d32f2f">Clearly aₙ ≤ bₖ</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ STEP 4: Logic Connection ═══ -->
+        <div class="step">
+            <div class="tcolorbox purple">
+                <div class="tcolorbox-header">Conclusion of Part 1</div>
+                <div class="tcolorbox-content">
+                    In <strong>both cases</strong> (for any $n \in \mathbb{N}$), we have shown that:
+                    $$ a_n \le b_k. $$                      <br>
+                    <strong>Implication:</strong> Since $k$ is arbitrary,  $\forall k\; b_k$ is greater than or equal to <em>every</em> element $a_n$ in the set $A$, $b_k$ is an <strong>upper bound</strong> for the set $A.$                     <br><br>
+                    Therefore, by the definition of the Least Upper Bound (LUB), since $\alpha = \sup(A)$ is the <em>least</em> of all upper bounds:
+                    $$\forall k\in \mathbb{N},\; \alpha \le b_k.$$                     
+                    <div class="diagram-container">
+                        <svg width="100%" height="120" viewBox="0 0 600 120" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Line representing all a_n -->
+                            <line x1="50" y1="80" x2="300" y2="80" stroke="#1565c0" stroke-width="4"/>
+                            <text x="20" y="85" text-anchor="end" font-weight="bold" fill="#1565c0">A = {aₙ}</text>
+                            
+                            <!-- LUB Alpha -->
+                            <line x1="300" y1="40" x2="300" y2="100" stroke="#6a1b9a" stroke-width="4"/>
+                            <text x="300" y="30" text-anchor="middle" font-weight="bold" fill="#6a1b9a">α (lub A)</text>
+
+                            <!-- b_k decreasing -->
+                            <line x1="300" y1="90" x2="500" y2="90" stroke="#d32f2f" stroke-width="2" marker-end="url(#arr)"/>
+                            <text x="510" y="95" fill="#d32f2f">b₁, b₂, ... (decreasing)</text>
+                            
+                            <!-- Inequality -->
+                            <text x="350" y="70" text-anchor="middle" font-size="14" fill="#6a1b9a">α ≤ bₖ</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ STEP 5: Final Conclusion ═══ -->
+        <div class="step">
+            <div class="tcolorbox blue">
+                <div class="tcolorbox-header">Final Step: Intersection is Nonempty</div>
+                <div class="tcolorbox-content">
+                    We have established two key facts for any $k \in \mathbb{N}$:
+                    <ol>
+                        <li>From the definition of $A$, $a_k \in A.$ Since $\alpha = \sup(A)$, it is an upper bound, so $a_k \le \alpha.$</li>
+                        <li>From the proof above, $\alpha \le b_k.$</li>
+                    </ol>
+                    
+                    Combining these two inequalities:
+                    $$ a_k \le \alpha \le b_k $$                     
+                    This means $\alpha$ lies inside the interval $[a_k, b_k] = J_k$ for <strong>every</strong> $k.$                     <br>
+                    Therefore, $\alpha$ belongs to the intersection of all intervals:
+                    $$ \alpha \in \bigcap_{n=1}^{\infty} J_n $$                     <br>
+                    Since $\alpha$ is an element of the intersection, the intersection is nonempty. $\blacksquare$                     
+                    <div class="diagram-container" style="background:#f3e5f5; border:1px solid #6a1b9a;">
+                        <svg width="100%" height="150" viewBox="0 0 600 150" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Intervals J_1, J_2, J_3 -->
+                            <rect x="50" y="30" width="500" height="30" fill="none" stroke="#999" stroke-width="1"/>
+                            <rect x="100" y="45" width="400" height="30" fill="none" stroke="#999" stroke-width="1"/>
+                            <rect x="150" y="60" width="300" height="30" fill="none" stroke="#999" stroke-width="1"/>
+                            
+                            <text x="560" y="50" font-size="12" fill="#999">J₁</text>
+                            <text x="510" y="65" font-size="12" fill="#999">J₂</text>
+                            <text x="460" y="80" font-size="12" fill="#999">J₃</text>
+
+                            <!-- Alpha Line -->
+                            <line x1="300" y1="20" x2="300" y2="100" stroke="#6a1b9a" stroke-width="3" stroke-dasharray="5,3"/>
+                            <circle cx="300" cy="75" r="5" fill="#6a1b9a"/>
+                            <text x="300" y="110" text-anchor="middle" font-weight="bold" fill="#6a1b9a">α ∈ J₁, J₂, J₃...</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>           
 
 <!-- ═══ STEP: Nested Interval Theorem (Modified) ═══ -->
         <div class="step">

@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture 6 – The Modulus (Absolute Value) Function</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Code+Pro:wght@400;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+:root {
+  --ink:       #1a1f2e;
+  --blue:      #2563eb;
+  --blue-lt:   #dbeafe;
+  --green:     #15803d;
+  --green-lt:  #dcfce7;
+  --amber:     #b45309;
+  --amber-lt:  #fef3c7;
+  --purple:    #6d28d9;
+  --purple-lt: #ede9fe;
+  --red:       #dc2626;
+  --red-lt:    #fee2e2;
+  --slate:     #475569;
+  --border:    #e2e8f0;
+  --bg:        #f8f9fb;
+  --card:      #ffffff;
+  --bar-bg:    #1e293b;
+  --bar-fill:  #3b82f6;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--ink);
+  background: var(--bg);
+  padding: 28px 20px 120px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: var(--card);
+  padding: 48px 52px;
+  border-radius: 12px;
+  box-shadow: 0 2px 32px rgba(0,0,0,.08);
+}
+
+/* ── Typography ── */
+h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.2rem; font-weight: 800;
+  color: var(--ink);
+  border-bottom: 4px solid var(--blue);
+  padding-bottom: 12px; margin-bottom: 8px;
+  letter-spacing: -.5px;
+}
+.subtitle { color: var(--slate); font-size: .97rem; margin-bottom: 36px; font-style: italic; }
+.step-label {
+  font-family: 'Outfit', sans-serif;
+  font-size: .72rem; font-weight: 700; letter-spacing: 1.5px;
+  color: var(--blue); text-transform: uppercase;
+  margin-bottom: 4px; display: block;
+}
+h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.55rem; font-weight: 700;
+  color: var(--ink);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px; margin-bottom: 18px;
+}
+h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.1rem; font-weight: 600;
+  color: var(--blue); margin: 20px 0 10px;
+}
+p { margin-bottom: 1rem; }
+ul, ol { margin: 0 0 1rem 1.6rem; }
+li { margin-bottom: .4rem; }
+
+/* ── Coloured boxes ── */
+.def-box, .theorem-box, .proof-box, .note-box, .warn-box, .geo-box {
+  border-radius: 8px; padding: 16px 20px;
+  margin: 16px 0; border-left: 5px solid;
+}
+.def-box     { background: var(--blue-lt);   border-color: var(--blue);   }
+.theorem-box { background: #f0f4ff;           border-color: #3b4fd8;       }
+.proof-box   { background: #fafbfc;           border-left: 4px dashed #cbd5e1; }
+.note-box    { background: var(--green-lt);   border-color: var(--green);  }
+.warn-box    { background: var(--amber-lt);   border-color: var(--amber);  }
+.geo-box     { background: var(--purple-lt);  border-color: var(--purple); }
+.danger-box  { background: var(--red-lt);     border-color: var(--red); border-radius:8px;
+               padding:16px 20px; margin:16px 0; border-left:5px solid; }
+
+.box-title {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700; font-size: .95rem;
+  display: block; margin-bottom: 8px;
+}
+.def-box     .box-title { color: var(--blue);   }
+.theorem-box .box-title { color: #3b4fd8;       }
+.proof-box   .box-title { color: var(--slate);  }
+.note-box    .box-title { color: var(--green);  }
+.warn-box    .box-title { color: var(--amber);  }
+.geo-box     .box-title { color: var(--purple); }
+.danger-box  .box-title { color: var(--red);    }
+.qed { text-align: right; font-weight: bold; margin-top: 10px; font-size: 1.1rem; }
+
+/* ── Math display block ── */
+.math-display {
+  background: #f1f5f9; border: 1px solid #cbd5e1;
+  border-radius: 6px; padding: 14px 20px;
+  text-align: center; font-size: 1.05rem;
+  margin: 14px 0; overflow-x: auto;
+}
+
+/* ── Table ── */
+table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: .95rem; }
+th, td { border: 1px solid var(--border); padding: 10px 14px; text-align: left; }
+th { background: #f1f5f9; font-family: 'Outfit', sans-serif; font-weight: 600; }
+tr:nth-child(even) td { background: #fafbfd; }
+
+/* ── Quiz cards ── */
+.quiz-card {
+  background: #fdfefe; border: 1px solid var(--border);
+  border-left: 5px solid var(--blue);
+  padding: 18px 20px; margin: 14px 0; border-radius: 8px;
+}
+.quiz-card p { margin-bottom: 8px; }
+.btn-sol {
+  background: transparent; border: 1.5px solid var(--blue);
+  color: var(--blue); padding: 6px 16px;
+  border-radius: 4px; cursor: pointer; font-size: .85rem;
+  font-family: 'Outfit', sans-serif; font-weight: 600;
+  transition: all .18s; margin-top: 10px;
+}
+.btn-sol:hover { background: var(--blue); color: #fff; }
+.solution {
+  display: none; margin-top: 14px; padding: 14px 16px;
+  background: #f8fafc; border-top: 1px dashed #e2e8f0;
+  border-radius: 4px; color: #374151;
+}
+.sol-label {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700; color: var(--ink);
+  display: block; margin-bottom: 8px;
+}
+
+/* ── Interactive widgets ── */
+.widget-wrap {
+  background: #f8fafc; border: 1px solid var(--border);
+  border-radius: 10px; padding: 18px; margin: 18px 0;
+}
+.widget-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: .8rem; font-weight: 700; letter-spacing: 1px;
+  color: var(--blue); text-transform: uppercase; margin-bottom: 12px;
+}
+canvas { display: block; max-width: 100%; border-radius: 6px; }
+.slider-row {
+  display: flex; align-items: center; gap: 12px;
+  margin-top: 12px; flex-wrap: wrap;
+}
+.slider-row label {
+  font-family: 'Source Code Pro', monospace;
+  font-size: .9rem; color: var(--ink); white-space: nowrap; min-width: 80px;
+}
+.slider-row input[type=range] {
+  flex: 1; min-width: 120px; accent-color: var(--blue);
+}
+.readout {
+  font-family: 'Source Code Pro', monospace;
+  font-size: .9rem; color: var(--ink);
+  background: #fff; border: 1px solid var(--border);
+  border-radius: 4px; padding: 4px 10px; white-space: nowrap;
+}
+
+/* ── Two-column ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0; }
+@media(max-width: 620px) { .two-col { grid-template-columns: 1fr; } }
+
+/* ── Section rule ── */
+.section-rule { border: none; border-top: 2px dashed #cbd5e1; margin: 32px 0 24px; }
+
+/* ── Logical chain SVG ── */
+.chain-wrap { overflow-x: auto; margin: 14px 0; text-align: center; }
+
+/* ── STEP reveal ── */
+.step {
+  opacity: 0; max-height: 0; overflow: hidden;
+  transition: opacity .4s ease, max-height .7s ease;
+}
+.step.visible { opacity: 1; max-height: 99999px; margin-bottom: 8px; }
+
+/* ── CONTROLS BAR ── */
+.ctrl-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--bar-bg);
+  padding: 14px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 20px; z-index: 1000;
+  box-shadow: 0 -4px 20px rgba(0,0,0,.2);
+}
+.prog-wrap { flex: 1; display: flex; align-items: center; gap: 12px; }
+.prog-bg { flex: 1; height: 5px; background: #334155; border-radius: 3px; overflow: hidden; }
+.prog-fill { height: 100%; background: var(--bar-fill); border-radius: 3px; width: 0%; transition: width .4s ease; }
+.prog-lbl { font-family: 'Outfit', sans-serif; font-size: 13px; color: #94a3b8; font-weight: 700; white-space: nowrap; min-width: 58px; text-align: right; }
+.btn-next {
+  font-family: 'Outfit', sans-serif;
+  background: var(--blue); color: #fff; border: none;
+  padding: 10px 28px; font-size: 15px; font-weight: 700;
+  cursor: pointer; border-radius: 6px;
+  transition: background .18s; letter-spacing: .3px;
+}
+.btn-next:hover:not(:disabled) { background: #1d4ed8; }
+.btn-next:disabled { background: #334155; cursor: default; }
+.key-hint { font-size: 12px; color: #64748b; font-style: italic; white-space: nowrap; }
+
+/* ── Picture figure ── */
+figure { margin: 16px 0; text-align: center; }
+figcaption { font-size: .85rem; color: var(--slate); margin-top: 6px; font-style: italic; }
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>The Modulus (Absolute Value) Function</h1>
+<p class="subtitle">
+  A complete lecture covering definition · properties · proofs · geometry ·
+  boundedness · applications — with interactive explorers and 24 self-assessment problems.
+</p>
+
+<!-- ══════════════════════════════════════════
+     STEP 1 — Definition
+══════════════════════════════════════════ -->
+<div class="step">
+  <span class="step-label">Section 1</span>
+  <h2>Definition</h2>
+
+  <div class="def-box">
+    <span class="box-title">Definition — Absolute Value / Modulus</span>
+    For $a\in\mathbb{R},$ the <strong>absolute value</strong> (or <em>modulus</em>) of $a,$
+    written $|a|,$ is defined as the larger of $a$ and $-a$:
+    $$|a| \;=\; \max\{a,\,-a\}.$$
+    Geometrically, $|a|$ is the <em>distance</em> from the point $a$ to the origin $0$
+    on the real number line.
+  </div>
+
+  <p>
+    Distance is always non-negative, motivating $|a|\ge 0.$
+    The piecewise form follows at once:
+  </p>
+  <div class="math-display">
+    $$|a| = \begin{cases} a & \text{if } a\ge 0,\\ -a & \text{if } a &lt; 0. \end{cases}$$
+  </div>
+
+  <div class="proof-box">
+    <span class="box-title">Proof of the piecewise form.</span>
+    <strong>Case 1 ($a\ge 0$):</strong>
+    Then $-a\le 0\le a,$ so $\max\{a,-a\}=a.$ ✓<br>
+    <strong>Case 2 ($a&lt;0$):</strong>
+    Then $-a&gt;0&gt;a,$ so $\max\{a,-a\}=-a.$ ✓
+    <div class="qed">$\blacksquare$</div>
+  </div>
+
+  <div class="note-box">
+    <span class="box-title">Key immediate facts</span>
+    <ul>
+      <li>$|a|\ge 0$ for all $a\in\mathbb{R}$, with $|a|=0\iff a=0.$</li>
+      <li>$|-a|=|a|$ &nbsp;(symmetry / even function).</li>
+      <li>$-|a|\le a\le|a|$ &nbsp;(the sandwich lemma).</li>
+      <li>$\sqrt{a^2}=|a|$ — a square-root identity used constantly in proofs.</li>
+    </ul>
+  </div>
+</div><!-- /step 1 -->
+
+<!-- ══════════════════════════════════════════
+     STEP 2 — Geometric interpretation + Interactive V-Graph
+══════════════════════════════════════════ -->
+<div class="step">
+  <span class="step-label">Section 2</span>
+  <h2>Geometric Interpretation &amp; the V-Graph</h2>
+
+  <div class="geo-box">
+    <span class="box-title">Distance on the Real Line</span>
+    <ul>
+      <li>$|x|$ = distance from $x$ to $0.$</li>
+      <li>$|x-y|$ = distance from $x$ to $y.$</li>
+      <li>$|x-c|&lt;\delta \;\iff\; c-\delta &lt; x &lt; c+\delta$ — an open interval of radius $\delta$ centred at $c$ (a <em>neighbourhood</em>).</li>
+    </ul>
+  </div>
+
+  <div class="graph-container">
+                <!-- Simple SVG Graph -->
+                <svg width="300" height="200" viewBox="-10 -10 320 220" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Grid lines (optional) -->
+                    <line x1="150" y1="0" x2="150" y2="200" stroke="#ccc" stroke-width="1" />
+                    <line x1="0" y1="100" x2="300" y2="100" stroke="#ccc" stroke-width="1" />
+                    
+                    <!-- Axes -->
+                    <line x1="0" y1="100" x2="300" y2="100" stroke="black" stroke-width="2" marker-end="url(#arrow)" /> <!-- X Axis -->
+                    <line x1="150" y1="200" x2="150" y2="0" stroke="black" stroke-width="2" marker-end="url(#arrow)" /> <!-- Y Axis -->
+                    
+                    <!-- V Shape Function -->
+                    <!-- Right side (y=x) from 0,0 to 100,100 (scaled) -->
+                    <!-- Origin is (150, 100). Scale: 1 unit = 20px -->
+                    <!-- x >= 0: x=0 is 150, y=0 is 100. x=5 is 250, y=5 is 0 -->
+                    <line x1="150" y1="100" x2="250" y2="0" stroke="#3498db" stroke-width="3" />
+                    
+                    <!-- Left side (y=-x) from x=-5 (50) to x=0 (150) -->
+                    <!-- x=-5 is 50, y=5 is 0. -->
+                    <line x1="50" y1="0" x2="150" y2="100" stroke="#3498db" stroke-width="3" />
+                    
+                    <!-- Points -->
+                    <circle cx="150" cy="100" r="4" fill="black" /> <!-- (0,0) -->
+                    <circle cx="250" cy="0" r="3" fill="#3498db" /> <!-- (5,5) -->
+                    <circle cx="50" cy="0" r="3" fill="#3498db" /> <!-- (-5,5) -->
+
+                    <!-- Labels -->
+                    <text x="260" y="105" font-family="Arial" font-size="14">x</text>
+                    <text x="140" y="10" font-family="Arial" font-size="14">y</text>
+                    <text x="160" y="120" font-family="Arial" font-size="12">0</text>
+
+                    <!-- Arrow Markers Definition -->
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth">
+                        <path d="M0,0 L0,6 L9,3 z" fill="black" />
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+            <p>The graph is a "V-shape" with the vertex at the origin (0,0). The function is continuous everywhere but not differentiable at $x = 0$ due to the sharp corner.</p>
+  <div class="two-col">
+    <div class="def-box" style="margin:0;">
+      <span class="box-title">For $x \ge 0$</span>
+      The graph follows $y = x$ (slope $+1$). The function is increasing.
+    </div>
+    <div class="def-box" style="margin:0;">
+      <span class="box-title">For $x &lt; 0$</span>
+      The graph follows $y = -x$ (slope $-1$). The function is decreasing.
+    </div>
+  </div>
+</div><!-- /step 2 -->
+
+<!-- ══════════════════════════════════════════
+     STEP 3 — Algebraic Properties
+══════════════════════════════════════════ -->
+<div class="step">
+  <span class="step-label">Section 3</span>
+  <h2>Fundamental Algebraic Properties</h2>
+
+  <table>
+    <tr><th>Property</th><th>Statement</th></tr>
+    <tr><td>Positivity</td>      <td>$|a|\ge 0;\quad |a|=0\iff a=0$</td></tr>
+    <tr><td>Symmetry</td>        <td>$|-a|=|a|$</td></tr>
+    <tr><td>Sandwich</td>        <td>$-|a|\le a\le|a|$</td></tr>
+    <tr><td>Square root</td>     <td>$\sqrt{a^2}=|a|$</td></tr>
+    <tr><td>Multiplicativity</td><td>$|ab|=|a||b|$</td></tr>
+    <tr><td>Division</td>        <td>$|a/b|=|a|/|b|\;(b\ne 0)$</td></tr>
+    <tr><td>Power</td>           <td>$|a^n|=|a|^n\;\forall n\in\mathbb{N}$</td></tr>
+    <tr><td>Equality criterion</td><td>$|a|=|b|\iff a=\pm b$</td></tr>
+  </table>
+
+  <div class="proof-box">
+    <span class="box-title">Proof of Multiplicativity: $|ab|=|a||b|.$</span>
+    Using $|x|=\sqrt{x^2}:$
+    $$|ab|=\sqrt{(ab)^2}=\sqrt{a^2 b^2}=\sqrt{a^2}\cdot\sqrt{b^2}=|a||b|.\quad\blacksquare$$
+  </div>
+
+  <div class="proof-box">
+    <span class="box-title">Proof of the Power Property by induction.</span>
+    <em>Base ($n=1$):</em> $|a^1|=|a|=|a|^1.$ ✓<br>
+    <em>Inductive step:</em> Assume $|a^k|=|a|^k.$
+    Then $|a^{k+1}|=|a^k\cdot a|=|a^k||a|=|a|^k\cdot|a|=|a|^{k+1}.$ ✓
+    <div class="qed">$\blacksquare$</div>
+  </div>
+
+  <div class="warn-box">
+    <span class="box-title">Common Pitfalls</span>
+    <ul>
+      <li>$|a+b|\ne|a|+|b|$ in general — equality holds only when $a$ and $b$ have the <em>same</em> sign (or one is zero).</li>
+      <li>$|a-b|\ne|a|-|b|$ in general.</li>
+      <li>$\sqrt{a^2+b^2}\ne|a|+|b|$ in general (this is for the 2-D modulus).</li>
+    </ul>
+  </div>
+</div><!-- /step 3 -->
+
+<!-- ══════════════════════════════════════════
+     STEP 4 — Characterisation via Inequalities + Interactive
+══════════════════════════════════════════ -->
+<div class="step">
+  <span class="step-label">Section 4</span>
+  <h2>Characterisation via Inequalities</h2>
+
+  <p>
+    For any $c&gt;0$ and $x,a\in\mathbb{R},$ the following equivalences
+    connect absolute value to <em>interval notation</em>:
+  </p>
+
+  <div class="math-display">
+    $$|x| \le c \;\iff\; -c \le x \le c$$
+    $$|x| &lt; c \;\iff\; -c &lt; x &lt; c$$
+    $$|x| \ge c \;\iff\; x\le -c \;\text{ or }\; x\ge c$$
+    $$|x-a| &lt; \delta \;\iff\; a-\delta &lt; x &lt; a+\delta \quad\text{(neighbourhood of }a\text{)}$$
+  </div>
+
+  
+  <div class="proof-box">
+    <span class="box-title">Proof of $|x|\le c \iff -c\le x\le c.$</span>
+    <strong>($\Rightarrow$):</strong>
+    Suppose $|x|\le c.$
+    Since $|x|\ge x,$ we get $x\le c.$
+    Since $|x|\ge -x,$ we get $-x\le c,$ i.e., $-c\le x.$
+    So $-c\le x\le c.$<br><br>
+    <strong>($\Leftarrow$):</strong>
+    Suppose $-c\le x\le c.$ Then $x\le c$ and $-x\le c.$
+    Since $|x|=\max\{x,-x\},$ we get $|x|\le c.$
+    <div class="qed">$\blacksquare$</div>
+  </div>
+
+  <div class="note-box">
+    <span class="box-title">Application — $\varepsilon$-$\delta$ and $\varepsilon$-$N$ Language</span>
+    The statement "$|x_n - L|&lt;\varepsilon$ for all $n\ge N$" is precisely
+    the formal definition of $x_n\to L.$
+    Writing $|x_n-L|&lt;\varepsilon$ is shorthand for $L-\varepsilon &lt; x_n &lt; L+\varepsilon$.
+    Every limit and continuity argument in analysis hinges on this characterisation.
+  </div>
+</div><!-- /step 4 -->
+
+<!-- ═══ STEP 1: Proof of |ab| = |a||b| ═══ -->
+<div class="step">
+    <div class="tcolorbox blue">
+        <div class="tcolorbox-header">Theorem &mdash; Multiplicative Property of Absolute Value (Second Proof)</div>
+        <div class="tcolorbox-content">
+            <strong>Theorem:</strong> For any $a, b \in \mathbb{R}$, $|ab| = |a||b|.$             
+            <br><br>
+            <strong>Given Definition:</strong> For any $x \in \mathbb{R}$, the absolute value is defined as $|x| = \max\{x, -x\}.$ 
+            <br>
+            This directly implies the standard piecewise definition:
+            $$ |x| = \begin{cases} x & \text{if } x \ge 0 \\ -x & \text{if } x < 0 \end{cases} $$             
+            <br>
+            <strong>Proof:</strong>
+            By the definition of absolute value, evaluating $|ab|$ yields exactly one of two possibilities. We proceed by analyzing these two mutually exclusive cases.
+            
+            <br><br>
+            <hr style="border:none; border-top:1px solid #ccc; margin:10px 0;">
+            <strong>Case 1: $|ab| = ab$</strong>
+            <br>
+            If $|ab| = ab$, then by the definition of absolute value, it must be that $ab \ge 0.$             <br>
+            For the product of two real numbers to be non-negative ($ab \ge 0$), the numbers must have the <em>same sign</em>. We split this into two subcases:
+            <ol type="i">
+                <li>
+                    <strong>Subcase 1a: $a \ge 0$ and $b \ge 0$</strong>
+                    <br>
+                    Since $a \ge 0$, the definition gives $|a| = a.$                     <br>
+                    Since $b \ge 0$, the definition gives $|b| = b.$                     <br>
+                    Multiplying these together:
+                    $$ |a||b| = (a)(b) = ab $$                     Since we are in the case where $|ab| = ab$, we have $|a||b| = |ab|.$                 </li>
+                <li style="margin-top: 15px;">
+                    <strong>Subcase 1b: $a < 0$ and $b < 0$</strong>
+                    <br>
+                    Since $a < 0$, the definition gives $|a| = -a.$                     <br>
+                    Since $b < 0$, the definition gives $|b| = -b.$                     <br>
+                    Multiplying these together:
+                    $$ |a||b| = (-a)(-b) = ab $$                     (The negatives cancel out). Again, since we are in the case where $|ab| = ab$, we have $|a||b| = |ab|.$                 </li>
+            </ol>
+            
+            <br><br>
+            <hr style="border:none; border-top:1px solid #ccc; margin:10px 0;">
+            <strong>Case 2: $|ab| = -ab$</strong>
+            <br>
+            If $|ab| = -ab$, then by the definition of absolute value, it must be that $ab < 0.$             <br>
+            For the product of two real numbers to be negative ($ab < 0$), the numbers must have <em>opposite signs</em>. We split this into two subcases:
+            <ol type="i">
+                <li>
+                    <strong>Subcase 2a: $a \ge 0$ and $b < 0$</strong>
+                    <br>
+                    Since $a \ge 0$, the definition gives $|a| = a.$                     <br>
+                    Since $b < 0$, the definition gives $|b| = -b.$                     <br>
+                    Multiplying these together:
+                    $$ |a||b| = (a)(-b) = -ab $$                     Since we are in the case where $|ab| = -ab$, we have $|a||b| = |ab|.$                 </li>
+                <li style="margin-top: 15px;">
+                    <strong>Subcase 2b: $a < 0$ and $b \ge 0$</strong>
+                    <br>
+                    Since $a < 0$, the definition gives $|a| = -a.$                     <br>
+                    Since $b \ge 0$, the definition gives $|b| = b.$                     <br>
+                    Multiplying these together:
+                    $$ |a||b| = (-a)(b) = -ab $$                     Since we are in the case where $|ab| = -ab$, we have $|a||b| = |ab|.$                 </li>
+            </ol>
+            
+            <br>
+            <hr style="border:none; border-top:1px solid #ccc; margin:10px 0;">
+            <strong>Conclusion:</strong>
+            In all possible subcases arising from $|ab| = ab$ or $|ab| = -ab$, we arrived at $|a||b| = |ab|.$ 
+            Therefore, the equality holds for all $a, b \in \mathbb{R}.$             <span style="float:right; font-weight:bold;">$\blacksquare$</span>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     STEP 5 — Triangle Inequality + Visual
+══════════════════════════════════════════ -->
+<div class="step">
+  <span class="step-label">Section 5</span>
+  <h2>The Triangle Inequality</h2>
+
+  <div class="theorem-box">
+    <span class="box-title">Theorem (Triangle Inequality)</span>
+    For all $a,b\in\mathbb{R}:$
+    $$|a+b|\le|a|+|b|.$$
+    Substituting $b\mapsto -b$ also gives $|a-b|\le|a|+|b|.$
+  </div>
+
+  <div class="proof-box">
+    <span class="box-title">Proof 1(1) — via the sandwich.</span>
+    From the sandwich lemma: $-|a|\le a\le|a|$ and $-|b|\le b\le|b|.$
+    Adding these:
+    $$-(|a|+|b|)\le a+b\le|a|+|b|.$$
+    By the characterisation ($|x|\le c\iff -c\le x\le c$) with $c=|a|+|b|:$
+    $$|a+b|\le|a|+|b|.$$
+    <div class="qed">$\blacksquare$</div>
+  </div>
+<div class="proof-box">
+    <span class="box-title">Proof 1(2) — via the sandwich (little modification to above).</span>
+    Since $a\le |a|, b\le |b|,$ we have $a+b\le |a|+|b|.$<br>
+    Since $-a\le |a|, -b\le |b|,$ we have $-(a+b)\le |a|+|b|.$<br>
+    Hence  $\max\{a+b,-(a+b)\}=|a+b|\le |a|+|b|.$ Thus
+     $$|a+b|\le|a|+|b|.$$
+    <div class="qed">$\blacksquare$</div>
+  </div>
+
+  <div class="proof-box">
+    <span class="box-title">Proof 2 — via squaring.</span>
+    $$|a+b|^2=(a+b)^2=a^2+2ab+b^2.$$
+    Since $ab\le|a||b|$ (as $ab\le|ab|=|a||b|$):
+    $$a^2+2ab+b^2\le|a|^2+2|a||b|+|b|^2=(|a|+|b|)^2.$$
+    Both sides are non-negative; taking square roots gives $|a+b|\le|a|+|b|.$
+    <div class="qed">$\blacksquare$</div>
+  </div>
+
+  <!-- Interactive Triangle Inequality visualizer -->
+  <div class="widget-wrap">
+    <div class="widget-title">&#9654; Interactive — Triangle Inequality Visualizer</div>
+    <canvas id="cvTriangle" width="820" height="200" style="width:100%;height:auto;"></canvas>
+    <div class="slider-row">
+      <label>$a$</label>
+      <input type="range" id="slTa" min="-4" max="4" step="0.1" value="2">
+      <span class="readout" id="rdTa">a = 2.0</span>
+    </div>
+    <div class="slider-row">
+      <label>$b$</label>
+      <input type="range" id="slTb" min="-4" max="4" step="0.1" value="-1.5">
+      <span class="readout" id="rdTb">b = −1.5</span>
+    </div>
+    <div class="readout" id="rdTriResult" style="margin-top:8px;display:inline-block;">|a+b| = 0.5 ≤ |a|+|b| = 3.5</div>
+  </div>
+
+  <h3>5.1 Generalised Triangle Inequality</h3>
+  <div class="theorem-box">
+    <span class="box-title">Theorem</span>
+    For $a_1,\ldots,a_n\in\mathbb{R}:$
+    $$\left|\sum_{k=1}^{n}a_k\right|\le\sum_{k=1}^{n}|a_k|.$$
+  </div>
+  <div class="proof-box">
+    <span class="box-title">Proof by induction.</span>
+    <em>Base ($n=2$):</em> the Triangle Inequality. ✓<br>
+    <em>Step:</em> Let $S=a_1+\cdots+a_k.$ Assume $|S|\le\sum_{i=1}^k|a_i|.$
+    Then $|S+a_{k+1}|\le|S|+|a_{k+1}|\le\sum_{i=1}^{k+1}|a_i|.$
+    <div class="qed">$\blacksquare$</div>
+  </div>
+</div><!-- /step 5 -->
+
+<!-- ══════════════════════════════════════════
+     STEP 6 — Reverse Triangle Inequality
+══════════════════════════════════════════ -->
+<div class="step">
+  <span class="step-label">Section 6</span>
+  <h2>The Reverse Triangle Inequality</h2>
+
+  <div class="theorem-box">
+    <span class="box-title">Theorem (Reverse Triangle Inequality)</span>
+    For all $a,b\in\mathbb{R}:$
+    $$\bigl||a|-|b|\bigr|\le|a-b|.$$
+  </div>
+
+  <div class="proof-box">
+    <span class="box-title">Proof.</span>
+    Apply the Triangle Inequality to $a=(a-b)+b$:
+    $$|a|\le|a-b|+|b|\;\Rightarrow\;|a|-|b|\le|a-b|.\tag{1}$$
+    Apply it to $b=(b-a)+a$:
+    $$|b|\le|b-a|+|a|=|a-b|+|a|\;\Rightarrow\;|b|-|a|\le|a-b|.\tag{2}$$
+    Combining (1) and (2): $-|a-b|\le|a|-|b|\le|a-b|,$
+    which gives $\bigl||a|-|b|\bigr|\le|a-b|.$
+    <div class="qed">$\blacksquare$</div>
+  </div>
+
+  <div class="note-box">
+    <span class="box-title">Why the Reverse TI is essential in analysis</span>
+    It converts a bound on $|x_n-x|$ into a bound on $\bigl||x_n|-|x|\bigr|$:
+    $$\bigl||x_n|-|x|\bigr|\le|x_n-x|&lt;\varepsilon$$
+    — proving that $x_n\to x\;\Rightarrow\;|x_n|\to|x|$ (continuity of the modulus function).
+  </div>
+
+  <div class="geo-box">
+    <span class="box-title">Geometric Intuition</span>
+    On the number line, $|a-b|$ is the distance between $a$ and $b$.
+    The Reverse TI says: the difference of the distances from the origin
+    ($|a|$ and $|b|$) can never exceed the distance between $a$ and $b$.
+    Think of it as: "you cannot gain distance to the origin faster than you move."
+  </div>
+</div><!-- /step 6 -->
+
+<!-- ══════════════════════════════════════════
+     STEP 7 — Boundedness
+══════════════════════════════════════════ -->
+<div class="step">
+  <span class="step-label">Section 7</span>
+  <h2>Absolute Value &amp; Boundedness</h2>
+
+  <div class="theorem-box">
+    <span class="box-title">Theorem — Characterisation of Boundedness</span>
+    Let $A\subseteq\mathbb{R}.$ Then $A$ is <strong>bounded</strong>
+    (bounded above <em>and</em> below) if and only if
+    $$\exists\,M&gt;0:\;\forall x\in A,\;|x|\le M.$$
+  </div>
+
+  <div class="proof-box">
+    <span class="box-title">Proof ($\Rightarrow$).</span>
+    Suppose $A$ is bounded below by $L$ and above by $U.$
+    Set $M=\max(|L|,|U|).$
+    For all $x\in A$: $-M\le L\le x\le U\le M,$ so $|x|\le M.$
+    <div class="qed">$\blacksquare$</div>
+  </div>
+
+  <div class="proof-box">
+    <span class="box-title">Proof ($\Leftarrow$).</span>
+    If $|x|\le M$ for all $x\in A,$ then $-M\le x\le M,$
+    so $-M$ is a lower bound and $M$ is an upper bound. Hence $A$ is bounded.
+    <div class="qed">$\blacksquare$</div>
+  </div>
+
+  <div class="warn-box">
+    <span class="box-title">Worked Example</span>
+    $A=(-4,7].$&ensp; Choose $M=\max(|-4|,|7|)=7.$
+    For all $x\in A$: $-7\le -4&lt;x\le 7,$ so $|x|\le 7.$ ✓<br><br>
+    The <em>smallest</em> valid $M$ is exactly $\sup_{x\in A}|x|=7.$
+  </div>
+</div><!-- /step 7 -->
+
+<!-- ══════════════════════════════════════════
+     STEP 8 — Worked Exercises
+══════════════════════════════════════════ -->
+<div class="step">
+  <span class="step-label">Section 8</span>
+  <h2>Worked Exercises</h2>
+
+  <h3>Exercise A — Solving $|2x-3|&lt;5$</h3>
+  <div class="proof-box">
+    <span class="box-title">Solution.</span>
+    By the characterisation: $-5&lt;2x-3&lt;5.$
+    $$-5+3&lt;2x&lt;5+3\;\Rightarrow\;-2&lt;2x&lt;8\;\Rightarrow\;-1&lt;x&lt;4.$$
+    Solution set: $x\in(-1,4).$
+    <div class="qed">$\blacksquare$</div>
+  </div>
+
+  <h3>Exercise B — Solving $|3x-2|=|5x+4|$</h3>
+  <div class="proof-box">
+    <span class="box-title">Solution.</span>
+    Use $|a|=|b|\iff a=\pm b.$<br><br>
+    <strong>Case 1 ($a=b$):</strong>
+    $3x-2=5x+4\Rightarrow -2x=6\Rightarrow x=-3.$<br>
+    <strong>Case 2 ($a=-b$):</strong>
+    $3x-2=-(5x+4)\Rightarrow 8x=−2\Rightarrow x=-\tfrac{1}{4}.$<br><br>
+    Solution set: $\left\{-3,\,-\tfrac{1}{4}\right\}.$
+    <div class="qed">$\blacksquare$</div>
+  </div>
+
+  <h3>Exercise C — Solving $|x+1|\ge 3$</h3>
+  <div class="proof-box">
+    <span class="box-title">Solution.</span>
+    $|x+1|\ge 3\iff x+1\le -3$ or $x+1\ge 3.$<br>
+    Case 1: $x\le -4.$ &emsp; Case 2: $x\ge 2.$<br><br>
+    Solution set: $(-\infty,-4]\cup[2,+\infty).$
+    <div class="qed">$\blacksquare$</div>
+  </div>
+
+  <h3>Exercise D — Bounding $|x^2-9|$ near $x=3$</h3>
+  <div class="proof-box">
+    <span class="box-title">Solution: Show $|x-3|&lt;\tfrac12\Rightarrow|x^2-9|&lt;\tfrac{15}{2}.$</span>
+    Factor: $|x^2-9|=|x-3||x+3|.$<br>
+    From $|x-3|&lt;\tfrac12$: $\tfrac52&lt;x&lt;\tfrac72,$ so $|x+3|&lt;\tfrac72+3=\tfrac{13}{2}.$<br>
+    Then $|x^2-9|&lt;\tfrac12\cdot\tfrac{13}{2}=\tfrac{13}{4}&lt;\tfrac{15}{2}.$
+    <div class="qed">$\blacksquare$</div>
+  </div>
+</div><!-- /step 8 -->
+
+<!-- ══════════════════════════════════════════
+     STEP 9 — Self-Assessment Part A (Computational)
+══════════════════════════════════════════ -->
+<div class="step">
+  <hr class="section-rule">
+  <span class="step-label">Self-Assessment — Part A</span>
+  <h2>9. Computational &amp; Proof Skills (Q1–Q6)</h2>
+
+  <!-- Q1 -->
+  <div class="quiz-card">
+    <p><strong>Q1.</strong> Solve $|4x-5|\le 11.$ Express the answer as an interval.</p>
+    <button class="btn-sol" onclick="tog('s1')">Show / Hide Solution</button>
+    <div class="solution" id="s1">
+      <span class="sol-label">Solution.</span>
+      $-11\le 4x-5\le 11\;\Rightarrow\;-6\le 4x\le 16\;\Rightarrow\;-\tfrac{3}{2}\le x\le 4.$<br>
+      Answer: $x\in\!\left[-\tfrac{3}{2},\,4\right].$
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-card">
+    <p><strong>Q2.</strong> Prove that $|x|-|y|\le|x-y|$ for all $x,y\in\mathbb{R}.$</p>
+    <button class="btn-sol" onclick="tog('s2')">Show / Hide Solution</button>
+    <div class="solution" id="s2">
+      <span class="sol-label">Proof.</span>
+      Write $x=(x-y)+y$ and apply the Triangle Inequality:
+      $|x|\le|x-y|+|y|.$ Subtract $|y|$: $|x|-|y|\le|x-y|.$ $\blacksquare$
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-card">
+    <p><strong>Q3.</strong> Prove $|a+b|\le|a|+|b|$ <em>without</em> using squaring.</p>
+    <button class="btn-sol" onclick="tog('s3')">Show / Hide Solution</button>
+    <div class="solution" id="s3">
+      <span class="sol-label">Proof.</span>
+      We have $-|a|\le a\le|a|$ and $-|b|\le b\le|b|.$
+      Adding: $-(|a|+|b|)\le a+b\le|a|+|b|.$
+      By the characterisation of absolute value, $|a+b|\le|a|+|b|.$ $\blacksquare$
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-card">
+    <p><strong>Q4.</strong> For which $x\in\mathbb{R}$ does $|x^2-4|&lt;3$?</p>
+    <button class="btn-sol" onclick="tog('s4')">Show / Hide Solution</button>
+    <div class="solution" id="s4">
+      <span class="sol-label">Solution.</span>
+      $|x^2-4|&lt;3\iff -3&lt;x^2-4&lt;3\iff 1&lt;x^2&lt;7.$<br>
+      $x^2&gt;1\iff|x|&gt;1\iff x&lt;-1$ or $x&gt;1.$<br>
+      $x^2&lt;7\iff|x|&lt;\sqrt7\iff -\sqrt7&lt;x&lt;\sqrt7.$<br>
+      Intersection: $x\in(-\sqrt7,-1)\cup(1,\sqrt7).$
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-card">
+    <p><strong>Q5.</strong> Prove: $|a^2-b^2|\le(|a|+|b|)|a-b|.$</p>
+    <button class="btn-sol" onclick="tog('s5')">Show / Hide Solution</button>
+    <div class="solution" id="s5">
+      <span class="sol-label">Proof.</span>
+      $|a^2-b^2|=|(a-b)(a+b)|=|a-b||a+b|\le|a-b|(|a|+|b|)$
+      by the Triangle Inequality applied to $|a+b|.$ $\blacksquare$
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="quiz-card">
+    <p><strong>Q6.</strong>
+      Let $A=[-3,5)\cup\{7\}.$ Find the smallest $M&gt;0$ with $|x|\le M$ for all $x\in A.$
+    </p>
+    <button class="btn-sol" onclick="tog('s6')">Show / Hide Solution</button>
+    <div class="solution" id="s6">
+      <span class="sol-label">Solution.</span>
+      Elements of $A$ satisfy $-3\le x&lt;5$ or $x=7.$
+      So $|x|\le\max(|-3|,|7|)=7.$ The smallest valid $M$ is $M=7.$
+    </div>
+  </div>
+</div><!-- /step 9 -->
+
+<!-- ══════════════════════════════════════════
+     STEP 10 — Self-Assessment Part B (Deeper)
+══════════════════════════════════════════ -->
+<div class="step">
+  <span class="step-label">Self-Assessment — Part B</span>
+  <h2>10. Deeper Results (Q7–Q13)</h2>
+
+  <!-- Q7 -->
+  <div class="quiz-card">
+    <p><strong>Q7.</strong>
+      Show that for all $a,b,c\in\mathbb{R}$:
+      $|a-c|\le|a-b|+|b-c|.$
+      Interpret this geometrically.
+    </p>
+    <button class="btn-sol" onclick="tog('s7')">Show / Hide Solution</button>
+    <div class="solution" id="s7">
+      <span class="sol-label">Proof.</span>
+      Write $a-c=(a-b)+(b-c)$ and apply the Triangle Inequality:
+      $|a-c|\le|a-b|+|b-c|.$ $\blacksquare$
+      <br><br>
+      <em>Geometric:</em> The distance from $a$ to $c$ is at most the sum of distances
+      from $a$ to $b$ and from $b$ to $c$ — the triangle inequality for points on a line.
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="quiz-card">
+    <p><strong>Q8.</strong>
+      Prove: $\bigl||a|-|b|\bigr|\le|a+b|.$
+      When does equality hold?
+    </p>
+    <button class="btn-sol" onclick="tog('s8')">Show / Hide Solution</button>
+    <div class="solution" id="s8">
+      <span class="sol-label">Proof.</span>
+      Replace $b$ by $-b$ in the Reverse Triangle Inequality
+      $\bigl||a|-|b|\bigr|\le|a-b|$:
+      since $|-b|=|b|,$ we get $\bigl||a|-|b|\bigr|\le|a-(-b)|=|a+b|.$ $\blacksquare$
+      <br><br>
+      <em>Equality:</em> holds when $a$ and $b$ have opposite signs (or one is zero),
+      i.e., $ab\le 0.$
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="quiz-card">
+    <p><strong>Q9.</strong>
+      Suppose $|x-2|&lt;\dfrac{1}{2}.$
+      Show that $|x^2-4|&lt;\dfrac{5}{2}.$
+    </p>
+    <button class="btn-sol" onclick="tog('s9')">Show / Hide Solution</button>
+    <div class="solution" id="s9">
+      <span class="sol-label">Solution.</span>
+      From $|x-2|&lt;\tfrac12$: $\tfrac32&lt;x&lt;\tfrac52,$ so $x+2\in(\tfrac72,\tfrac92)$
+      and $|x+2|&lt;\tfrac92.$<br>
+      Then $|x^2-4|=|x-2||x+2|&lt;\tfrac12\cdot\tfrac92=\tfrac94&lt;\tfrac52.$ ✓
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="quiz-card">
+    <p><strong>Q10.</strong>
+      Prove: if $|x-a|&lt;\varepsilon$ and $|y-b|&lt;\varepsilon,$ then
+      $|(x+y)-(a+b)|&lt;2\varepsilon.$
+    </p>
+    <button class="btn-sol" onclick="tog('s10')">Show / Hide Solution</button>
+    <div class="solution" id="s10">
+      <span class="sol-label">Proof.</span>
+      $|(x+y)-(a+b)|=|(x-a)+(y-b)|\le|x-a|+|y-b|&lt;\varepsilon+\varepsilon=2\varepsilon.$
+      $\blacksquare$
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="quiz-card">
+    <p><strong>Q11.</strong>
+      Let $|x|\le 1.$ Prove $|x^3-x^2|\le 2.$
+    </p>
+    <button class="btn-sol" onclick="tog('s11')">Show / Hide Solution</button>
+    <div class="solution" id="s11">
+      <span class="sol-label">Proof.</span>
+      $|x^3-x^2|=|x^2||x-1|\le|x|^2\cdot(|x|+1)\le 1\cdot(1+1)=2.$ $\blacksquare$
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="quiz-card">
+    <p><strong>Q12.</strong>
+      Determine all $x\in\mathbb{R}$ satisfying $\bigl||x-1|-2\bigr|=3.$
+    </p>
+    <button class="btn-sol" onclick="tog('s12')">Show / Hide Solution</button>
+    <div class="solution" id="s12">
+      <span class="sol-label">Solution.</span>
+      $||x-1|-2|=3\iff|x-1|-2=\pm 3.$<br>
+      <strong>Case $+3$:</strong> $|x-1|=5\iff x-1=\pm5\iff x=6$ or $x=-4.$<br>
+      <strong>Case $-3$:</strong> $|x-1|=-1,$ impossible ($|\cdot|\ge 0$).<br>
+      Answer: $x\in\{-4,\,6\}.$
+    </div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="quiz-card">
+    <p><strong>Q13.</strong>
+      Verify that $\max\{a,b\}=\dfrac{a+b+|a-b|}{2}$
+      and $\min\{a,b\}=\dfrac{a+b-|a-b|}{2}$
+      by testing $a=5, b=2$ and $a=-1, b=3.$
+    </p>
+    <button class="btn-sol" onclick="tog('s13')">Show / Hide Solution</button>
+    <div class="solution" id="s13">
+      <span class="sol-label">Solution.</span>
+      <strong>Test $a=5, b=2$:</strong> $|a-b|=3.$
+      $\tfrac{5+2+3}{2}=5=\max\{5,2\}$ ✓ &nbsp; $\tfrac{5+2-3}{2}=2=\min\{5,2\}$ ✓<br><br>
+      <strong>Test $a=-1, b=3$:</strong> $|a-b|=4.$
+      $\tfrac{-1+3+4}{2}=3=\max\{-1,3\}$ ✓ &nbsp; $\tfrac{-1+3-4}{2}=-1=\min\{-1,3\}$ ✓<br><br>
+       </div>
+  </div>
+</div><!-- /step 10 -->
+
+
+<!-- ══════════════════════════════════════════
+     STEP 13 — Summary
+══════════════════════════════════════════ -->
+<div class="step">
+  <hr class="section-rule">
+  <span class="step-label">Section 13</span>
+  <h2>Summary — Core Properties at a Glance</h2>
+
+  <div class="def-box">
+    <span class="box-title">Complete Reference Table</span>
+    <table>
+      <tr>
+        <th>Property</th>
+        <th>Formula</th>
+        <th>Primary Use in Analysis</th>
+      </tr>
+      <tr>
+        <td>Non-negativity</td>
+        <td>$|a|\ge 0;\;|a|=0\iff a=0$</td>
+        <td>Limit uniqueness; metric positivity</td>
+      </tr>
+      <tr>
+        <td>Symmetry</td>
+        <td>$|-a|=|a|$</td>
+        <td>Even function; distance symmetry</td>
+      </tr>
+      <tr>
+        <td>Multiplicativity</td>
+        <td>$|ab|=|a||b|$</td>
+        <td>Bounding products in estimates</td>
+      </tr>
+      <tr>
+        <td>Characterisation</td>
+        <td>$|x|\le c\iff -c\le x\le c$</td>
+        <td>$\varepsilon$-$\delta$ / $\varepsilon$-$N$ definitions</td>
+      </tr>
+      <tr>
+        <td>Triangle Ineq.</td>
+        <td>$|a+b|\le|a|+|b|$</td>
+        <td>Virtually every analysis proof</td>
+      </tr>
+      <tr>
+        <td>Reverse TI</td>
+        <td>$\bigl||a|-|b|\bigr|\le|a-b|$</td>
+        <td>Continuity of $|\cdot|$; convergence of $|x_n|$</td>
+      </tr>
+      <tr>
+        <td>Boundedness</td>
+        <td>$A$ bounded $\iff\exists M:|x|\le M\;\forall x\in A$</td>
+        <td>Bolzano–Weierstrass; MCT; EVT</td>
+      </tr>
+      <tr>
+        <td>Uniform continuity</td>
+        <td>$\bigl||x|-|y|\bigr|\le|x-y|$</td>
+        <td>$|\cdot|$ is Lipschitz with constant 1</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="note-box" style="margin-top:20px;">
+    <span class="box-title">Logical Chain of Dependence</span>
+    <div class="chain-wrap">
+      <svg viewBox="0 0 720 80" width="700" height="80" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;font-family:'Outfit',sans-serif;">
+        <!-- Box 1 -->
+        <rect x="5" y="20" width="190" height="40" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+        <text x="100" y="36" text-anchor="middle" font-size="11" fill="#1e40af" font-weight="600">Triangle Ineq.</text>
+        <text x="100" y="52" text-anchor="middle" font-size="10" fill="#1e40af">|a+b| ≤ |a|+|b|</text>
+        <!-- Arrow 1 -->
+        <line x1="197" y1="40" x2="228" y2="40" stroke="#475569" stroke-width="2" marker-end="url(#arrowSummary)"/>
+        <!-- Box 2 -->
+        <rect x="230" y="20" width="205" height="40" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="1.5"/>
+        <text x="332" y="36" text-anchor="middle" font-size="11" fill="#166534" font-weight="600">Reverse TI</text>
+        <text x="332" y="52" text-anchor="middle" font-size="10" fill="#166534">||a|−|b|| ≤ |a−b|</text>
+        <!-- Arrow 2 -->
+        <line x1="437" y1="40" x2="468" y2="40" stroke="#475569" stroke-width="2" marker-end="url(#arrowSummary)"/>
+        <!-- Box 3 -->
+        <rect x="470" y="20" width="240" height="40" rx="6" fill="#ede9fe" stroke="#6d28d9" stroke-width="1.5"/>
+        <text x="590" y="36" text-anchor="middle" font-size="11" fill="#5b21b6" font-weight="600">Continuity of |·|</text>
+        <text x="590" y="52" text-anchor="middle" font-size="10" fill="#5b21b6">xₙ→x ⇒ |xₙ|→|x|</text>
+        <!-- Arrowhead marker -->
+        <defs>
+          <marker id="arrowSummary" markerWidth="8" markerHeight="8" refX="4" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L0,6 L7,3 z" fill="#475569"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+    <p style="margin:0;font-size:.9rem;">
+      The Triangle Inequality is the single most important tool in real analysis.
+      Almost every proof of continuity, convergence, or limit estimation flows through it.
+    </p>
+  </div>
+
+  
+  <p style="text-align:center;margin-top:30px;font-weight:700;color:var(--blue);font-family:'Outfit',sans-serif;font-size:1.1rem;letter-spacing:.5px;">
+    — End of Lecture 6 —
+  </p>
+</div><!-- /step 13 -->
+
+</div><!-- /.container -->
+
+<!-- ══════════ CONTROLS BAR ══════════ -->
+<div class="ctrl-bar">
+  <span class="key-hint">Press <kbd style="background:#334155;color:#e2e8f0;padding:1px 5px;border-radius:3px;font-size:11px;">Enter</kbd> or <kbd style="background:#334155;color:#e2e8f0;padding:1px 5px;border-radius:3px;font-size:11px;">→</kbd> to advance</span>
+  <div class="prog-wrap">
+    <div class="prog-bg"><div class="prog-fill" id="pFill"></div></div>
+    <span class="prog-lbl" id="pLbl">0 / 0</span>
+  </div>
+  <button class="btn-next" id="btnNext" onclick="revealNext()">Next &#9654;</button>
+</div>
+
+<!-- ══════════ SCRIPTS ══════════ -->
+<script>
+/* ── Step reveal ── */
+const steps   = document.querySelectorAll('.step');
+const fill    = document.getElementById('pFill');
+const lbl     = document.getElementById('pLbl');
+const btn     = document.getElementById('btnNext');
+let   current = 0;
+
+// Canvas init registry: stepIndex → function
+const canvasInits = {
+  1: initVGraph,
+  3: initNeighbour,
+  4: initTriangle
+};
+
+function updateUI() {
+  fill.style.width = (current / steps.length * 100) + '%';
+  lbl.textContent  = current + ' / ' + steps.length;
+  btn.disabled     = current >= steps.length;
+  btn.textContent  = current >= steps.length ? 'Done \u2713' : 'Next \u25B6';
+}
+
+function revealNext() {
+  if (current >= steps.length) return;
+  const el = steps[current];
+  el.classList.add('visible');
+  if (window.MathJax) MathJax.typesetPromise([el]);
+  if (canvasInits[current]) {
+    setTimeout(() => canvasInits[current](), 80);
+  }
+  current++;
+  updateUI();
+  setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+}
+
+function tog(id) {
+  const s = document.getElementById(id);
+  const show = s.style.display !== 'block';
+  s.style.display = show ? 'block' : 'none';
+  if (show && window.MathJax) MathJax.typesetPromise([s]);
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' || e.key === 'ArrowRight') { e.preventDefault(); revealNext(); }
+  if (e.key === ' ' && e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT') {
+    e.preventDefault(); revealNext();
+  }
+});
+
+window.addEventListener('load', function() { updateUI(); revealNext(); });
+
+
+/* ══════════════════════════════════════════
+   CANVAS 1 — Interactive V-Graph  (Step 2)
+══════════════════════════════════════════ */
+function initVGraph() {
+  const canvas = document.getElementById('cvVGraph');
+  if (!canvas) return;
+  const slider = document.getElementById('slVx');
+  const readout = document.getElementById('rdVGraph');
+  drawVGraph(canvas, parseFloat(slider.value));
+  slider.addEventListener('input', function() {
+    drawVGraph(canvas, parseFloat(this.value));
+  });
+
+  function drawVGraph(c, xVal) {
+    const ctx = c.getContext('2d');
+    const W = c.width, H = c.height;
+    const scaleX = 50, scaleY = 50;   // px per unit
+    const ox = W / 2, oy = H * 0.65;  // origin in canvas coords
+
+    ctx.clearRect(0, 0, W, H);
+
+    // ── Grid ──
+    ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1;
+    for (let i = -8; i <= 8; i++) {
+      const gx = ox + i * scaleX;
+      ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke();
+    }
+    for (let j = -4; j <= 6; j++) {
+      const gy = oy - j * scaleY;
+      ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
+    }
+
+    // ── Axes ──
+    ctx.strokeStyle = '#334155'; ctx.lineWidth = 2;
+    // x-axis
+    ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(W - 10, oy); ctx.stroke();
+    // y-axis
+    ctx.beginPath(); ctx.moveTo(ox, H); ctx.lineTo(ox, 10); ctx.stroke();
+    // Arrowheads
+    ctx.fillStyle = '#334155';
+    ctx.beginPath(); ctx.moveTo(W-10,oy-5); ctx.lineTo(W,oy); ctx.lineTo(W-10,oy+5); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(ox-5,10); ctx.lineTo(ox,0); ctx.lineTo(ox+5,10); ctx.fill();
+
+    // ── Axis tick marks & labels ──
+    ctx.fillStyle = '#64748b'; ctx.font = '12px Outfit, sans-serif'; ctx.textAlign = 'center';
+    for (let i = -7; i <= 7; i++) {
+      if (i === 0) continue;
+      const gx = ox + i * scaleX;
+      ctx.beginPath(); ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1;
+      ctx.moveTo(gx, oy - 4); ctx.lineTo(gx, oy + 4); ctx.stroke();
+      ctx.fillText(i.toString(), gx, oy + 16);
+    }
+    ctx.textAlign = 'right';
+    for (let j = 1; j <= 5; j++) {
+      const gy = oy - j * scaleY;
+      ctx.beginPath(); ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1;
+      ctx.moveTo(ox - 4, gy); ctx.lineTo(ox + 4, gy); ctx.stroke();
+      ctx.fillText(j.toString(), ox - 6, gy + 4);
+    }
+    // Axis labels
+    ctx.fillStyle = '#334155'; ctx.font = 'italic 14px Lora, serif'; ctx.textAlign = 'left';
+    ctx.fillText('x', W - 8, oy - 8);
+    ctx.fillText('y', ox + 6, 14);
+    ctx.fillText('O', ox + 4, oy + 14);
+
+    // ── V-graph y = |x| ──
+    const x1 = -7, x2 = 7;
+    ctx.beginPath();
+    ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 3; ctx.lineJoin = 'round';
+    ctx.moveTo(ox + x1 * scaleX, oy - Math.abs(x1) * scaleY);
+    ctx.lineTo(ox,               oy);
+    ctx.lineTo(ox + x2 * scaleX, oy - Math.abs(x2) * scaleY);
+    ctx.stroke();
+
+    // ── Selected point ──
+    const px = ox + xVal * scaleX;
+    const py = oy - Math.abs(xVal) * scaleY;
+
+    // Dashed vertical from x-axis to point
+    ctx.setLineDash([5, 4]);
+    ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(px, oy); ctx.lineTo(px, py); ctx.stroke();
+    // Dashed horizontal from y-axis to point
+    ctx.beginPath(); ctx.moveTo(ox, py); ctx.lineTo(px, py); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Point on graph
+    ctx.beginPath(); ctx.fillStyle = '#dc2626';
+    ctx.arc(px, py, 6, 0, 2 * Math.PI); ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(px, py, 6, 0, 2 * Math.PI); ctx.stroke();
+
+    // Point on x-axis
+    ctx.beginPath(); ctx.fillStyle = '#f59e0b';
+    ctx.arc(px, oy, 4, 0, 2 * Math.PI); ctx.fill();
+
+    // Label
+    const absX = Math.abs(xVal).toFixed(2);
+    readout.textContent = 'x = ' + xVal.toFixed(2) + ',   |x| = ' + absX;
+
+    // Floating info label near point
+    ctx.font = '13px Outfit, sans-serif'; ctx.fillStyle = '#dc2626'; ctx.textAlign = 'left';
+    const lx = px + 10, ly = py - 10;
+    ctx.fillText('(' + xVal.toFixed(1) + ', ' + absX + ')', lx > W - 100 ? px - 100 : lx, ly < 14 ? py + 20 : ly);
+  }
+}
+
+
+/* ══════════════════════════════════════════
+   CANVAS 2 — Neighbourhood Explorer  (Step 4)
+══════════════════════════════════════════ */
+function initNeighbour() {
+  const canvas  = document.getElementById('cvNeighbour');
+  const slA     = document.getElementById('slNa');
+  const slD     = document.getElementById('slNd');
+  const rdA     = document.getElementById('rdNa');
+  const rdD     = document.getElementById('rdNd');
+  const rdIntvl = document.getElementById('rdNInterval');
+  if (!canvas) return;
+
+  function update() {
+    const a = parseFloat(slA.value), d = parseFloat(slD.value);
+    rdA.textContent = 'a = ' + a.toFixed(1);
+    rdD.textContent = 'δ = ' + d.toFixed(1);
+    rdIntvl.textContent = 'Interval: (' + (a - d).toFixed(1) + ', ' + (a + d).toFixed(1) + ')';
+    draw(canvas, a, d);
+  }
+
+  slA.addEventListener('input', update);
+  slD.addEventListener('input', update);
+  update();
+
+  function draw(c, ctr, rad) {
+    const ctx = c.getContext('2d');
+    const W = c.width, H = c.height;
+    const oy = H / 2;
+    const scX = 60; // px per unit
+    const ox = W / 2;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // Number line
+    ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(20, oy); ctx.lineTo(W - 20, oy); ctx.stroke();
+
+    // Tick marks  −6 to 6
+    ctx.fillStyle = '#64748b'; ctx.font = '12px Outfit, sans-serif'; ctx.textAlign = 'center';
+    for (let i = -6; i <= 6; i++) {
+      const px = ox + i * scX;
+      if (px < 20 || px > W - 20) continue;
+      ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(px, oy - 6); ctx.lineTo(px, oy + 6); ctx.stroke();
+      ctx.fillText(i.toString(), px, oy + 20);
+    }
+
+    // Highlighted interval
+    const left  = ox + (ctr - rad) * scX;
+    const right = ox + (ctr + rad) * scX;
+    const lClamped = Math.max(left, 20), rClamped = Math.min(right, W - 20);
+
+    ctx.fillStyle = 'rgba(37,99,235,0.18)';
+    ctx.fillRect(lClamped, oy - 18, rClamped - lClamped, 36);
+    ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 2;
+    ctx.strokeRect(lClamped, oy - 18, rClamped - lClamped, 36);
+
+    // Open-circle endpoints
+    function openCircle(px, clr) {
+      ctx.beginPath(); ctx.arc(px, oy, 7, 0, 2*Math.PI);
+      ctx.fillStyle = '#f8fafc'; ctx.fill();
+      ctx.strokeStyle = clr; ctx.lineWidth = 2.5; ctx.stroke();
+    }
+    openCircle(Math.max(left, 20), '#2563eb');
+    openCircle(Math.min(right, W-20), '#2563eb');
+
+    // Centre dot
+    const cx2 = ox + ctr * scX;
+    ctx.beginPath(); ctx.arc(Math.min(Math.max(cx2, 24), W - 24), oy, 7, 0, 2*Math.PI);
+    ctx.fillStyle = '#dc2626'; ctx.fill();
+
+    // Labels for endpoints
+    ctx.fillStyle = '#1e40af'; ctx.font = '12px Outfit, sans-serif'; ctx.textAlign = 'center';
+    if (left > 20 && left < W - 20)
+      ctx.fillText((ctr-rad).toFixed(1), left, oy - 26);
+    if (right > 20 && right < W - 20)
+      ctx.fillText((ctr+rad).toFixed(1), right, oy - 26);
+
+    // Label for centre
+    ctx.fillStyle = '#dc2626';
+    ctx.fillText('a=' + ctr.toFixed(1), Math.min(Math.max(cx2, 30), W-30), oy + 38);
+
+    // Title label
+    ctx.fillStyle = '#334155'; ctx.font = '13px Outfit, sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText('|x − ' + ctr.toFixed(1) + '| < ' + rad.toFixed(1), 24, 20);
+  }
+}
+
+
+/* ══════════════════════════════════════════
+   CANVAS 3 — Triangle Inequality Visual  (Step 5)
+══════════════════════════════════════════ */
+function initTriangle() {
+  const canvas  = document.getElementById('cvTriangle');
+  const slA     = document.getElementById('slTa');
+  const slB     = document.getElementById('slTb');
+  const rdA     = document.getElementById('rdTa');
+  const rdB     = document.getElementById('rdTb');
+  const rdRes   = document.getElementById('rdTriResult');
+  if (!canvas) return;
+
+  function update() {
+    const a = parseFloat(slA.value), b = parseFloat(slB.value);
+    rdA.textContent = 'a = ' + (a >= 0 ? '' : '') + a.toFixed(1);
+    rdB.textContent = 'b = ' + b.toFixed(1);
+    const sum = Math.abs(a + b), bnd = Math.abs(a) + Math.abs(b);
+    rdRes.textContent = '|a+b| = ' + sum.toFixed(2) + '  ≤  |a|+|b| = ' + bnd.toFixed(2)
+      + (sum < bnd ? '   (strict)' : '   (equality)');
+    draw(canvas, a, b);
+  }
+  slA.addEventListener('input', update);
+  slB.addEventListener('input', update);
+  update();
+
+  function draw(c, a, b) {
+    const ctx = c.getContext('2d');
+    const W = c.width, H = c.height;
+    const rowH = H / 3;
+    const scX = 52; // px per unit
+    const ox = W / 2;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // Row labels
+    const rowLabels = ['|a|', '|b|', '|a+b| vs |a|+|b|'];
+    const rowColors = ['#2563eb', '#15803d', '#7c3aed'];
+    const rowVals   = [
+      { left: 0, right: a,   abs: Math.abs(a),   raw: a   },
+      { left: 0, right: b,   abs: Math.abs(b),   raw: b   },
+      { left: 0, right: a+b, abs: Math.abs(a+b), raw: a+b }
+    ];
+
+    rowVals.forEach((row, ri) => {
+      const oy = rowH * ri + rowH * 0.55;
+
+      // Axis line
+      ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(30, oy); ctx.lineTo(W - 30, oy); ctx.stroke();
+
+      // Tick marks
+      ctx.fillStyle = '#94a3b8'; ctx.font = '11px Outfit, sans-serif'; ctx.textAlign = 'center';
+      for (let t = -7; t <= 7; t++) {
+        const px = ox + t * scX;
+        if (px < 30 || px > W - 30) continue;
+        ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(px, oy - 4); ctx.lineTo(px, oy + 4); ctx.stroke();
+        if (t !== 0) ctx.fillText(t.toString(), px, oy + 15);
+      }
+
+      // Origin label
+      ctx.fillStyle = '#64748b'; ctx.fillText('0', ox, oy + 15);
+
+      // Segment from 0 to raw value
+      const endPx = Math.min(Math.max(ox + row.raw * scX, 32), W - 32);
+      ctx.strokeStyle = rowColors[ri]; ctx.lineWidth = ri === 2 ? 5 : 4;
+      ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(endPx, oy); ctx.stroke();
+      ctx.lineCap = 'butt';
+
+      // If row 2, also show |a|+|b| as dashed
+      if (ri === 2) {
+        const bndPx = Math.min(Math.max(
+          a+b >= 0 ? ox + (Math.abs(a)+Math.abs(b)) * scX : ox - (Math.abs(a)+Math.abs(b)) * scX,
+          32), W - 32);
+        ctx.setLineDash([6, 4]);
+        ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(bndPx, oy); ctx.stroke();
+        ctx.setLineDash([]);
+        // Legend
+        ctx.fillStyle = '#7c3aed'; ctx.font = 'bold 11px Outfit,sans-serif'; ctx.textAlign = 'left';
+        ctx.fillText('|a+b|', 32, oy - 8);
+        ctx.fillStyle = '#f59e0b';
+        ctx.fillText('|a|+|b| (upper bound)', 90, oy - 8);
+      } else {
+        // Show |value| label
+        ctx.fillStyle = rowColors[ri]; ctx.font = 'bold 11px Outfit,sans-serif'; ctx.textAlign = 'left';
+        ctx.fillText(rowLabels[ri] + ' = ' + row.abs.toFixed(2), 32, oy - 8);
+      }
+
+      // Endpoint dot
+      ctx.beginPath(); ctx.arc(endPx, oy, 5, 0, 2*Math.PI);
+      ctx.fillStyle = rowColors[ri]; ctx.fill();
+    });
+  }
+}
+</script>
+</body>
+</html>

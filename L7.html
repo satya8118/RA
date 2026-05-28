@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L7 — Sequences: Definitions, Convergence &amp; Visualisation</title>
+
+<script>
+    window.MathJax = {
+        tex: { inlineMath:[['$','$'],['\\(','\\)']], displayMath:[['$$','$$']] },
+        svg: { fontCache:'global' }
+    };
+</script>
+<script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+:root{--primary:#2c3e50;--secondary:#3498db;--bg:#f4f7f6;
+      --green:#27ae60;--gold:#b8892a;--rust:#8b3a2a;--teal:#2a6b6e;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+     line-height:1.75;color:var(--primary);background:var(--bg);
+     padding:20px 20px 110px;}
+.container{max-width:920px;margin:auto;background:#fff;
+           padding:40px;border-radius:8px;
+           box-shadow:0 4px 15px rgba(0,0,0,.1);}
+h1{font-size:2rem;color:var(--primary);
+   border-bottom:3px solid var(--secondary);padding-bottom:10px;margin-bottom:6px;}
+.subtitle{color:#7f8c8d;font-size:1rem;margin-bottom:28px;}
+h2{font-size:1.5rem;color:var(--primary);
+   border-bottom:1px solid #eee;padding-bottom:7px;margin-bottom:14px;}
+h3{font-size:1.15rem;color:var(--secondary);margin:16px 0 8px;}
+p{margin-bottom:1rem;}
+
+/* ── coloured boxes ─────────────────────────── */
+.tcolorbox{border-radius:6px;margin:14px 0;overflow:hidden;border:1px solid #ccc;}
+.tcolorbox-header{padding:8px 15px;font-weight:bold;font-size:1rem;color:#fff;}
+.tcolorbox-content{padding:14px 18px;}
+.tcolorbox.blue   .tcolorbox-header{background:#1565c0;}
+.tcolorbox.blue   .tcolorbox-content{background:#e3f2fd;}
+.tcolorbox.green  .tcolorbox-header{background:#2e7d32;}
+.tcolorbox.green  .tcolorbox-content{background:#e8f5e9;}
+.tcolorbox.orange .tcolorbox-header{background:#e65100;}
+.tcolorbox.orange .tcolorbox-content{background:#fff3e0;}
+.tcolorbox.purple .tcolorbox-header{background:#6a1b9a;}
+.tcolorbox.purple .tcolorbox-content{background:#f3e5f5;}
+.tcolorbox.red    .tcolorbox-header{background:#c62828;}
+.tcolorbox.red    .tcolorbox-content{background:#ffebee;}
+.tcolorbox.teal   .tcolorbox-header{background:#00695c;}
+.tcolorbox.teal   .tcolorbox-content{background:#e0f2f1;}
+.tcolorbox.indigo .tcolorbox-header{background:#283593;}
+.tcolorbox.indigo .tcolorbox-content{background:#e8eaf6;}
+.tcolorbox.brown  .tcolorbox-header{background:#4e342e;}
+.tcolorbox.brown  .tcolorbox-content{background:#efebe9;}
+.tcolorbox.amber  .tcolorbox-header{background:#f57f17;}
+.tcolorbox.amber  .tcolorbox-content{background:#fff8e1;}
+.tcolorbox.grey   .tcolorbox-header{background:#424242;}
+.tcolorbox.grey   .tcolorbox-content{background:#f5f5f5;}
+.tcolorbox.cyan   .tcolorbox-header{background:#00838f;}
+.tcolorbox.cyan   .tcolorbox-content{background:#e0f7fa;}
+.tcolorbox.lime   .tcolorbox-header{background:#558b2f;}
+.tcolorbox.lime   .tcolorbox-content{background:#f1f8e9;}
+.tcolorbox.slate  .tcolorbox-header{background:#37474f;}
+.tcolorbox.slate  .tcolorbox-content{background:#eceff1;}
+.tcolorbox.pink   .tcolorbox-header{background:#ad1457;}
+.tcolorbox.pink   .tcolorbox-content{background:#fce4ec;}
+
+/* ── proof block ────────────────────────────── */
+.proof-block{background:#f9f9f9;border-left:4px solid #7a6e64;
+             padding:14px 18px;margin:12px 0;border-radius:0 4px 4px 0;}
+.proof-label{font-weight:bold;color:#4e342e;display:block;margin-bottom:8px;}
+.qed{float:right;font-weight:bold;font-size:1.1rem;}
+
+/* ── math display ───────────────────────────── */
+.math-box{background:#e8f4fd;border-left:5px solid var(--secondary);
+          padding:14px 18px;margin:16px 0;border-radius:4px;}
+.math-center{text-align:center;padding:12px;background:#f8f8f8;
+             border:1px solid #e0e0e0;border-radius:4px;margin:12px 0;
+             overflow-x:auto;}
+
+/* ── table ──────────────────────────────────── */
+table{width:100%;border-collapse:collapse;margin:14px 0;}
+th,td{border:1px solid #ddd;padding:10px 13px;text-align:left;}
+th{background:#f2f2f2;font-weight:600;}
+
+/* ── lists ──────────────────────────────────── */
+ul,ol{margin-left:1.5rem;margin-bottom:1rem;}
+li{margin-bottom:.4rem;}
+
+/* ── two-col ────────────────────────────────── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0;}
+@media(max-width:620px){.two-col{grid-template-columns:1fr;}}
+
+/* ── diagram ────────────────────────────────── */
+.diagram-wrap{text-align:center;margin:16px 0 10px;
+              background:#fafafa;border:1px solid #ddd;
+              border-radius:6px;padding:10px;}
+.diagram-caption{font-size:.88rem;color:#555;margin-top:6px;font-style:italic;}
+
+/* ── quiz cards ─────────────────────────────── */
+.quiz-card{background:#fdfefe;border:1px solid #e2e8f0;
+           border-left:5px solid var(--secondary);
+           padding:18px 20px;margin:14px 0;border-radius:5px;}
+.btn-sol{background:transparent;border:1.5px solid var(--secondary);
+         color:var(--secondary);padding:7px 16px;border-radius:4px;
+         cursor:pointer;font-size:.88rem;font-weight:600;
+         transition:all .2s;margin-top:10px;}
+.btn-sol:hover{background:var(--secondary);color:#fff;}
+.solution{display:none;margin-top:12px;padding:12px 14px;
+          background:#f8fafc;border-top:1px dashed #e2e8f0;
+          border-radius:4px;color:#4a5568;}
+.sol-label{font-weight:700;color:var(--primary);display:block;margin-bottom:6px;}
+
+/* ── section rule ───────────────────────────── */
+.section-rule{border:none;border-top:2px dashed #c8b99a;margin:30px 0 22px;}
+
+/* ── STEP REVEAL ─────────────────────────────── */
+.step{opacity:0;max-height:0;overflow:hidden;
+      transition:opacity .4s ease,max-height .65s ease;}
+.step.visible{opacity:1;max-height:8000px;margin-bottom:8px;}
+
+/* ── CONTROLS BAR ────────────────────────────── */
+.controls{position:fixed;bottom:0;left:0;right:0;
+          background:#ede5d8;border-top:2px solid #c8b99a;
+          padding:12px 40px;display:flex;align-items:center;
+          justify-content:space-between;gap:20px;z-index:1000;
+          box-shadow:0 -2px 8px rgba(0,0,0,.08);}
+.progress-wrap{flex:1;display:flex;align-items:center;gap:12px;}
+.progress-bar-bg{flex:1;height:5px;background:#c8b99a;border-radius:3px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:#8b2500;border-radius:3px;
+                   width:0%;transition:width .4s ease;}
+.progress-label{font-size:14px;color:#8b2500;font-weight:700;
+                white-space:nowrap;min-width:55px;text-align:right;}
+.btn-next{background:var(--primary);color:#fff;border:none;
+          padding:10px 28px;font-size:15px;cursor:pointer;
+          border-radius:4px;transition:background .2s;}
+.btn-next:hover:not(:disabled){background:var(--secondary);}
+.btn-next:disabled{background:#c8b99a;cursor:default;}
+.key-hint{font-size:13px;color:#7a6e64;font-style:italic;white-space:nowrap;}
+</style>
+</head>
+<body>
+<nav style="max-width:920px;margin:0 auto 12px;font-size:.9rem;">
+    <a href="main.html">&larr; Course Home</a> &nbsp;|&nbsp;
+    <a href="L8.html">Next: Convergence Applications &rarr;</a>
+</nav>
+
+<div class="container">
+<h1>Lecture 7 &mdash; Sequences</h1>
+<p class="subtitle">Definitions, examples, bounded sequences, convergence,
+visualisation, uniqueness of limits, and self-assessment.</p>
+
+<!-- ══════════════════════════════════════
+     STEP 1 — Why study sequences?
+══════════════════════════════════════ -->
+<div class="step">
+    <h2>1. Overview &amp; Motivation</h2>
+    <div class="tcolorbox blue">
+        <div class="tcolorbox-header">Why Sequences?</div>
+        <div class="tcolorbox-content">
+            <ul>
+                <li>Analysis is built on the notion of a <strong>limit</strong>,
+                    which can be defined rigorously in terms of sequences.</li>
+                <li>Elementary functions — trigonometric, exponential, logarithm —
+                    can be approximated by sequences. With computers, such
+                    approximations can be made as accurate as needed.</li>
+                <li>A sequence is a <em>special class of function</em>:
+                    its domain is $\mathbb{N}$ and its range is a subset of $\mathbb{R}.$</li>
+            </ul>
+        </div>
+    </div>
+    <p>
+        In this lecture we introduce the formal definition of a sequence, study
+        what it means for a sequence to converge, visualise sequences on the real
+        line and in the plane, and prove that limits are unique.
+    </p>
+</div><!-- /step 1 -->
+
+<!-- ══════════════════════════════════════
+     STEP 2 — Formal definition
+══════════════════════════════════════ -->
+<div class="step">
+    <h2>2. Definition of a Sequence</h2>
+
+    <div class="tcolorbox blue">
+        <div class="tcolorbox-header">Definition — Infinite Sequence</div>
+        <div class="tcolorbox-content">
+            An <strong>infinite sequence of real numbers</strong> is a function
+            $$f:\mathbb{N}\to\mathbb{R}.$$
+            We write $a_n = f(n)$ and denote the sequence by
+            $(a_n),\; (a_n)_{n=1}^{\infty},$ or simply $a_1,a_2,a_3,\ldots$
+            <br><br>
+            Each $a_n$ is called the <em>$n$-th term</em> and $n$ is its <em>index</em>.
+        </div>
+    </div>
+
+    <div class="math-box">
+        <strong>Notation.</strong>
+        A sequence is an <em>ordered</em> list. We may also start the index at any
+        integer $n_0$ (not just $1$), giving a function
+        $f:\{n\in\mathbb{Z}:n\ge n_0\}\to\mathbb{R}.$
+        <br><br>
+        <strong>Order matters:</strong> $1,2,3,4,\ldots$ and $2,1,3,4,\ldots$
+        are <em>different</em> sequences.
+    </div>
+
+    <div class="tcolorbox amber">
+        <div class="tcolorbox-header">Sequence vs Set</div>
+        <div class="tcolorbox-content">
+            <ul>
+                <li>A <strong>set</strong> is a collection of distinct elements —
+                    no ordering, no repetition.</li>
+                <li>A <strong>sequence</strong> has a definite order and may repeat values.</li>
+            </ul>
+            Example: $(1,-1,1,-1,1,-1,\ldots)$ is a sequence whose terms
+            come from the set $\{-1,1\}.$
+        </div>
+    </div>
+</div><!-- /step 2 -->
+
+<!-- ══════════════════════════════════════
+     STEP 3 — Examples
+══════════════════════════════════════ -->
+<div class="step">
+    <h2>3. Examples of Sequences</h2>
+
+    <table>
+        <tr>
+            <th>Formula</th>
+            <th>First few terms</th>
+            <th>Behaviour</th>
+        </tr>
+        <tr>
+            <td>$a_n = 2n$</td>
+            <td>$2,4,6,8,10,\ldots$</td>
+            <td>Grows without bound</td>
+        </tr>
+        <tr>
+            <td>$a_n = \dfrac{1}{n}$</td>
+            <td>$1,\tfrac{1}{2},\tfrac{1}{3},\tfrac{1}{4},\ldots$</td>
+            <td>Decreases toward $0$</td>
+        </tr>
+        <tr>
+            <td>$a_n = \dfrac{n-1}{n}$</td>
+            <td>$0,\tfrac{1}{2},\tfrac{2}{3},\tfrac{3}{4},\ldots$</td>
+            <td>Increases toward $1$</td>
+        </tr>
+        <tr>
+            <td>$a_n = (-1)^{n+1}\dfrac{1}{n}$</td>
+            <td>$1,-\tfrac{1}{2},\tfrac{1}{3},-\tfrac{1}{4},\ldots$</td>
+            <td>Alternating, converges to $0$</td>
+        </tr>
+        <tr>
+            <td>$a_n = (-1)^{n+1}$</td>
+            <td>$1,-1,1,-1,\ldots$</td>
+            <td>Oscillates, never settles</td>
+        </tr>
+        <tr>
+            <td>$a_n = \sqrt{n}$</td>
+            <td>$1,\sqrt2,\sqrt3,2,\ldots$</td>
+            <td>Increases to $+\infty$</td>
+        </tr>
+    </table>
+
+    <div class="tcolorbox orange">
+        <div class="tcolorbox-header">Two ways to describe a sequence</div>
+        <div class="tcolorbox-content">
+            <strong>(a) By a formula:</strong> $a_n = \dfrac{1}{n}$ defines every term at once.
+            <br>
+            <strong>(b) By listing:</strong>
+            $\left(\tfrac{1}{1},\tfrac{1}{2},\tfrac{1}{3},\ldots\right).$
+            <br>
+            We may also write $\left(\dfrac{1}{n}\right)_{n=1}^{\infty}.$
+            Starting the index at $n_0\ne 1$ can give simpler formulas
+            (e.g. $b_n=2n$ with $n\ge 6$ gives $12,14,16,\ldots$).
+        </div>
+    </div>
+</div><!-- /step 3 -->
+
+<!-- ══════════════════════════════════════
+     STEP 4 — Bounded sequences
+══════════════════════════════════════ -->
+<div class="step">
+    <h2>4. Bounded Sequences</h2>
+
+    <div class="tcolorbox purple">
+        <div class="tcolorbox-header">Definition — Bounded Sequence</div>
+        <div class="tcolorbox-content">
+            A sequence $(a_n)$ is <strong>bounded</strong> if its range set
+            $\{a_n:n\in\mathbb{N}\}$ is a bounded subset of $\mathbb{R}.$
+            <br><br>
+            Equivalently, $(a_n)$ is bounded if there exists $B\in\mathbb{R}$ such that
+            $$|a_n|\le B \qquad\text{for all }n\in\mathbb{N}.$$
+        </div>
+    </div>
+
+    <table>
+        <tr><th>Sequence</th><th>Bounded?</th><th>Reason</th></tr>
+        <tr>
+            <td>$\left(\dfrac{1}{n}\right)$</td>
+            <td>Yes</td>
+            <td>Terms lie in $(0,1]$; $|a_n|\le 1$</td>
+        </tr>
+        <tr>
+            <td>$\left(1-\dfrac{1}{n}\right)$</td>
+            <td>Yes</td>
+            <td>Terms lie in $[0,1)$; $|a_n|\le 1$</td>
+        </tr>
+        <tr>
+            <td>$\bigl((-1)^n\bigr)$</td>
+            <td>Yes</td>
+            <td>Range $=\{-1,1\}$; $|a_n|=1$</td>
+        </tr>
+        <tr>
+            <td>$\bigl(\sqrt{n}\bigr)$</td>
+            <td>No</td>
+            <td>Terms grow to $+\infty$</td>
+        </tr>
+        <tr>
+            <td>$(2n)$</td>
+            <td>No</td>
+            <td>Terms grow without bound</td>
+        </tr>
+    </table>
+
+    <div class="math-box">
+        <strong>Note:</strong> A sequence can be bounded yet not converge:
+        $\bigl((-1)^n\bigr)$ is bounded ($|a_n|=1$) but oscillates and never settles.
+        Boundedness is <em>necessary</em> but not <em>sufficient</em> for convergence.
+    </div>
+</div><!-- /step 4 -->
+
+<!-- ══════════════════════════════════════
+     STEP 5 — Convergence definition
+══════════════════════════════════════ -->
+<div class="step">
+    <h2>5. Convergence and Divergence</h2>
+
+    <div class="tcolorbox blue">
+        <div class="tcolorbox-header">Definition — Convergence</div>
+        <div class="tcolorbox-content">
+            The sequence $(a_n)$ <strong>converges</strong> to the number $L\in\mathbb{R},$
+            written $a_n\to L$ or $\displaystyle\lim_{n\to\infty}a_n=L,$ if
+            $$\forall\,\varepsilon&gt;0,\;\exists\,N\in\mathbb{N}:\;
+              n&gt;N\;\Longrightarrow\;|a_n-L|&lt;\varepsilon.$$
+            Equivalently: $L-\varepsilon&lt;a_n&lt;L+\varepsilon$ for all $n&gt;N.$
+            <br><br>
+            If no such $L$ exists, the sequence <strong>diverges</strong>.
+        </div>
+    </div>
+
+    <div class="tcolorbox amber">
+        <div class="tcolorbox-header">Alternative form ($n\ge N$ vs $n&gt;N$)</div>
+        <div class="tcolorbox-content">
+            Some textbooks write $n\ge N$ instead of $n&gt;N.$
+            Both are equivalent: the convergence or divergence of a sequence
+            does not depend on any finite initial segment of terms.
+            <br>
+            — Using $n&gt;N$: concerned with terms from index $N+1$ onwards.<br>
+            — Using $n\ge N$: concerned with terms from index $N$ onwards.
+        </div>
+    </div>
+
+    <div class="tcolorbox red">
+        <div class="tcolorbox-header">Common Mistake — Incomplete Statement</div>
+        <div class="tcolorbox-content">
+            Writing "$L-\varepsilon&lt;a_n&lt;L+\varepsilon$" alone is <em>incomplete</em>.
+            You must also state: given $\varepsilon&gt;0,$ you have <em>found</em> a positive
+            integer $N$ such that the inequality holds for all $n&gt;N.$ The existence of $N$
+            for every $\varepsilon$ is the heart of the definition.
+        </div>
+    </div>
+
+    <div class="tcolorbox orange">
+        <div class="tcolorbox-header">The shortest maths joke: Let $\varepsilon&lt;0$</div>
+        <div class="tcolorbox-content">
+            Applying the definition of convergence to $\varepsilon$ gives index $N_1.$
+            Applying it to $\varepsilon/99$ gives a (possibly larger) index $N_2.$
+            <br>
+            <strong>Caution:</strong> $N_2$ is not necessarily $99\,N_1$ — it could be
+            anything. The only guarantee is $N_2$ is some natural number that works for
+            the smaller tolerance $\varepsilon/99.$
+        </div>
+    </div>
+</div><!-- /step 5 -->
+
+<!-- ══════════════════════════════════════
+     STEP 6 — Visualisation
+══════════════════════════════════════ -->
+<div class="step">
+    <h2>6. Visualising Sequences</h2>
+    <p>There are two natural ways to display a sequence graphically.</p>
+
+    <div class="two-col">
+        <div class="tcolorbox teal" style="margin:0;">
+            <div class="tcolorbox-header">On the Real Line</div>
+            <div class="tcolorbox-content">
+                Plot each term $a_n$ as a point on the number line.
+                Convergence is visible: the points cluster around the limit $L.$
+            </div>
+        </div>
+        <div class="tcolorbox indigo" style="margin:0;">
+            <div class="tcolorbox-header">In the Plane</div>
+            <div class="tcolorbox-content">
+                Plot the points $(n,a_n)$ in the $xy$-plane.
+                The horizontal axis is the index $n$; the vertical axis is the value $a_n.$
+                Convergence appears as the dots approaching a horizontal asymptote $y=L.$
+            </div>
+        </div>
+    </div>
+
+    <!-- SVG: 1/n visualisation -->
+    <div class="diagram-wrap" style="margin-top:18px;">
+        <svg viewBox="0 0 760 170" width="100%" xmlns="http://www.w3.org/2000/svg"
+             style="max-height:170px;">
+            <defs>
+                <marker id="ra" markerWidth="7" markerHeight="5"
+                        refX="7" refY="2.5" orient="auto">
+                    <path d="M0,0 L7,2.5 L0,5 Z" fill="#607d8b"/>
+                </marker>
+                <marker id="la" markerWidth="7" markerHeight="5"
+                        refX="0" refY="2.5" orient="auto">
+                    <path d="M7,0 L0,2.5 L7,5 Z" fill="#b8892a"/>
+                </marker>
+            </defs>
+            <!-- Real line section -->
+            <text x="10" y="22" fill="#1a2640" font-size="12"
+                  font-family="Georgia,serif" font-weight="600">Real Line — $(1/n)$</text>
+            <line x1="10" y1="62" x2="355" y2="62" stroke="#607d8b" stroke-width="1.5"
+                  marker-end="url(#ra)"/>
+            <line x1="28" y1="57" x2="28" y2="67" stroke="#2a6b6e" stroke-width="2"/>
+            <text x="22" y="82" font-size="10" fill="#2a6b6e">$0$</text>
+            <!-- dots squeezing to 0 -->
+            <circle cx="310" cy="62" r="6"   fill="#b8892a"/>
+            <text x="303" y="96" font-size="9" fill="#6b6355">$1$</text>
+            <circle cx="184" cy="62" r="5.5" fill="#b8892a" opacity=".82"/>
+            <text x="177" y="96" font-size="9" fill="#6b6355">$\tfrac{1}{2}$</text>
+            <circle cx="130" cy="62" r="5"   fill="#b8892a" opacity=".65"/>
+            <text x="122" y="96" font-size="9" fill="#6b6355">$\tfrac{1}{3}$</text>
+            <circle cx="99"  cy="62" r="4.5" fill="#b8892a" opacity=".5"/>
+            <text x="91"  y="96" font-size="9" fill="#6b6355">$\tfrac{1}{4}$</text>
+            <circle cx="77"  cy="62" r="4"   fill="#b8892a" opacity=".38"/>
+            <circle cx="63"  cy="62" r="3.5" fill="#b8892a" opacity=".28"/>
+            <circle cx="52"  cy="62" r="3"   fill="#b8892a" opacity=".2"/>
+            <path d="M280,47 Q220,28 55,52" fill="none" stroke="#b8892a"
+                  stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#la)"/>
+            <text x="180" y="36" font-size="10" fill="#b8892a"
+                  font-style="italic">squeezing toward $0$</text>
+            <!-- xy-plane section -->
+            <text x="390" y="22" fill="#1a2640" font-size="12"
+                  font-family="Georgia,serif" font-weight="600">$xy$-Plane — $(1/n)$</text>
+            <line x1="390" y1="155" x2="390" y2="25" stroke="#607d8b" stroke-width="1.5"
+                  marker-end="url(#ra)"/>
+            <line x1="385" y1="150" x2="750" y2="150" stroke="#607d8b" stroke-width="1.5"
+                  marker-end="url(#ra)"/>
+            <text x="752" y="158" font-size="10" fill="#6b6355">$n$</text>
+            <text x="397" y="24"  font-size="10" fill="#6b6355">$a_n$</text>
+            <line x1="390" y1="150" x2="750" y2="150" stroke="#2a6b6e"
+                  stroke-width="1" stroke-dasharray="5,4" opacity=".6"/>
+            <text x="393" y="147" font-size="9" fill="#2a6b6e">$L=0$</text>
+            <circle cx="430" cy="52"  r="5.5" fill="#b8892a"/>
+            <circle cx="475" cy="100" r="5"   fill="#b8892a" opacity=".82"/>
+            <circle cx="520" cy="120" r="4.5" fill="#b8892a" opacity=".68"/>
+            <circle cx="565" cy="132" r="4"   fill="#b8892a" opacity=".54"/>
+            <circle cx="610" cy="139" r="3.5" fill="#b8892a" opacity=".4"/>
+            <circle cx="655" cy="143" r="3"   fill="#b8892a" opacity=".3"/>
+            <circle cx="700" cy="146" r="2.5" fill="#b8892a" opacity=".2"/>
+            <text x="427" y="165" font-size="9" fill="#6b6355">$1$</text>
+            <text x="472" y="165" font-size="9" fill="#6b6355">$2$</text>
+            <text x="517" y="165" font-size="9" fill="#6b6355">$3$</text>
+            <text x="562" y="165" font-size="9" fill="#6b6355">$4$</text>
+        </svg>
+        <div class="diagram-caption">
+            $(1/n)$ visualised on the real line (dots cluster at $0$) and in the plane
+            (dots approach the horizontal asymptote $y=0$).
+        </div>
+    </div>
+
+    <!-- SVG: (-1)^(n+1) visualisation -->
+    <div class="diagram-wrap" style="margin-top:14px;">
+        <svg viewBox="0 0 680 175" width="100%" xmlns="http://www.w3.org/2000/svg"
+             style="max-height:175px;">
+            <defs>
+                <marker id="ra2" markerWidth="7" markerHeight="5"
+                        refX="7" refY="2.5" orient="auto">
+                    <path d="M0,0 L7,2.5 L0,5 Z" fill="#607d8b"/>
+                </marker>
+                <marker id="dbl-l" markerWidth="7" markerHeight="5"
+                        refX="0" refY="2.5" orient="auto">
+                    <path d="M7,0 L0,2.5 L7,5 Z" fill="#6b6355"/>
+                </marker>
+                <marker id="dbl-r" markerWidth="7" markerHeight="5"
+                        refX="7" refY="2.5" orient="auto">
+                    <path d="M0,0 L7,2.5 L0,5 Z" fill="#6b6355"/>
+                </marker>
+            </defs>
+            <!-- Real line -->
+            <text x="10" y="20" fill="#1a2640" font-size="12"
+                  font-family="Georgia,serif" font-weight="600">$((-1)^{n+1})$ on Real Line</text>
+            <line x1="10" y1="58" x2="345" y2="58" stroke="#607d8b" stroke-width="1.5"
+                  marker-end="url(#ra2)"/>
+            <line x1="60"  y1="53" x2="60"  y2="63" stroke="#6b6355" stroke-width="1.5"/>
+            <text x="52" y="78" font-size="10" fill="#6b6355">$-1$</text>
+            <line x1="298" y1="53" x2="298" y2="63" stroke="#6b6355" stroke-width="1.5"/>
+            <text x="292" y="78" font-size="10" fill="#6b6355">$1$</text>
+            <circle cx="298" cy="58" r="6"   fill="#b8892a"/>
+            <circle cx="60"  cy="58" r="6"   fill="#8b3a2a"/>
+            <line x1="70" y1="43" x2="288" y2="43" stroke="#6b6355"
+                  stroke-width="1.2" marker-start="url(#dbl-l)" marker-end="url(#dbl-r)"/>
+            <text x="145" y="38" font-size="9" fill="#6b6355" text-anchor="middle">
+                bounces between $-1$ and $1$
+            </text>
+            <!-- xy-plane -->
+            <text x="375" y="20" fill="#1a2640" font-size="12"
+                  font-family="Georgia,serif" font-weight="600">$xy$-Plane — $((-1)^{n+1})$</text>
+            <line x1="380" y1="160" x2="380" y2="28" stroke="#607d8b" stroke-width="1.5"
+                  marker-end="url(#ra2)"/>
+            <line x1="375" y1="92"  x2="670" y2="92"  stroke="#607d8b" stroke-width="1.5"
+                  marker-end="url(#ra2)"/>
+            <text x="662" y="107" font-size="10" fill="#6b6355">$n$</text>
+            <text x="388" y="25"  font-size="10" fill="#6b6355">$a_n$</text>
+            <line x1="380" y1="48"  x2="665" y2="48"  stroke="#b8892a"
+                  stroke-width="1" stroke-dasharray="4,3" opacity=".55"/>
+            <text x="384" y="44" font-size="9" fill="#b8892a">$1$</text>
+            <line x1="380" y1="136" x2="665" y2="136" stroke="#8b3a2a"
+                  stroke-width="1" stroke-dasharray="4,3" opacity=".55"/>
+            <text x="384" y="132" font-size="9" fill="#8b3a2a">$-1$</text>
+            <circle cx="420" cy="48"  r="5" fill="#b8892a"/>
+            <circle cx="460" cy="136" r="5" fill="#8b3a2a"/>
+            <circle cx="500" cy="48"  r="5" fill="#b8892a"/>
+            <circle cx="540" cy="136" r="5" fill="#8b3a2a"/>
+            <circle cx="580" cy="48"  r="5" fill="#b8892a"/>
+            <circle cx="620" cy="136" r="5" fill="#8b3a2a"/>
+            <text x="417" y="170" font-size="9" fill="#6b6355">$1$</text>
+            <text x="457" y="170" font-size="9" fill="#6b6355">$2$</text>
+            <text x="497" y="170" font-size="9" fill="#6b6355">$3$</text>
+            <text x="537" y="170" font-size="9" fill="#6b6355">$4$</text>
+            <text x="577" y="170" font-size="9" fill="#6b6355">$5$</text>
+        </svg>
+        <div class="diagram-caption">
+            $((-1)^{n+1})$ oscillates between $+1$ and $-1$ — it never converges to any $L.$
+        </div>
+    </div>
+</div><!-- /step 6 -->
+
+<!-- ══════════════════════════════════════
+     STEP 7 — ε-band interpretation
+══════════════════════════════════════ -->
+<div class="step">
+    <h2>7. The $\varepsilon$-Band Picture</h2>
+
+    <p>
+        The definition of convergence becomes transparent in the plane.
+        Given $\varepsilon&gt;0,$ draw the horizontal band
+        $(L-\varepsilon,\,L+\varepsilon).$
+        The definition says:
+    </p>
+
+    <div class="tcolorbox indigo">
+        <div class="tcolorbox-header">Geometric reading of convergence</div>
+        <div class="tcolorbox-content">
+            $a_n\to L$ means: for every $\varepsilon&gt;0,$ there exists $N$ such that
+            <strong>all points $(n,a_n)$ with $n&gt;N$ lie inside the $\varepsilon$-band</strong>
+            $L-\varepsilon&lt;y&lt;L+\varepsilon.$
+            <br><br>
+            No matter how thin the band, eventually all dots are inside it.
+        </div>
+    </div>
+
+    <!-- ε-band SVG -->
+    <div class="diagram-wrap">
+        <svg viewBox="0 0 620 180" width="100%" xmlns="http://www.w3.org/2000/svg"
+             style="max-height:180px;">
+            <defs>
+                <marker id="ra3" markerWidth="7" markerHeight="5"
+                        refX="7" refY="2.5" orient="auto">
+                    <path d="M0,0 L7,2.5 L0,5 Z" fill="#607d8b"/>
+                </marker>
+            </defs>
+            <!-- axes -->
+            <line x1="40" y1="155" x2="40"  y2="15"  stroke="#607d8b" stroke-width="1.5"
+                  marker-end="url(#ra3)"/>
+            <line x1="35" y1="105" x2="610" y2="105" stroke="#607d8b" stroke-width="1.5"
+                  marker-end="url(#ra3)"/>
+            <text x="600" y="118" font-size="11" fill="#6b6355">$n$</text>
+            <text x="48"  y="17"  font-size="11" fill="#6b6355">$a_n$</text>
+            <!-- L line -->
+            <line x1="40" y1="105" x2="605" y2="105" stroke="#2e7d32"
+                  stroke-width="2" stroke-dasharray="8,4"/>
+            <text x="585" y="101" font-size="11" fill="#2e7d32" font-weight="bold">$L$</text>
+            <!-- epsilon band -->
+            <rect x="40" y="75" width="565" height="30" fill="#c8e6c9" opacity=".45"/>
+            <line x1="40" y1="75"  x2="605" y2="75"  stroke="#e67e22"
+                  stroke-width="1.5" stroke-dasharray="5,3"/>
+            <line x1="40" y1="105" x2="605" y2="105" stroke="#e67e22"
+                  stroke-width="1.5" stroke-dasharray="5,3"/>
+            <text x="610" y="78"  font-size="10" fill="#e67e22">$L+\varepsilon$</text>
+            <text x="610" y="108" font-size="10" fill="#e67e22">$L-\varepsilon$</text>
+            <!-- sequence dots: first few outside band, then all inside -->
+            <circle cx="80"  cy="45"  r="5" fill="#c62828"/>
+            <circle cx="120" cy="130" r="5" fill="#c62828"/>
+            <circle cx="160" cy="60"  r="5" fill="#c62828"/>
+            <circle cx="200" cy="120" r="5" fill="#c62828"/>
+            <!-- N marker -->
+            <line x1="240" y1="10" x2="240" y2="155" stroke="#1565c0"
+                  stroke-width="1.5" stroke-dasharray="6,3"/>
+            <text x="235" y="12" font-size="10" fill="#1565c0" text-anchor="middle">$N$</text>
+            <!-- dots inside band after N -->
+            <circle cx="270" cy="95"  r="5" fill="#2e7d32"/>
+            <circle cx="320" cy="100" r="5" fill="#2e7d32"/>
+            <circle cx="370" cy="98"  r="5" fill="#2e7d32"/>
+            <circle cx="420" cy="103" r="5" fill="#2e7d32"/>
+            <circle cx="470" cy="97"  r="5" fill="#2e7d32"/>
+            <circle cx="520" cy="102" r="5" fill="#2e7d32"/>
+            <circle cx="570" cy="99"  r="5" fill="#2e7d32"/>
+            <!-- legend -->
+            <circle cx="60" cy="167" r="5" fill="#c62828"/>
+            <text x="70" y="172" font-size="10" fill="#6b6355">Outside band (before $N$)</text>
+            <circle cx="240" cy="167" r="5" fill="#2e7d32"/>
+            <text x="250" y="172" font-size="10" fill="#6b6355">Inside band (after $N$)</text>
+        </svg>
+        <div class="diagram-caption">
+            The green dots (all $n&gt;N$) lie inside the $\varepsilon$-band around $L.$
+            Red dots (early terms) may be anywhere.
+        </div>
+    </div>
+
+    <div class="math-box">
+        <strong>The constant sequence.</strong>
+        If $a_n=c$ for all $n,$ then for any $\varepsilon&gt;0$ and any $N\ge 1$:
+        $$|a_n-c|=|c-c|=0&lt;\varepsilon.$$
+        So every constant sequence converges to its constant value,
+        and <em>any</em> $N$ works.
+    </div>
+</div><!-- /step 7 -->
+
+<!-- ══════════════════════════════════════
+     STEP 8 — Uniqueness of limits
+══════════════════════════════════════ -->
+<div class="step">
+    <h2>8. Uniqueness of Limits</h2>
+
+    <div class="tcolorbox green">
+        <div class="tcolorbox-header">Theorem — Uniqueness of Limits</div>
+        <div class="tcolorbox-content">
+            Every convergent sequence has a <strong>unique</strong> limit.
+            That is, if $a_n\to L_1$ and $a_n\to L_2,$ then $L_1=L_2.$
+        </div>
+    </div>
+
+    <div class="math-box">
+        <strong>Key idea.</strong>
+        We show $|L_1-L_2|&lt;\varepsilon$ for every $\varepsilon&gt;0.$
+        Since a non-negative number that is smaller than every positive number must be $0,$
+        this forces $|L_1-L_2|=0,$ i.e., $L_1=L_2.$
+        <br><br>
+        <em>Why does $|L_1-L_2|&lt;\varepsilon$ for all $\varepsilon&gt;0$ imply $L_1=L_2$?</em>
+        Suppose $L_1\ne L_2.$ Set $\varepsilon=\tfrac{|L_1-L_2|}{2}&gt;0.$
+        Then $|L_1-L_2|&lt;\varepsilon=\tfrac{|L_1-L_2|}{2}$ gives $|L_1-L_2|&lt;\tfrac12|L_1-L_2|,$
+        which is impossible for a positive quantity. Contradiction.
+    </div>
+
+    <div class="proof-block">
+        <span class="proof-label">Proof of uniqueness.</span>
+        Let $\varepsilon&gt;0.$
+        <br><br>
+        Since $a_n\to L_1,$ there exists $N_1$ such that
+        $n&gt;N_1\Rightarrow|a_n-L_1|&lt;\varepsilon/2.$
+        <br>
+        Since $a_n\to L_2,$ there exists $N_2$ such that
+        $n&gt;N_2\Rightarrow|a_n-L_2|&lt;\varepsilon/2.$
+        <br><br>
+        Choose any $n&gt;\max(N_1,N_2).$ By the Triangle Inequality:
+        $$|L_1-L_2|=|L_1-a_n+a_n-L_2|
+        \le|a_n-L_1|+|a_n-L_2|
+        &lt;\frac{\varepsilon}{2}+\frac{\varepsilon}{2}=\varepsilon.$$
+        Since $\varepsilon&gt;0$ was arbitrary, $|L_1-L_2|=0,$ so $L_1=L_2.$
+        <span class="qed">$\blacksquare$</span>
+    </div>
+
+    <div class="tcolorbox amber">
+        <div class="tcolorbox-header">Why $\varepsilon/2$?</div>
+        <div class="tcolorbox-content">
+            We need the sum of two small errors to be small. Using $\varepsilon/2$ for each
+            guarantees their sum is $\varepsilon.$ This "$\varepsilon/2$-trick"
+            (or "$\varepsilon/k$-trick" in general) appears throughout analysis.
+        </div>
+    </div>
+</div><!-- /step 8 -->
+
+<!-- ══════════════════════════════════════
+     STEP 9 — First worked example
+══════════════════════════════════════ -->
+<div class="step">
+    <h2>9. First Worked Example: $\dfrac{1}{n}\to 0$</h2>
+
+    <div class="tcolorbox blue">
+        <div class="tcolorbox-header">Proposition</div>
+        <div class="tcolorbox-content">
+            $\displaystyle\lim_{n\to\infty}\frac{1}{n}=0.$
+        </div>
+    </div>
+
+    <div class="proof-block">
+        <span class="proof-label">Proof.</span>
+        Let $\varepsilon&gt;0.$ By the <strong>Archimedean Property</strong> of $\mathbb{R},$
+        there exists $N\in\mathbb{N}$ with $N&gt;\dfrac{1}{\varepsilon}.$
+        <br><br>
+        For any $n&gt;N$:
+        $$\left|\frac{1}{n}-0\right|=\frac{1}{n}\le\frac{1}{N}&lt;\varepsilon.$$
+        Since $\varepsilon&gt;0$ was arbitrary, $\dfrac{1}{n}\to 0.$
+        <span class="qed">$\blacksquare$</span>
+    </div>
+
+    <h3>Which $N$ works for which $\varepsilon$?</h3>
+    <table>
+        <tr><th>$\varepsilon$</th><th>Need $n&gt;1/\varepsilon$</th>
+            <th>Smallest valid $N$</th></tr>
+        <tr><td>$1$</td>   <td>$n&gt;1$</td>    <td>$N=2$</td></tr>
+        <tr><td>$0.5$</td> <td>$n&gt;2$</td>    <td>$N=3$</td></tr>
+        <tr><td>$0.1$</td> <td>$n&gt;10$</td>   <td>$N=11$</td></tr>
+        <tr><td>$0.01$</td><td>$n&gt;100$</td>  <td>$N=101$</td></tr>
+        <tr><td>$\varepsilon$</td><td>$n&gt;1/\varepsilon$</td>
+            <td>$N=\lfloor1/\varepsilon\rfloor+1$</td></tr>
+    </table>
+
+    <div class="tcolorbox teal">
+        <div class="tcolorbox-header">Second example: $\dfrac{n}{n+1}\to 1$</div>
+        <div class="tcolorbox-content">
+            $\left|\dfrac{n}{n+1}-1\right|=\dfrac{1}{n+1}&lt;\dfrac{1}{n}.$
+            Given $\varepsilon&gt;0,$ choose $N&gt;1/\varepsilon.$
+            For $n&gt;N$: $\left|\dfrac{n}{n+1}-1\right|&lt;\dfrac{1}{n}&lt;\varepsilon.$ $\blacksquare$
+        </div>
+    </div>
+</div><!-- /step 9 -->
+
+<!-- ═══ STEP 1: Convergence of the Product Sequence ═══ -->
+<div class="step">
+    <div class="tcolorbox blue">
+        <div class="tcolorbox-header">10: Prove $a_n = (1 - \frac{1}{2})(1 - \frac{1}{3})\dots(1 - \frac{1}{n+1})$ converges.</div>
+        <div class="tcolorbox-content">
+            <strong>1. Simplify the Sequence Definition:</strong>
+            The sequence is a product of $n$ terms. Let's rewrite the general term $k$ (where $k$ ranges from $2$ to $n+1$):
+            $$ 1 - \frac{1}{k} = \frac{k-1}{k} $$             So, the sequence can be written as:
+            $$ a_n = \frac{1}{2} \cdot \frac{2}{3} \cdot \frac{3}{4} \cdot \dots \cdot \frac{n}{n+1} $$ 
+            <br><br>
+            <strong>2. Visualizing the Cancellation:</strong>
+            This is a <strong>telescoping product</strong>. Notice how the numerator of one term cancels with the denominator of the previous term.
+            
+            
+            <br>
+            <strong>3. Closed Form Formula:</strong>
+            Due to the massive cancellation, only the first numerator ($1$) and the last denominator ($n+1$) remain.
+            $$ a_n = \frac{1 \cdot 2 \cdot 3 \cdot \dots \cdot n}{2 \cdot 3 \cdot 4 \cdot \dots \cdot (n+1)} = \frac{1}{n+1} $$ 
+            <br><br>
+            <strong>4. Convergence Proof:</strong>
+            We evaluate the limit of the closed form expression:
+            $$ \lim_{n \to \infty} a_n = \lim_{n \to \infty} \frac{1}{n+1} $$             As $n$ becomes arbitrarily large, the denominator $n+1$ tends to $\infty$, so the fraction tends to $0$.
+            $$ \lim_{n \to \infty} a_n = 0 $$             Since the limit exists as a finite real number, the sequence converges (to 0).
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     STEP 11 — Self-Assessment
+══════════════════════════════════════ -->
+<div class="step">
+    <hr class="section-rule">
+    <h2>10. Self-Assessment</h2>
+
+    <!-- Q1 -->
+    <div class="quiz-card">
+        <p><strong>Q1.</strong>
+            Write down the first five terms of the sequence $a_n=\dfrac{(-1)^n}{n}.$
+            Is this sequence bounded? Does it converge?
+        </p>
+        <button class="btn-sol" onclick="tog('q1')">Show / Hide Solution</button>
+        <div class="solution" id="q1">
+            <span class="sol-label">Answer.</span>
+            Terms: $-1,\;\tfrac{1}{2},\;-\tfrac{1}{3},\;\tfrac{1}{4},\;-\tfrac{1}{5}.$
+            <br>
+            <strong>Bounded:</strong> $|a_n|=1/n\le 1$ for all $n.$ ✓
+            <br>
+            <strong>Convergence:</strong> $|a_n-0|=1/n\to 0,$ so $a_n\to 0.$
+            Use Step 3 of L8 (or direct $\varepsilon$-$N$): choose $N&gt;1/\varepsilon.$
+        </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="quiz-card">
+        <p><strong>Q2.</strong>
+            Prove from the definition that $\dfrac{2n+1}{n+1}\to 2.$
+        </p>
+        <button class="btn-sol" onclick="tog('q2')">Show / Hide Solution</button>
+        <div class="solution" id="q2">
+            <span class="sol-label">Proof.</span>
+            $\left|\dfrac{2n+1}{n+1}-2\right|=\left|\dfrac{2n+1-2(n+1)}{n+1}\right|
+            =\dfrac{1}{n+1}&lt;\dfrac{1}{n}.$
+            Given $\varepsilon&gt;0,$ choose $N&gt;1/\varepsilon.$
+            For $n&gt;N$: the expression $&lt;1/n&lt;\varepsilon.$ $\blacksquare$
+        </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="quiz-card">
+        <p><strong>Q3.</strong>
+            Show that $(-1)^n$ diverges using the definition of convergence.
+        </p>
+        <button class="btn-sol" onclick="tog('q3')">Show / Hide Solution</button>
+        <div class="solution" id="q3">
+            <span class="sol-label">Proof.</span>
+            Suppose $(-1)^n\to L.$ Choose $\varepsilon=\tfrac{1}{2}.$
+            There exists $N$ with $|(-1)^n-L|&lt;\tfrac{1}{2}$ for all $n&gt;N.$
+            For consecutive indices $n,n+1$ both $&gt;N$:
+            $$2=|(-1)^{n+1}-(-1)^n|\le|(-1)^{n+1}-L|+|(-1)^n-L|&lt;\tfrac{1}{2}+\tfrac{1}{2}=1.$$
+            But $2&lt;1$ is a contradiction. Hence $(-1)^n$ diverges. $\blacksquare$
+        </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="quiz-card">
+        <p><strong>Q4.</strong>
+            Suppose $a_n\to L.$ Prove that $(a_n)$ is bounded.
+        </p>
+        <button class="btn-sol" onclick="tog('q4')">Show / Hide Solution</button>
+        <div class="solution" id="q4">
+            <span class="sol-label">Proof.</span>
+            Take $\varepsilon=1.$ There exists $N$ with $|a_n-L|&lt;1$ for all $n&gt;N.$
+            Then $|a_n|=|a_n-L+L|\le|a_n-L|+|L|&lt;1+|L|$ for $n&gt;N.$
+            <br>
+            Set $M=\max(|a_1|,\ldots,|a_N|,\,1+|L|).$ Then $|a_n|\le M$ for all $n.$ $\blacksquare$
+        </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="quiz-card">
+        <p><strong>Q5.</strong>
+            If $a_n\to L$ and $a_n\to M,$ prove $L=M$ directly
+            (re-derive uniqueness without using the $\varepsilon/2$-trick — try $\varepsilon=|L-M|/3$).
+        </p>
+        <button class="btn-sol" onclick="tog('q5')">Show / Hide Solution</button>
+        <div class="solution" id="q5">
+            <span class="sol-label">Proof.</span>
+            Suppose $L\ne M.$ Set $\varepsilon=|L-M|/3&gt;0.$
+            Choose $N_1,N_2$ so the definition holds for each.
+            For $n&gt;\max(N_1,N_2)$:
+            $|L-M|\le|L-a_n|+|a_n-M|&lt;\varepsilon+\varepsilon=\tfrac{2}{3}|L-M|.$
+            But $|L-M|&lt;\tfrac{2}{3}|L-M|$ is impossible. So $L=M.$ $\blacksquare$
+        </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="quiz-card">
+        <p><strong>Q6.</strong>
+            True or False: "The convergence of $(a_n)$ depends on the first $100$ terms."
+            Justify.
+        </p>
+        <button class="btn-sol" onclick="tog('q6')">Show / Hide Solution</button>
+        <div class="solution" id="q6">
+            <span class="sol-label">Answer: False.</span>
+            The definition requires the existence of $N$ beyond which
+            $|a_n-L|&lt;\varepsilon.$ We can always choose $N\ge 100,$ so the first
+            $100$ terms are irrelevant. Changing any finite number of terms of a
+            convergent sequence does not affect convergence or the limit.
+        </div>
+    </div>
+
+    <!-- Q7 (from L8 self-assessment block: Part C Q13–Q17) -->
+    <hr class="section-rule">
+    <h3>Sequences &amp; the $\varepsilon$-$N$ Definition — Connecting to Part C</h3>
+    <p>
+        The following questions are the core bridge between the abstract definition
+        of convergence and working with absolute values.
+    </p>
+
+    <!-- Q13 -->
+    <div class="quiz-card">
+        <p><strong>Q13.</strong>
+            Using the $\varepsilon$-$N$ definition, prove $\dfrac{1}{n}\to 0.$
+        </p>
+        <button class="btn-sol" onclick="tog('s13')">Show / Hide Solution</button>
+        <div class="solution" id="s13">
+            <span class="sol-label">Proof.</span>
+            Let $\varepsilon&gt;0.$ By the Archimedean property, choose $N\in\mathbb{N}$
+            with $N&gt;1/\varepsilon.$
+            For $n\ge N$: $\left|\tfrac{1}{n}-0\right|=\tfrac{1}{n}\le\tfrac{1}{N}&lt;\varepsilon.$
+            $\blacksquare$
+        </div>
+    </div>
+
+    <!-- Q14 -->
+    <div class="quiz-card">
+        <p><strong>Q14.</strong>
+            Suppose $x_n\to x.$ Prove $|x_n|\to|x|.$
+        </p>
+        <button class="btn-sol" onclick="tog('s14')">Show / Hide Solution</button>
+        <div class="solution" id="s14">
+            <span class="sol-label">Proof.</span>
+            By the Reverse Triangle Inequality:
+            $\bigl||x_n|-|x|\bigr|\le|x_n-x|.$
+            Given $\varepsilon&gt;0,$ since $x_n\to x,$ there exists $N$ with
+            $|x_n-x|&lt;\varepsilon$ for all $n\ge N.$
+            Then $\bigl||x_n|-|x|\bigr|&lt;\varepsilon.$ $\blacksquare$
+        </div>
+    </div>
+
+    <!-- Q15 -->
+    <div class="quiz-card">
+        <p><strong>Q15.</strong>
+            Give an example of a divergent sequence $(x_n)$ such that $|x_n|$ converges.
+            What does this show?
+        </p>
+        <button class="btn-sol" onclick="tog('s15')">Show / Hide Solution</button>
+        <div class="solution" id="s15">
+            <span class="sol-label">Answer.</span>
+            $x_n=(-1)^n$ diverges (oscillates between $+1$ and $-1$),
+            but $|x_n|=1$ for all $n,$ so $|x_n|\to 1.$
+            <br><br>
+            This shows $x_n\to x\Rightarrow|x_n|\to|x|$ does <em>not</em> reverse in general.
+            However, $|x_n|\to 0\iff x_n\to 0$ (the special zero-limit case where the
+            converse holds).
+        </div>
+    </div>
+
+    <!-- Q16 -->
+    <div class="quiz-card">
+        <p><strong>Q16.</strong>
+            Suppose $(x_n)$ is bounded ($|x_n|\le M$) and $y_n\to 0.$
+            Prove $x_n y_n\to 0.$
+        </p>
+        <button class="btn-sol" onclick="tog('s16')">Show / Hide Solution</button>
+        <div class="solution" id="s16">
+            <span class="sol-label">Proof.</span>
+            Let $\varepsilon&gt;0.$ Since $y_n\to 0,$ choose $N$ with
+            $|y_n|&lt;\varepsilon/M$ for all $n\ge N.$
+            Then $|x_n y_n|=|x_n||y_n|\le M\cdot\tfrac{\varepsilon}{M}=\varepsilon.$
+            $\blacksquare$
+        </div>
+    </div>
+
+    <!-- Q17 -->
+    <div class="quiz-card">
+        <p><strong>Q17.</strong>
+            Prove: if $|x_n-x|&lt;\dfrac{1}{n}$ for all $n\ge 1,$ then $x_n\to x.$
+        </p>
+        <button class="btn-sol" onclick="tog('s17')">Show / Hide Solution</button>
+        <div class="solution" id="s17">
+            <span class="sol-label">Proof.</span>
+            Given $\varepsilon&gt;0,$ choose $N&gt;1/\varepsilon$ (Archimedean).
+            For $n\ge N$: $|x_n-x|&lt;\tfrac{1}{n}\le\tfrac{1}{N}&lt;\varepsilon.$
+            $\blacksquare$
+        </div>
+    </div>
+</div><!-- /step 10 -->
+
+</div><!-- /.container -->
+
+<!-- CONTROLS -->
+<div class="controls">
+    <span class="key-hint">Press <kbd>Enter</kbd> or <kbd>→</kbd> to advance</span>
+    <div class="progress-wrap">
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="pFill"></div>
+        </div>
+        <span class="progress-label" id="pLbl">0 / 0</span>
+    </div>
+    <button class="btn-next" id="btnNext" onclick="revealNext()">Next &#9654;</button>
+</div>
+
+<script>
+const steps   = document.querySelectorAll('.step');
+const fill    = document.getElementById('pFill');
+const lbl     = document.getElementById('pLbl');
+const btn     = document.getElementById('btnNext');
+let   current = 0;
+
+function updateUI(){
+    fill.style.width=(current/steps.length*100)+'%';
+    lbl.textContent=current+' / '+steps.length;
+    btn.disabled=current>=steps.length;
+    btn.textContent=current>=steps.length?'Done \u2713':'Next \u25B6';
+}
+function revealNext(){
+    if(current>=steps.length)return;
+    const el=steps[current];
+    el.classList.add('visible');
+    if(window.MathJax)MathJax.typesetPromise([el]);
+    current++;
+    updateUI();
+    setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+function tog(id){
+    const s=document.getElementById(id);
+    const show=s.style.display!=='block';
+    s.style.display=show?'block':'none';
+    if(show&&window.MathJax)MathJax.typesetPromise([s]);
+}
+document.addEventListener('keydown',function(e){
+    if(e.key==='Enter'||e.key==='ArrowRight'||
+      (e.key===' '&&e.target.tagName!=='BUTTON')){
+        e.preventDefault();revealNext();
+    }
+});
+window.addEventListener('load',function(){updateUI();revealNext();});
+</script>
+</body>
+</html>

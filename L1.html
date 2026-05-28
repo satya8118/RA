@@ -433,8 +433,16 @@
                             <li>If $a > b$ and $c &lt; 0$, then $ac &lt; bc$ (the inequality flips!).</li>
                         </ul>
                     </li>
-                    <li><strong>Powers:</strong> If $a > b > 0$, then $a^n > b^n$ for any $n \in \mathbb{N}.$
-                        <br><em>Proof:</em> $a^n - b^n = (a-b)(a^{n-1} + a^{n-2}b + \cdots + ab^{n-2} + b^{n-1}) > 0.$
+                    <li><strong>Powers:</strong>Let a,b be positive real numbers.  Then $a > b$ if and only if  $a^n > b^n$ for any $n \in \mathbb{N}.$
+                        <br><em>Proof:</em>
+                        <ul>
+                            <li> Let S=1+r+r^2+\dots+r^{n-1}.$ If $r=1$, then $S=n.$ </li>
+                            <li> If $r\ne 1,$ then $rS-S=r^n-1$ or $S=\frac{r^n-1}{r-1}.$ </li>
+                            <li> $a^n-b^n=b^n((a/b)^n-1)=b^n (a/b-1)(a^{n-1}/b^{n-1}+a^{n-2}/b^{n-2}+\dots+a/b+1).$                                
+                        <li> First notice that  $a^n - b^n = (a-b)(a^{n-1} + a^{n-2}b + \cdots + ab^{n-2} + b^{n-1}) > 0.$</li>
+                            <li> It is clear that $(a^{n-1} + a^{n-2}b + \cdots + ab^{n-2} + b^{n-1}).$  </li>
+                            <li> Hence $a-b>0$ if and only if $a^n -b^n>0.$ </li>
+                            </ul>
                     </li>
                 </ul>
             </div>

@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Algebra of Convergent Sequences </title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5f0e8;
+    --navy: #0d1b3e;
+    --gold: #b8962e;
+    --gold-light: #d4a843;
+    --teal: #2a7c6f;
+    --rust: #c0522a;
+    --slate: #3a4a6b;
+    --muted: #6b7a99;
+    --white: #fefcf8;
+    --p1: #1e5a8a;   /* addition */
+    --p2: #2a6b3a;   /* scalar */
+    --p3: #6b3a7c;   /* product */
+    --p4: #8a4a1e;   /* quotient */
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--cream);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 3rem;
+    background: rgba(13,27,62,0.93);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184,150,46,0.15);
+  }
+
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .nav-links {
+    display: flex; gap: 2rem; list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.5);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+
+  .nav-chapter-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.4em 1em;
+    border: 1px solid rgba(184,150,46,0.4);
+    color: var(--gold);
+    text-decoration: none;
+    border-radius: 2px;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .nav-chapter-link:hover {
+    background: rgba(184,150,46,0.1);
+  }
+
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    nav { padding: 1rem 1.5rem; }
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 5rem 2rem 4rem;
+    position: relative;
+    background:
+      radial-gradient(ellipse 70% 50% at 30% 30%, rgba(107,58,124,0.13) 0%, transparent 65%),
+      radial-gradient(ellipse 60% 45% at 75% 70%, rgba(42,107,58,0.10) 0%, transparent 60%),
+      var(--navy);
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(184,150,46,0.03) 60px),
+      repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(184,150,46,0.03) 60px);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(184,150,46,0.4);
+    padding: 0.4em 1.4em;
+    border-radius: 2px;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeDown 0.8s 0.1s ease forwards;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.6rem, 6.5vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.06;
+    color: var(--white);
+    max-width: 860px;
+    opacity: 0;
+    animation: fadeDown 0.9s 0.25s ease forwards;
+  }
+
+  .hero h1 em { font-style: italic; color: var(--gold-light); }
+
+  .hero-sub {
+    margin-top: 1.8rem;
+    font-size: 1.2rem;
+    font-weight: 300;
+    color: rgba(245,240,232,0.65);
+    max-width: 540px;
+    opacity: 0;
+    animation: fadeDown 1s 0.4s ease forwards;
+  }
+
+  .hero-rule {
+    width: 70px; height: 2px;
+    background: var(--gold);
+    margin: 2.5rem auto;
+    opacity: 0;
+    animation: scaleIn 0.8s 0.55s ease forwards;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  /* the four parts pill row */
+  .hero-parts {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeDown 1s 0.65s ease forwards;
+  }
+
+  .part-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    padding: 0.35em 0.9em;
+    border-radius: 20px;
+    border: 1px solid;
+  }
+
+  .pp1 { border-color: rgba(30,90,138,0.6); color: #7fb3d8; background: rgba(30,90,138,0.12); }
+  .pp2 { border-color: rgba(42,107,58,0.6); color: #7fd4a0; background: rgba(42,107,58,0.12); }
+  .pp3 { border-color: rgba(107,58,124,0.6); color: #c09fdc; background: rgba(107,58,124,0.12); }
+  .pp4 { border-color: rgba(138,74,30,0.6); color: #d4a07f; background: rgba(138,74,30,0.12); }
+
+  .scroll-hint {
+    position: absolute; bottom: 2.5rem; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.2em;
+    color: rgba(245,240,232,0.3); text-transform: uppercase;
+    animation: bob 2s 1.8s ease-in-out infinite;
+  }
+
+  /* ── THEOREM STATEMENT ── */
+  .theorem-banner {
+    background: var(--white);
+    color: var(--navy);
+    padding: 4.5rem 2rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .theorem-banner::after {
+    content: ''; position: absolute;
+    bottom: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .t-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 1.2rem;
+  }
+
+  .theorem-banner h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+    font-weight: 700; color: var(--navy);
+    margin-bottom: 2rem;
+  }
+
+  .thm-box {
+    display: inline-block;
+    background: var(--cream);
+    border-left: 4px solid var(--gold);
+    padding: 2rem 3rem;
+    text-align: left;
+    max-width: 720px;
+    font-size: 1.08rem;
+    color: var(--navy);
+    line-height: 1.8;
+  }
+
+  .thm-box .tn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.22em;
+    color: var(--gold); margin-bottom: 0.7rem;
+    display: block;
+  }
+
+  .thm-parts {
+    margin-top: 1.2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem 2rem;
+  }
+
+  @media (max-width: 580px) { .thm-parts { grid-template-columns: 1fr; } }
+
+  .thm-part {
+    display: flex; align-items: baseline; gap: 0.8rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(13,27,62,0.1);
+  }
+
+  .thm-part:last-child { border-bottom: none; }
+
+  .part-n {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem; font-weight: 500;
+    min-width: 20px;
+  }
+
+  .part-n.n1 { color: var(--p1); }
+  .part-n.n2 { color: var(--p2); }
+  .part-n.n3 { color: var(--p3); }
+  .part-n.n4 { color: var(--p4); }
+
+  .mi {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.88em;
+    background: rgba(13,27,62,0.08);
+    padding: 0.1em 0.4em;
+    border-radius: 2px;
+  }
+
+  /* ── GENERIC SECTION ── */
+  section {
+    padding: 5rem 2rem;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  .sec-header {
+    text-align: center; margin-bottom: 3.5rem;
+  }
+
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 0.8rem;
+  }
+
+  .sec-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.7rem);
+    font-weight: 700; color: var(--white);
+  }
+
+  .sec-header p {
+    margin-top: 1rem; font-size: 1.05rem;
+    color: rgba(245,240,232,0.6); max-width: 560px;
+    margin-left: auto; margin-right: auto;
+  }
+
+  /* ── KEY LEMMAS ── */
+  .lemmas-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 760px) { .lemmas-grid { grid-template-columns: 1fr; } }
+
+  .lemma-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(184,150,46,0.15);
+    border-top: 3px solid var(--gold);
+    border-radius: 4px;
+    padding: 1.8rem;
+  }
+
+  .lemma-card .lc-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 0.6rem;
+  }
+
+  .lemma-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; font-weight: 700;
+    color: var(--white); margin-bottom: 0.6rem;
+  }
+
+  .lemma-card p {
+    font-size: 0.95rem;
+    color: rgba(245,240,232,0.65); line-height: 1.6;
+  }
+
+  .lemma-card .formula {
+    margin-top: 0.8rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem; color: var(--gold-light);
+    background: rgba(184,150,46,0.08);
+    padding: 0.5em 0.9em; border-radius: 2px;
+    display: block;
+  }
+
+  /* ── PROOF CARDS ── */
+  .proof-card {
+    margin-bottom: 4.5rem;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 6px; overflow: hidden;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .proof-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+
+  @media (max-width: 720px) { .proof-card { grid-template-columns: 1fr; } }
+
+  .pc-side {
+    padding: 2.5rem 1.8rem;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .pc-side.s1 { background: rgba(30,90,138,0.18); border-right: 1px solid rgba(30,90,138,0.3); }
+  .pc-side.s2 { background: rgba(42,107,58,0.18); border-right: 1px solid rgba(42,107,58,0.3); }
+  .pc-side.s3 { background: rgba(107,58,124,0.18); border-right: 1px solid rgba(107,58,124,0.3); }
+  .pc-side.s4 { background: rgba(138,74,30,0.18); border-right: 1px solid rgba(138,74,30,0.3); }
+
+  .pc-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem; font-weight: 900;
+    line-height: 1; opacity: 0.12;
+  }
+
+  .pc-num.c1 { color: #7fb3d8; }
+  .pc-num.c2 { color: #7fd4a0; }
+  .pc-num.c3 { color: #c09fdc; }
+  .pc-num.c4 { color: #d4a07f; }
+
+  .pc-type {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.28em;
+    text-transform: uppercase; margin-bottom: 0.4rem;
+  }
+
+  .pc-type.c1 { color: #7fb3d8; }
+  .pc-type.c2 { color: #7fd4a0; }
+  .pc-type.c3 { color: #c09fdc; }
+  .pc-type.c4 { color: #d4a07f; }
+
+  .pc-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; font-weight: 700;
+    color: var(--white); line-height: 1.3; margin-bottom: 0.8rem;
+  }
+
+  .pc-chip {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.1em;
+    padding: 0.25em 0.7em;
+    border: 1px solid currentColor;
+    border-radius: 2px; opacity: 0.65;
+  }
+
+  .pc-chip.c1 { color: #7fb3d8; }
+  .pc-chip.c2 { color: #7fd4a0; }
+  .pc-chip.c3 { color: #c09fdc; }
+  .pc-chip.c4 { color: #d4a07f; }
+
+  .pc-body {
+    padding: 2.5rem 2.8rem;
+    background: rgba(255,255,255,0.025);
+  }
+
+  .pc-body h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--white); margin-bottom: 0.3rem;
+  }
+
+  .strategy-lbl {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--gold);
+    display: block; margin-bottom: 1.4rem;
+  }
+
+  .pc-body p {
+    font-size: 1.02rem;
+    color: rgba(245,240,232,0.75); margin-bottom: 1rem;
+  }
+
+  .proof-steps {
+    list-style: none; margin: 1.3rem 0;
+    border-left: 2px solid rgba(184,150,46,0.2);
+    padding-left: 1.5rem;
+  }
+
+  .proof-steps li {
+    padding: 0.45rem 0;
+    font-size: 1rem;
+    color: rgba(245,240,232,0.78);
+    position: relative;
+  }
+
+  .proof-steps li::before {
+    content: '◆';
+    position: absolute; left: -1.55rem;
+    font-size: 0.48rem; color: var(--gold);
+    top: 0.65rem;
+  }
+
+  /* numbered equation block */
+  .eq-block {
+    margin: 1.3rem 0;
+    background: rgba(13,27,62,0.55);
+    border: 1px solid rgba(184,150,46,0.18);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .eq-row {
+    display: flex; align-items: center;
+    gap: 1rem; padding: 0.75rem 1.5rem;
+    border-bottom: 1px solid rgba(184,150,46,0.08);
+  }
+
+  .eq-row:last-child { border-bottom: none; }
+
+  .eq-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem; color: var(--muted);
+    min-width: 36px; text-align: right;
+    flex-shrink: 0;
+  }
+
+  .eq-formula {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem; color: var(--cream);
+    flex: 1;
+  }
+
+  .eq-comment {
+    font-size: 0.82rem; color: rgba(245,240,232,0.4);
+    font-style: italic;
+    white-space: nowrap;
+  }
+
+  .key-insight {
+    margin-top: 1.5rem; padding: 1rem 1.5rem;
+    border-left: 3px solid var(--gold);
+    background: rgba(184,150,46,0.06);
+    font-size: 0.97rem;
+    color: rgba(245,240,232,0.8);
+  }
+
+  .key-insight strong {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--gold-light);
+    display: block; margin-bottom: 0.3rem;
+  }
+
+  .caution-box {
+    margin-top: 1.2rem; padding: 1rem 1.4rem;
+    border: 1px solid rgba(192,82,42,0.3);
+    border-radius: 3px;
+    background: rgba(192,82,42,0.06);
+    font-size: 0.93rem;
+    color: rgba(245,240,232,0.7);
+  }
+
+  .caution-box .c-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: #e09070;
+    display: block; margin-bottom: 0.3rem;
+  }
+
+  /* ── TECHNIQUE SPOTLIGHT ── */
+  .technique-section {
+    background: var(--white);
+    padding: 5rem 2rem;
+    color: var(--navy);
+  }
+
+  .technique-section .sec-header h2 { color: var(--navy); }
+  .technique-section .eyebrow { color: var(--gold); }
+  .technique-section .sec-header p { color: rgba(13,27,62,0.55); }
+
+  .techniques-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 700px) { .techniques-grid { grid-template-columns: 1fr; } }
+
+  .tech-card {
+    background: var(--cream);
+    border-radius: 6px;
+    padding: 2rem 2.2rem;
+    border-left: 4px solid;
+  }
+
+  .tech-card.t1 { border-color: #1e5a8a; }
+  .tech-card.t2 { border-color: #2a6b3a; }
+  .tech-card.t3 { border-color: #6b3a7c; }
+  .tech-card.t4 { border-color: #8a4a1e; }
+
+  .tech-card .tc-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.25em;
+    text-transform: uppercase; margin-bottom: 0.5rem;
+  }
+
+  .tech-card.t1 .tc-label { color: #1e5a8a; }
+  .tech-card.t2 .tc-label { color: #2a6b3a; }
+  .tech-card.t3 .tc-label { color: #6b3a7c; }
+  .tech-card.t4 .tc-label { color: #8a4a1e; }
+
+  .tech-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; font-weight: 700;
+    color: var(--navy); margin-bottom: 0.7rem;
+  }
+
+  .tech-card p {
+    font-size: 0.97rem;
+    color: rgba(13,27,62,0.65); line-height: 1.65;
+  }
+
+  .tech-card .formula-light {
+    margin-top: 0.9rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    background: white;
+    border: 1px solid rgba(13,27,62,0.12);
+    padding: 0.6em 1em; border-radius: 3px;
+    color: var(--navy); display: block;
+    line-height: 1.7;
+  }
+
+  /* ── SUMMARY TABLE ── */
+  .summary-section {
+    padding: 5rem 2rem;
+    max-width: 1000px; margin: 0 auto;
+  }
+
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: 0.97rem;
+  }
+
+  thead tr { border-bottom: 2px solid var(--gold); }
+
+  thead th {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--gold);
+    padding: 1rem 1.3rem; text-align: left;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid rgba(184,150,46,0.1);
+    transition: background 0.2s;
+  }
+
+  tbody tr:hover { background: rgba(184,150,46,0.05); }
+
+  tbody td {
+    padding: 1rem 1.3rem;
+    color: rgba(245,240,232,0.8);
+    vertical-align: middle;
+  }
+
+  .ptag {
+    display: inline-block;
+    padding: 0.22em 0.65em; border-radius: 2px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.08em; font-weight: 500;
+  }
+
+  .pt1 { background: rgba(30,90,138,0.25); color: #7fb3d8; border: 1px solid rgba(30,90,138,0.45); }
+  .pt2 { background: rgba(42,107,58,0.25); color: #7fd4a0; border: 1px solid rgba(42,107,58,0.45); }
+  .pt3 { background: rgba(107,58,124,0.25); color: #c09fdc; border: 1px solid rgba(107,58,124,0.45); }
+  .pt4 { background: rgba(138,74,30,0.25); color: #d4a07f; border: 1px solid rgba(138,74,30,0.45); }
+
+  /* ── SVG DIAGRAMS ── */
+  .diag-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    max-width: 900px; margin: 0 auto;
+  }
+
+  @media (max-width: 680px) { .diag-grid { grid-template-columns: 1fr; } }
+
+  .diag-card {
+    background: var(--cream); border-radius: 6px;
+    padding: 1.8rem;
+    border-top: 4px solid;
+    color: var(--navy);
+  }
+
+  .diag-card.dc1 { border-color: #1e5a8a; }
+  .diag-card.dc2 { border-color: #2a6b3a; }
+  .diag-card.dc3 { border-color: #6b3a7c; }
+  .diag-card.dc4 { border-color: #8a4a1e; }
+
+  .diag-card .dsub {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem; letter-spacing: 0.22em;
+    text-transform: uppercase; margin-bottom: 0.4rem;
+  }
+
+  .diag-card.dc1 .dsub { color: #1e5a8a; }
+  .diag-card.dc2 .dsub { color: #2a6b3a; }
+  .diag-card.dc3 .dsub { color: #6b3a7c; }
+  .diag-card.dc4 .dsub { color: #8a4a1e; }
+
+  .diag-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem; font-weight: 700;
+    color: var(--navy); margin-bottom: 1rem;
+  }
+
+  .diag-card .diag-wrap {
+    background: white; border-radius: 4px;
+    overflow: hidden; margin-bottom: 0.9rem;
+  }
+
+  .diag-card p {
+    font-size: 0.9rem; color: rgba(13,27,62,0.6); line-height: 1.55;
+  }
+
+  /* ── FOOTER / COMBINE SECTION ── */
+  .combine-section {
+    background: rgba(184,150,46,0.05);
+    border-top: 1px solid rgba(184,150,46,0.2);
+    border-bottom: 1px solid rgba(184,150,46,0.2);
+    padding: 3.5rem 2rem; text-align: center;
+  }
+
+  .combine-section p {
+    font-size: 1rem; color: rgba(245,240,232,0.55);
+    max-width: 540px; margin: 0.8rem auto 0;
+    font-style: italic;
+  }
+
+  .combine-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 700;
+    color: var(--white);
+  }
+
+  .btn-link {
+    display: inline-block; margin-top: 1.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.2em;
+    text-transform: uppercase; text-decoration: none;
+    padding: 0.7em 2em;
+    border: 1px solid rgba(184,150,46,0.5);
+    color: var(--gold); border-radius: 2px;
+    transition: background 0.2s;
+  }
+
+  .btn-link:hover { background: rgba(184,150,46,0.1); }
+
+  footer {
+    text-align: center; padding: 2.5rem 2rem;
+    border-top: 1px solid rgba(184,150,46,0.12);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.18em;
+    color: rgba(245,240,232,0.22); text-transform: uppercase;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scaleIn {
+    to { transform: scaleX(1); }
+  }
+
+  @keyframes bob {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50%       { transform: translateX(-50%) translateY(7px); }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">Theorem </span>
+  <ul class="nav-links">
+    <li><a href="#theorem">Statement</a></li>
+    <li><a href="#proofs">Proofs</a></li>
+    <li><a href="#techniques">Techniques</a></li>
+    <li><a href="#summary">Summary</a></li>
+  </ul>
+  <a class="nav-chapter-link" href="global_boundedness.html">←  Lecture 10</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Real Analysis (algebra of limits)</div>
+  <h1>Algebra of <em>Convergent</em> Sequences</h1>
+  <div class="hero-sub">How limits interact with arithmetic — the four fundamental operations on convergent sequences</div>
+  <div class="hero-rule"></div>
+  <div class="hero-parts">
+    <span class="part-pill pp1">(1) Addition</span>
+    <span class="part-pill pp2">(2) Scalar Multiple</span>
+    <span class="part-pill pp3">(3) Product</span>
+    <span class="part-pill pp4">(4) Quotient</span>
+  </div>
+  <div class="scroll-hint">↓ Scroll to explore</div>
+</div>
+
+<!-- THEOREM STATEMENT -->
+<div class="theorem-banner" id="theorem">
+  <div class="t-label">Theorem — Algebra of Convergent Sequences</div>
+  <h2>The Theorem Statement</h2>
+  <div class="thm-box">
+    <span class="tn">THEOREM </span>
+    <p>Let <span class="mi">xₙ → x</span>, <span class="mi">yₙ → y</span>, and <span class="mi">α ∈ ℝ</span>. Then:</p>
+    <div class="thm-parts">
+      <div class="thm-part">
+        <span class="part-n n1">(1)</span>
+        <span><span class="mi">xₙ + yₙ → x + y</span></span>
+      </div>
+      <div class="thm-part">
+        <span class="part-n n2">(2)</span>
+        <span><span class="mi">αxₙ → αx</span></span>
+      </div>
+      <div class="thm-part">
+        <span class="part-n n3">(3)</span>
+        <span><span class="mi">xₙyₙ → xy</span></span>
+      </div>
+      <div class="thm-part">
+        <span class="part-n n4">(4)</span>
+        <span><span class="mi">xₙ/yₙ → x/y</span> &nbsp;(provided <span class="mi">y ≠ 0</span>)</span>
+      </div>
+    </div>
+    <p style="margin-top:1.2rem; font-size:0.93rem; color:rgba(13,27,62,0.6); font-style:italic;">
+      Note for (4): We know that , there exists N ∈ ℕ such that yₙ ≠ 0 for all n ≥ N, so 1/yₙ is eventually well-defined.
+    </p>
+  </div>
+</div>
+
+<!-- PREREQUISITE LEMMAS -->
+<div style="background: rgba(255,255,255,0.015); border-top:1px solid rgba(184,150,46,0.12); border-bottom:1px solid rgba(184,150,46,0.12);">
+  <section>
+    <div class="sec-header reveal">
+      <div class="eyebrow">Prerequisites</div>
+      <h2>Key Lemmas Used in the Proofs</h2>
+      <p>Each proof strategy builds on these foundational results discussed earlier.</p>
+    </div>
+    <div class="lemmas-grid">
+      <div class="lemma-card reveal">
+        <div class="lc-label">Triangle Inequality</div>
+        <h4>The Core Estimating Tool</h4>
+        <p>Used in every part to split error estimates into manageable pieces involving |xₙ − x| and |yₙ − y| separately.</p>
+        <span class="formula">|a + b| ≤ |a| + |b|</span>
+      </div>
+      <div class="lemma-card reveal" style="transition-delay:0.1s">
+        <div class="lc-label">Proposition </div>
+        <h4>Convergent ⟹ Bounded</h4>
+        <p>Every convergent sequence is bounded. Used crucially in Part (3) to bound |xₙ| ≤ C, and in Part (4) to keep |yₙ| away from zero.</p>
+        <span class="formula">xₙ → x ⟹ ∃C&gt;0: |xₙ| ≤ C ∀n</span>
+      </div>
+      <div class="lemma-card reveal" style="transition-delay:0.2s">
+        <div class="lc-label">Proposition </div>
+        <h4>Non-zero Limit ⟹ Eventually Non-zero</h4>
+        <p>If yₙ → y ≠ 0, then eventually |yₙ| &gt; |y|/2 This provides the lower bound on |yₙ| needed in the quotient proof.</p>
+        <span class="formula">y ≠ 0 ⟹ ∃N: n≥N ⟹ |yₙ| &gt; |y|/2</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- PROOFS -->
+<section id="proofs">
+  <div class="sec-header reveal">
+    <div class="eyebrow">Proof Strategies</div>
+    <h2>The Four Proofs in Detail</h2>
+    <p>Each part requires a custom estimation strategy — here is the complete architecture of each argument.</p>
+  </div>
+
+  <!-- PROOF 1 : ADDITION -->
+  <div class="proof-card reveal">
+    <div class="pc-side s1">
+      <div>
+        <div class="pc-type c1">Part (1)</div>
+        <div class="pc-title">Sum of Sequences</div>
+        <span class="pc-chip c1">Triangle Inequality</span>
+      </div>
+      <div class="pc-num c1">①</div>
+    </div>
+    <div class="pc-body">
+      <h3>Proof of (1) — Addition</h3>
+      <span class="strategy-lbl">Strategy:
+       Split the error using the Triangle Inequality</span>
+
+      <p>We need to estimate <span class="mi">|xₙ + yₙ − (x + y)|</span>. Rearranging:</p>
+      <div class="eq-block">
+        <div class="eq-row">
+          <span class="eq-num"></span>
+          <span class="eq-formula">|xₙ + yₙ − (x+y)| = |(xₙ−x) + (yₙ−y)| ≤ |xₙ−x| + |yₙ−y|</span>
+          <span class="eq-comment">Triangle ineq.</span>
+        </div>
+      </div>
+
+      <p>Since xₙ → x and yₙ → y, we can make each term on the right smaller than ε/2 independently. Let ε &gt; 0 be given.</p>
+
+      <ul class="proof-steps">
+        <li>Since xₙ → x, ∃ n₁ ∈ ℕ such that n ≥ n₁ ⟹ |xₙ − x| &lt; ε/2</li>
+        <li>Since yₙ → y, ∃ n₂ ∈ ℕ such that n ≥ n₂ ⟹ |yₙ − y| &lt; ε/2</li>
+        <li>Choose N = max{n₁, n₂}. For all n ≥ N both estimates hold simultaneously</li>
+        <li>Therefore: |xₙ + yₙ − (x+y)| ≤ |xₙ−x| + |yₙ−y| &lt; ε/2 + ε/2 = ε □</li>
+      </ul>
+
+      <div class="key-insight">
+        <strong>Key Insight</strong>
+        The ε/2 split is the standard device for adding two independent error terms. The N = max{n₁, n₂} ensures both estimates are active at the same time.
+      </div>
+    </div>
+  </div>
+
+  <!-- PROOF 2 : SCALAR -->
+  <div class="proof-card reveal">
+    <div class="pc-side s2">
+      <div>
+        <div class="pc-type c2">Part (2)</div>
+        <div class="pc-title">Scalar Multiple</div>
+        <span class="pc-chip c2">Case Split on α</span>
+      </div>
+      <div class="pc-num c2">②</div>
+    </div>
+    <div class="pc-body">
+      <h3>Proof of (2) — Scalar Multiple</h3>
+      <span class="strategy-lbl">Strategy: Factor out |α|, handle the α = 0 edge case</span>
+
+      <p>We estimate <span class="mi">|αxₙ − αx| = |α||xₙ − x|</span>. The natural temptation is to choose N such that |xₙ − x| &lt; ε/|α|. But if α = 0, division is undefined.</p>
+
+      <div class="caution-box">
+        <span class="c-label">⚠ Edge Case: α = 0</span>
+        If α = 0, then αxₙ = 0 for all n, which is a constant sequence converging to 0 = α·x. The result holds trivially. So we may assume α ≠ 0 for the rest of the proof.
+      </div>
+
+      <p style="margin-top:1.2rem;">Now assume α ≠ 0. Let ε &gt; 0 be given.</p>
+
+      <ul class="proof-steps">
+        <li>Since xₙ → x and α ≠ 0, choose N ∈ ℕ such that n ≥ N ⟹ |xₙ − x| &lt; ε/|α|</li>
+        <li>Then for all n ≥ N:</li>
+      </ul>
+
+      <div class="eq-block">
+        <div class="eq-row">
+          <span class="eq-num"></span>
+          <span class="eq-formula">|αxₙ − αx| = |α| · |xₙ − x| &lt; |α| · ε/|α| = ε &nbsp; □</span>
+        </div>
+      </div>
+
+      <div class="key-insight">
+        <strong>Key Insight</strong>
+        Always check edge cases before dividing. The α = 0 case is a degenerate but valid scenario that requires separate (trivial) treatment.
+      </div>
+    </div>
+  </div>
+
+  <!-- PROOF 3 : PRODUCT -->
+  <div class="proof-card reveal">
+    <div class="pc-side s3">
+      <div>
+        <div class="pc-type c3">Part (3)</div>
+        <div class="pc-title">Product of Sequences</div>
+        <span class="pc-chip c3">Add &amp; Subtract Cross Term</span>
+      </div>
+      <div class="pc-num c3">③</div>
+    </div>
+    <div class="pc-body">
+      <h3>Proof of (3) — Product</h3>
+      <span class="strategy-lbl">Strategy: Introduce cross term xₙy, use boundedness of {xₙ}</span>
+
+      <p>Estimating <span class="mi">|xₙyₙ − xy|</span> directly is awkward because both xₙ and yₙ are moving. The trick is to <em>add and subtract the cross term xₙy</em>, linking the error to the individual errors |xₙ − x| and |yₙ − y| separately:</p>
+
+      <div class="eq-block">
+        <div class="eq-row">
+          <span class="eq-num"></span>
+          <span class="eq-formula">|xₙyₙ − xy| = |xₙyₙ − xₙy + xₙy − xy|</span>
+          <span class="eq-comment">add &amp; subtract xₙy</span>
+        </div>
+        <div class="eq-row">
+          <span class="eq-num"></span>
+          <span class="eq-formula">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;≤ |xₙ||yₙ − y| + |y||xₙ − x|</span>
+          <span class="eq-comment">triangle ineq.</span>
+        </div>
+        <div class="eq-row">
+          <span class="eq-num"></span>
+          <span class="eq-formula">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;≤ C|yₙ − y| + |y||xₙ − x|</span>
+          <span class="eq-comment">|xₙ| ≤ C (bounded)</span>
+        </div>
+      </div>
+
+      <p>Since {xₙ} is convergent it is bounded, hence ∃ C &gt; 0 with |xₙ| ≤ C for all n. Let ε &gt; 0 be given.</p>
+
+      <ul class="proof-steps">
+        <li>Choose n₁ such that k ≥ n₁ ⟹ |yₖ − y| &lt; ε/(2C)</li>
+        <li>Choose n₂ such that k ≥ n₂ ⟹ |xₖ − x| &lt; ε/(2(|y|+1))</li>
+        <li>Note: we use |y|+1 (not |y|) as the denominator to avoid dividing by zero when y = 0</li>
+        <li>Set N = max{n₁, n₂}. For all k ≥ N:</li>
+      </ul>
+
+      <div class="eq-block">
+        <div class="eq-row">
+          <span class="eq-num">(2.1)</span>
+          <span class="eq-formula">|xₖyₖ − xy| ≤ C|yₖ−y| + |y||xₖ−x|</span>
+        </div>
+        <div class="eq-row">
+          <span class="eq-num">(2.2)</span>
+          <span class="eq-formula">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;≤ C · ε/(2C) + |y| · ε/(2(|y|+1))</span>
+        </div>
+        <div class="eq-row">
+          <span class="eq-num">(2.3)</span>
+          <span class="eq-formula">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= ε/2 + |y|ε/(2(|y|+1)) &lt; ε/2 + ε/2 = ε &nbsp; □</span>
+        </div>
+      </div>
+
+      <div class="caution-box">
+        <span class="c-label">⚠ Why (|y|+1) and not |y|?</span>
+        Using |y|+1 as the denominator ensures we don't divide by zero when y = 0, and it gives the clean bound |y|/(|y|+1) &lt; 1, making the final inequality valid regardless of the value of y.
+      </div>
+
+      <div class="key-insight">
+        <strong>Key Insight</strong>
+        The add-and-subtract trick is a cornerstone of real analysis: introduce the "missing link" xₙy to break a two-variable error into a sum of one-variable errors, each of which you can estimate independently.
+      </div>
+    </div>
+  </div>
+
+  <!-- PROOF 4 : QUOTIENT -->
+  <div class="proof-card reveal">
+    <div class="pc-side s4">
+      <div>
+        <div class="pc-type c4">Part (4)</div>
+        <div class="pc-title">Quotient of Sequences</div>
+        <span class="pc-chip c4">Lower Bound on |yₙ|</span>
+      </div>
+      <div class="pc-num c4">④</div>
+    </div>
+    <div class="pc-body">
+      <h3>Proof of (4) — Quotient</h3>
+      <span class="strategy-lbl">Strategy: Prove 1/yₙ → 1/y first; then apply Part (3)</span>
+
+      <p>It suffices to show <span class="mi">1/yₙ → 1/y</span>, since then xₙ/yₙ = xₙ · (1/yₙ) → x · (1/y) by Part (3). We estimate:</p>
+
+      <div class="eq-block">
+        <div class="eq-row">
+          <span class="eq-num"></span>
+          <span class="eq-formula">|1/yₙ − 1/y| = |y − yₙ| / (|yₙ| · |y|)</span>
+          <span class="eq-comment">common denominator</span>
+        </div>
+      </div>
+
+      <p>To control this, we need a <strong>lower bound</strong> on |yₙ|. Since yₙ → y ≠ 0, there exists n₁ ∈ ℕ such that:</p>
+
+      <div class="eq-block">
+        <div class="eq-row">
+          <span class="eq-num">(2.3)</span>
+          <span class="eq-formula">k ≥ n₁ &nbsp;⟹&nbsp; |yₖ| &gt; |y|/2</span>
+          <span class="eq-comment"></span>
+        </div>
+      </div>
+
+      <p>For all k ≥ n₁, using the lower bound |yₖ| &gt; |y|/2:</p>
+
+      <div class="eq-block">
+        <div class="eq-row">
+          <span class="eq-num"></span>
+          <span class="eq-formula">|1/yₖ − 1/y| = |yₖ − y| / (|yₖ| · |y|) &lt; (2/|y|²) · |yₖ − y|</span>
+          <span class="eq-comment">substitute lower bound</span>
+        </div>
+      </div>
+
+      <p>Now we can make |yₖ − y| small. Since yₙ → y, choose n₂ ∈ ℕ such that:</p>
+
+      <div class="eq-block">
+        <div class="eq-row">
+          <span class="eq-num">(2.5)</span>
+          <span class="eq-formula">k ≥ n₂ &nbsp;⟹&nbsp; |yₖ − y| &lt; |y|²ε / 2</span>
+        </div>
+      </div>
+
+      <ul class="proof-steps">
+        <li>Choose N = max{n₁, n₂}. For all k ≥ N both estimates hold</li>
+        <li>Combine: |1/yₖ − 1/y| &lt; (2/|y|²) · (|y|²ε/2) = ε</li>
+        <li>This proves 1/yₙ → 1/y. Apply Part (3): xₙ/yₙ = xₙ · (1/yₙ) → x · (1/y) = x/y □</li>
+      </ul>
+
+      <div class="key-insight">
+        <strong>Key Insight</strong>
+        When you have a denominator converging to something, the danger is it might pass through zero and blow up. The essential lower bound |yₙ| &gt; |y|/2 that prevents this catastrophe.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECHNIQUE SPOTLIGHT (white section) -->
+<div class="technique-section" id="techniques">
+  <div style="max-width:1080px; margin:0 auto;">
+    <div class="sec-header reveal">
+      <div class="eyebrow">Master Techniques</div>
+      <h2>The Toolbox Behind All Four Proofs</h2>
+      <p>These four recurring strategies appear throughout real analysis — mastering them here pays dividends everywhere.</p>
+    </div>
+    <div class="techniques-grid">
+      <div class="tech-card t1 reveal">
+        <div class="tc-label">Technique 1</div>
+        <h4>The ε/2 — ε/2 Split</h4>
+        <p>When bounding a sum of two terms, allocate ε/2 to each independently. Then N = max{n₁, n₂} ensures both bounds hold simultaneously. Generalizes to ε/k for k terms.</p>
+        <span class="formula-light">Let ε &gt; 0. Choose n₁: |xₙ−x| &lt; ε/2
+Choose n₂: |yₙ−y| &lt; ε/2
+N = max{n₁,n₂} ⟹ sum &lt; ε</span>
+      </div>
+
+      <div class="tech-card t2 reveal" style="transition-delay:0.1s">
+        <div class="tc-label">Technique 2</div>
+        <h4>Add &amp; Subtract a Cross Term</h4>
+        <p>The key maneuver for products. Insert the intermediate term xₙy (or xyₙ) to bridge between the "old" product xy and the "new" product xₙyₙ, splitting the error into parts you can control.</p>
+        <span class="formula-light">xₙyₙ − xy
+= (xₙyₙ − xₙy) + (xₙy − xy)
+= xₙ(yₙ−y) + y(xₙ−x)</span>
+      </div>
+
+      <div class="tech-card t3 reveal" style="transition-delay:0.1s">
+        <div class="tc-label">Technique 3</div>
+        <h4>Boundedness as a Constant Factor</h4>
+        <p>Convergent sequences are bounded. Replacing the moving term |xₙ| with a fixed constant C converts a two-moving-parts problem into a one-moving-part problem. Use |y|+1 to handle the y=0 edge case cleanly.</p>
+        <span class="formula-light">|xₙ| ≤ C for all n
+⟹ C|yₙ−y| → 0 as yₙ → y
+(C is a fixed multiplier, not a problem)</span>
+      </div>
+
+      <div class="tech-card t4 reveal" style="transition-delay:0.2s">
+        <div class="tc-label">Technique 4</div>
+        <h4>Lower Bounding a Denominator</h4>
+        <p>When dealing with reciprocals, you need |yₙ| bounded <em>away from zero</em>. We have |yₙ| &gt; |y|/2 eventually. This gives the upper bound 1/|yₙ| &lt; 2/|y| needed to control the reciprocal error.</p>
+        <span class="formula-light">|yₙ| &gt; |y|/2
+⟹ 1/|yₙ| &lt; 2/|y|
+⟹ |1/yₙ − 1/y| &lt; (2/|y|²)|yₙ−y|</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VISUAL DIAGRAMS -->
+<div style="background: rgba(255,255,255,0.015); border-top:1px solid rgba(184,150,46,0.12);">
+  <section>
+    <div class="sec-header reveal">
+      <div class="eyebrow">Visual Intuition</div>
+      <h2>Error Estimation Geometry</h2>
+      <p>How each proof "squeezes" the error term to zero.</p>
+    </div>
+    <div class="diag-grid">
+      <!-- Diagram 1: Addition -->
+      <div class="diag-card dc1 reveal">
+        <div class="dsub">Part 1 — Addition</div>
+        <h4>Two Arrows, One Target</h4>
+        <div class="diag-wrap">
+          <svg viewBox="0 0 280 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+            <rect width="280" height="140" fill="#f8f5ef"/>
+            <!-- number line -->
+            <line x1="20" y1="70" x2="260" y2="70" stroke="#1e2a4a" stroke-width="1.5"/>
+            <!-- x and xn -->
+            <circle cx="100" cy="70" r="5" fill="#1e5a8a"/>
+            <text x="97" y="90" font-size="10" fill="#1e5a8a" font-family="serif" font-style="italic">x</text>
+            <circle cx="130" cy="70" r="5" fill="#7fb3d8" opacity="0.8"/>
+            <text x="127" y="90" font-size="10" fill="#7fb3d8" font-family="serif" font-style="italic">xₙ</text>
+            <line x1="100" y1="62" x2="130" y2="62" stroke="#1e5a8a" stroke-width="1.5" marker-end="url(#a1)"/>
+            <text x="110" y="55" font-size="8" fill="#1e5a8a" font-family="monospace">|xₙ−x| &lt; ε/2</text>
+            <!-- y and yn -->
+            <circle cx="170" cy="70" r="5" fill="#2a6b3a"/>
+            <text x="167" y="90" font-size="10" fill="#2a6b3a" font-family="serif" font-style="italic">y</text>
+            <circle cx="200" cy="70" r="5" fill="#7fd4a0" opacity="0.8"/>
+            <text x="197" y="90" font-size="10" fill="#7fd4a0" font-family="serif" font-style="italic">yₙ</text>
+            <line x1="170" y1="62" x2="200" y2="62" stroke="#2a6b3a" stroke-width="1.5"/>
+            <text x="172" y="55" font-size="8" fill="#2a6b3a" font-family="monospace">|yₙ−y| &lt; ε/2</text>
+            <!-- combined -->
+            <text x="115" y="118" font-size="8" fill="#b8962e" font-family="monospace">|(xₙ+yₙ)−(x+y)| &lt; ε</text>
+            <defs>
+              <marker id="a1" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                <path d="M0,0 L6,3 L0,6 Z" fill="#1e5a8a"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+        <p>Split ε equally between the two independent errors; take N large enough for both.</p>
+      </div>
+
+      <!-- Diagram 2: Scalar -->
+      <div class="diag-card dc2 reveal" style="transition-delay:0.1s">
+        <div class="dsub">Part 2 — Scalar</div>
+        <h4>Stretching the Error</h4>
+        <div class="diag-wrap">
+          <svg viewBox="0 0 280 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+            <rect width="280" height="140" fill="#f8f5ef"/>
+            <line x1="20" y1="70" x2="260" y2="70" stroke="#1e2a4a" stroke-width="1.5"/>
+            <!-- original -->
+            <circle cx="80" cy="70" r="5" fill="#2a6b3a"/>
+            <circle cx="110" cy="70" r="5" fill="#7fd4a0" opacity="0.8"/>
+            <line x1="80" y1="58" x2="110" y2="58" stroke="#2a6b3a" stroke-width="1.5"/>
+            <text x="82" y="52" font-size="8" fill="#2a6b3a" font-family="monospace">|xₙ−x| &lt; ε/|α|</text>
+            <text x="77" y="88" font-size="10" fill="#2a6b3a" font-family="serif" font-style="italic">x</text>
+            <text x="107" y="88" font-size="10" fill="#7fd4a0" font-family="serif" font-style="italic">xₙ</text>
+            <!-- scaled (alpha > 1 shown) -->
+            <circle cx="160" cy="70" r="5" fill="#2a6b3a"/>
+            <circle cx="220" cy="70" r="5" fill="#7fd4a0" opacity="0.8"/>
+            <line x1="160" y1="58" x2="220" y2="58" stroke="#b8962e" stroke-width="2"/>
+            <text x="178" y="52" font-size="8" fill="#b8962e" font-family="monospace">|α|·|xₙ−x| &lt; ε</text>
+            <text x="155" y="88" font-size="10" fill="#2a6b3a" font-family="serif" font-style="italic">αx</text>
+            <text x="215" y="88" font-size="10" fill="#7fd4a0" font-family="serif" font-style="italic">αxₙ</text>
+            <text x="130" y="113" font-size="8" fill="#6b7a99" font-family="serif" font-style="italic">scaling by |α| stretches the gap</text>
+          </svg>
+        </div>
+        <p>Multiplying by |α| scales the gap. Choose the original gap smaller than ε/|α| to compensate.</p>
+      </div>
+
+      <!-- Diagram 3: Product -->
+      <div class="diag-card dc3 reveal" style="transition-delay:0.1s">
+        <div class="dsub">Part 3 — Product</div>
+        <h4>The Cross-Term Bridge</h4>
+        <div class="diag-wrap">
+          <svg viewBox="0 0 280 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+            <rect width="280" height="140" fill="#f8f5ef"/>
+            <!-- Three points on line -->
+            <line x1="20" y1="75" x2="260" y2="75" stroke="#1e2a4a" stroke-width="1.5"/>
+            <circle cx="50" cy="75" r="5" fill="#2a6b3a"/>
+            <text x="42" y="95" font-size="9" fill="#2a6b3a" font-family="serif" font-style="italic">xy</text>
+            <circle cx="150" cy="75" r="5" fill="#6b3a7c"/>
+            <text x="137" y="95" font-size="9" fill="#6b3a7c" font-family="serif" font-style="italic">xₙy</text>
+            <text x="130" y="110" font-size="7.5" fill="#6b3a7c" font-family="monospace">cross term</text>
+            <circle cx="240" cy="75" r="5" fill="#7fb3d8"/>
+            <text x="228" y="95" font-size="9" fill="#7fb3d8" font-family="serif" font-style="italic">xₙyₙ</text>
+            <!-- arrows -->
+            <line x1="50" y1="65" x2="150" y2="65" stroke="#2a6b3a" stroke-width="1.5"/>
+            <text x="85" y="58" font-size="7.5" fill="#2a6b3a" font-family="monospace">|y||xₙ−x|</text>
+            <line x1="150" y1="55" x2="240" y2="55" stroke="#6b3a7c" stroke-width="1.5"/>
+            <text x="175" y="48" font-size="7.5" fill="#6b3a7c" font-family="monospace">C|yₙ−y|</text>
+            <line x1="50" y1="40" x2="240" y2="40" stroke="#b8962e" stroke-width="1.5" stroke-dasharray="4,2"/>
+            <text x="115" y="33" font-size="7.5" fill="#b8962e" font-family="monospace">total ≤ ε</text>
+          </svg>
+        </div>
+        <p>The cross term xₙy creates two one-variable jumps that can each be bounded independently.</p>
+      </div>
+
+      <!-- Diagram 4: Quotient -->
+      <div class="diag-card dc4 reveal" style="transition-delay:0.2s">
+        <div class="dsub">Part 4 — Quotient</div>
+        <h4>Keeping the Denominator Safe</h4>
+        <div class="diag-wrap">
+          <svg viewBox="0 0 280 140" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+            <rect width="280" height="140" fill="#f8f5ef"/>
+            <!-- number line -->
+            <line x1="20" y1="70" x2="260" y2="70" stroke="#1e2a4a" stroke-width="1.5"/>
+            <!-- zero -->
+            <circle cx="50" cy="70" r="4" fill="#e09070" opacity="0.6"/>
+            <text x="44" y="90" font-size="9" fill="#e09070" font-family="monospace">0</text>
+            <text x="30" y="110" font-size="7.5" fill="#e09070" font-family="monospace">DANGER ZONE</text>
+            <!-- safe zone -->
+            <rect x="110" y="55" width="120" height="30" rx="3" fill="rgba(42,107,58,0.12)" stroke="rgba(42,107,58,0.4)" stroke-width="1" stroke-dasharray="4,2"/>
+            <text x="140" y="50" font-size="7.5" fill="#2a6b3a" font-family="monospace">|yₙ| &gt; |y|/2</text>
+            <!-- y/2 -->
+            <circle cx="120" cy="70" r="4" fill="#b8962e"/>
+            <text x="110" y="90" font-size="8.5" fill="#b8962e" font-family="serif" font-style="italic">|y|/2</text>
+            <!-- y -->
+            <circle cx="200" cy="70" r="5" fill="#2a6b3a"/>
+            <text x="196" y="90" font-size="9" fill="#2a6b3a" font-family="serif" font-style="italic">y</text>
+            <!-- yn range -->
+            <circle cx="175" cy="70" r="5" fill="#7fd4a0" opacity="0.9"/>
+            <text x="168" y="90" font-size="9" fill="#7fd4a0" font-family="serif" font-style="italic">yₙ</text>
+            <text x="90" y="125" font-size="7.5" fill="#8a4a1e" font-family="monospace">yₙ stays away from 0 for n ≥ N</text>
+          </svg>
+        </div>
+        <p>Prop. 2.1.22 guarantees yₙ stays in a safe zone bounded away from zero, controlling the reciprocal error.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- SUMMARY TABLE -->
+<div class="summary-section" id="summary">
+  <div class="sec-header reveal">
+    <div class="eyebrow">Quick Reference</div>
+    <h2>All Four Parts at a Glance</h2>
+  </div>
+  <table class="reveal">
+    <thead>
+      <tr>
+        <th>Part</th>
+        <th>Statement</th>
+        <th>Key Estimate</th>
+        <th>Core Tool</th>
+        <th>Subtlety</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="ptag pt1">(1) Addition</span></td>
+        <td>xₙ+yₙ → x+y</td>
+        <td class="mi" style="font-family:'DM Mono',monospace;font-size:0.82rem;">|xₙ−x|+|yₙ−y| &lt; ε/2+ε/2</td>
+        <td>Triangle Inequality</td>
+        <td>N = max{n₁, n₂}</td>
+      </tr>
+      <tr>
+        <td><span class="ptag pt2">(2) Scalar</span></td>
+        <td>αxₙ → αx</td>
+        <td class="mi" style="font-family:'DM Mono',monospace;font-size:0.82rem;">|α|·|xₙ−x| &lt; |α|·ε/|α|</td>
+        <td>Factor |α|</td>
+        <td>Handle α = 0 separately</td>
+      </tr>
+      <tr>
+        <td><span class="ptag pt3">(3) Product</span></td>
+        <td>xₙyₙ → xy</td>
+        <td class="mi" style="font-family:'DM Mono',monospace;font-size:0.82rem;">C|yₙ−y| + |y||xₙ−x|</td>
+        <td>Boundedness + cross term</td>
+        <td>Use |y|+1, not |y|</td>
+      </tr>
+      <tr>
+        <td><span class="ptag pt4">(4) Quotient</span></td>
+        <td>xₙ/yₙ → x/y</td>
+        <td class="mi" style="font-family:'DM Mono',monospace;font-size:0.82rem;">(2/|y|²)·|yₙ−y|</td>
+        <td>Lower bound on |yₙ|</td>
+        <td>Need y ≠ 0 </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- COMBINE SECTION -->
+<div class="combine-section">
+  <h3>Part of a Two-Chapter Series</h3>
+  <p>This file pairs with the Weierstrass Boundedness Theorem. Together they cover sequences, convergence, and the key compactness result of real analysis.</p>
+  <a class="btn-link" href="global_boundedness.html">View Global Boundedness →</a>
+</div>
+
+<footer>
+  Real Analysis  · Sequences &amp; Convergence ·  Algebra of Limits
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => obs.observe(r));
+</script>
+</body>
+</html>

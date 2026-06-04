@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lecture 5 - The Number e and its Properties</title>
+
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\$', '\$']], displayMath: [['$$', '$$']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --bg: #f4f7f6; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--primary);
+            background: var(--bg);
+            padding: 20px 20px 100px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 10px;
+        }
+
+        /* ── tcolorbox ─────────────────────────────────────── */
+        .tcolorbox { border-radius: 6px; margin: 14px 0; overflow: hidden; border: 1px solid #ccc; }
+        .tcolorbox-header { padding: 8px 15px; font-weight: bold; font-size: 1rem; background-color: #2c3e50; color: white; }
+        .tcolorbox-content { padding: 15px; background-color: #eaf0fb; }
+
+        .tcolorbox.blue        .tcolorbox-header  { background-color: #1565c0; }
+        .tcolorbox.blue        .tcolorbox-content { background-color: #e3f2fd; }
+        .tcolorbox.green       .tcolorbox-header  { background-color: #2e7d32; }
+        .tcolorbox.green       .tcolorbox-content { background-color: #e8f5e9; }
+        .tcolorbox.orange      .tcolorbox-header  { background-color: #e65100; }
+        .tcolorbox.orange      .tcolorbox-content { background-color: #fff3e0; }
+        .tcolorbox.purple      .tcolorbox-header  { background-color: #6a1b9a; }
+        .tcolorbox.purple      .tcolorbox-content { background-color: #f3e5f5; }
+        .tcolorbox.red         .tcolorbox-header  { background-color: #c62828; }
+        .tcolorbox.red         .tcolorbox-content { background-color: #ffebee; }
+        .tcolorbox.teal        .tcolorbox-header  { background-color: #00695c; }
+        .tcolorbox.teal        .tcolorbox-content { background-color: #e0f2f1; }
+        .tcolorbox.grey        .tcolorbox-header  { background-color: #424242; }
+        .tcolorbox.grey        .tcolorbox-content { background-color: #f5f5f5; }
+        .tcolorbox.indigo      .tcolorbox-header  { background-color: #283593; }
+        .tcolorbox.indigo      .tcolorbox-content { background-color: #e8eaf6; }
+
+        /* ── STEP REVEAL SYSTEM ────────────────────────────── */
+        .step {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.4s ease, max-height 0.5s ease;
+        }
+        .step.visible {
+            opacity: 1;
+            max-height: 3000px;
+            margin-bottom: 6px;
+        }
+
+        /* ── FIXED CONTROLS BAR ────────────────────────────── */
+        .controls {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: #ede5d8;
+            border-top: 2px solid #c8b99a;
+            padding: 12px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            z-index: 1000;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+        }
+        .progress-wrap { flex: 1; display: flex; align-items: center; gap: 12px; }
+        .progress-bar-bg {
+            flex: 1; height: 5px; background: #c8b99a;
+            border-radius: 3px; overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%; background: #8b2500;
+            border-radius: 3px; width: 0%;
+            transition: width 0.4s ease;
+        }
+        .progress-label {
+            font-size: 14px; color: #8b2500; font-weight: bold;
+            white-space: nowrap; min-width: 55px; text-align: right;
+        }
+        .btn-next {
+            background: #2c3e50; color: white; border: none;
+            padding: 10px 28px; font-family: 'Segoe UI', sans-serif;
+            font-size: 15px; cursor: pointer; border-radius: 4px;
+            transition: background 0.2s; letter-spacing: 0.03em;
+        }
+        .btn-next:hover:not(:disabled) { background: #3498db; }
+        .btn-next:disabled { background: #c8b99a; cursor: default; }
+        .key-hint { font-size: 13px; color: #7a6e64; font-style: italic; white-space: nowrap; }
+
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="index.html">← Back to Course Home</a>
+        &nbsp;|&nbsp;
+        <a href="L6.html">Next Lecture →</a>
+    </nav>
+
+    <div class="container">
+        <h1>Part V &mdash; The Number $e$</h1>
+        <p class="lead">We define the number $e$ using two different sequences and prove they converge to the same limit.</p>
+
+        <!-- ═══ STEP 1: Definition and Expansion ═══ -->
+        <div class="step">
+            <h2>Definition of the Sequence $x_n$</h2>
+            <p>Consider the sequence $x_n = \left(1 + \frac{1}{n}\right)^n$ for $n \in \mathbb{N}.$</p>
+
+            <div class="tcolorbox blue">
+                <div class="tcolorbox-header">Binomial Expansion</div>
+                <div class="tcolorbox-content">
+                    Using the Binomial Theorem:
+                    $$ x_n = \sum_{k=0}^n \binom{n}{k} \left(\frac{1}{n}\right)^k $$                     
+                    Recall $\binom{n}{k} =\frac{n!}{(n-k)!k!}= \frac{n(n-1)\cdots(n-k+1)}{k!}.$ 
+                    <hr style="border: none; border-top: 4px dotted red;">
+                    Substituting this in:
+                    $$ \begin{aligned} x_n &= \sum_{k=0}^n \frac{1}{k!} \cdot \frac{n(n-1)\cdots(n-k+1)}{n^k} \\ 
+                    &= \sum_{k=0}^n \frac{1}{k!} \left( \frac{n}{n} \right) \left( \frac{n-1}{n} \right) \cdots \left( \frac{n-k+1}{n} \right) \\ 
+                    &= 1 + \sum_{k=1}^n \frac{1}{k!} \left(1-\frac{1}{n}\right)\left(1 - \frac{2}{n}\right)\cdots\left(1 - \frac{k-1}{n}\right) \end{aligned} $$                 </div>
+            </div>
+        </div>
+
+        <!-- ═══ STEP 2: Monotonicity ═══ -->
+        <div class="step">
+            <h2>Monotonicity: $x_n$ is Increasing</h2>
+            
+            <p>We claim that $x_n < x_{n+1}$ for all $n.$</p>
+
+            <div class="tcolorbox green">
+                <div class="tcolorbox-header">Proof</div>
+                <div class="tcolorbox-content">
+                    Write out $x_{n+1}$ using the expansion derived above:
+                    $$ x_{n+1} = 1 + \sum_{k=1}^{n+1} \frac{1}{k!} \left(1 - \frac{1}{n+1}\right)\left(1 - \frac{2}{n+1}\right)\cdots\left(1 - \frac{k-1}{n+1}\right) $$                     
+                    <strong>Comparison of Terms:</strong>
+                    Both $x_n$ and $x_{n+1}$ start with $1$ and have terms corresponding to $k=1, 2, \dots, n.$                     <br>
+                    Let's compare the general term for a fixed $k$ (where $1 \le k \le n$) (Try with $k=3.$):
+                    <ul>
+                        <li>Term in $x_n$: $\frac{1}{k!} \left(1 - \frac{1}{n}\right)\left(1 - \frac{2}{n}\right)\cdots\left(1 - \frac{k-1}{n}\right)$</li>
+                        <li>Term in $x_{n+1}$: $\frac{1}{k!} \left(1 - \frac{1}{n+1}\right)\left(1 - \frac{2}{n+1}\right)\cdots\left(1 - \frac{k-1}{n+1}\right)$</li>
+                    </ul>
+                    Since $n+1 > n$, it follows that for any $j$:
+                    $$ 1 - \frac{j}{n+1} > 1 - \frac{j}{n} $$                     Thus, <strong>each of the first $n+1$ terms (excluding first, equality in first term $1=1$) in $x_{n+1}$ is strictly larger</strong> than the corresponding term in $x_n.$                     <br><br>
+                    <strong>Extra Term:</strong>
+                    Furthermore, $x_{n+1}$ contains one <strong>extra positive term</strong> at the end (when $k=n+1$):
+                    $$ \frac{1}{(n+1)!} \left(1 - \frac{1}{n+1}\right)\cdots\left(1 - \frac{n}{n+1}\right) > 0 $$                     <br>
+                    <strong>Conclusion:</strong> Since every matching term in $x_{n+1}$ is larger, and $x_{n+1}$ has an extra positive term, we have:
+                    $$ x_n < x_{n+1} $$                     <span style="float:right; font-weight:bold;">$\blacksquare$</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ STEP 3: Boundedness ═══ -->
+        <div class="step">
+            <h2>Boundedness: $x_n < 3$</h2>
+            <p>We claim that $2 < x_n < 3$ for all $n.$</p>
+
+            <div class="tcolorbox orange">
+                <div class="tcolorbox-header">Proof by Comparison with Geometric Series</div>
+                <div class="tcolorbox-content">
+                    From the expansion, note that all factors in the product are less than 1:
+                    $$ \left(1 - \frac{1}{n}\right)\cdots\left(1 - \frac{k-1}{n}\right) < 1 $$                     Therefore:
+                    <hr style="border: none; border-top: 4px dotted red;">
+                    $$\forall n\;\;\;\; x_n < 1 + \sum_{k=1}^n \frac{1}{k!} = 1 + 1 + \frac{1}{2!} + \frac{1}{3!} + \dots + \frac{1}{n!}.$$      
+                    <hr style="border: none; border-top: 4px dotted red;">               
+                    Now, we estimate the factorials. For $k \ge 2$, we have $k! \ge 1 \cdot\; \underbrace{2 \cdot 2 \cdots 2}_{k-1\; times} = 2^{k-1}.$                     <br>
+                    Thus, $\frac{1}{k!} \le \frac{1}{2^{k-1}}.$                     <br><br>
+                    Substituting this bound back into the inequality for $x_n$:
+                    $$ \begin{aligned} x_n &< 1 + \left( 1 + \frac{1}{2!} + \frac{1}{3!} + \dots + \frac{1}{n!} \right) \\ 
+                    &< 1 + \left( 1 + \frac{1}{2} + \frac{1}{2^2} + \dots + \frac{1}{2^{n-1}} \right) \end{aligned} $$                     The sum in the parentheses is a partial sum of a geometric series with ratio $r = 1/2.$                     Since $1 + r + r^2 + \dots < \frac{1}{1-r} = 2,$ we have:
+                    $$ x_n < 1 + 2 = 3 $$                     Also, since $x_n$ is increasing and $x_1 = 2$, we have $x_n > 2.$                     <span style="float:right; font-weight:bold;">$\blacksquare$</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ STEP 4: Definition of Limit e ═══ -->
+        <div class="step">
+            <h2>The Limit $e$</h2>
+            <p>Since $(x_n)$ is monotone increasing and bounded above, by the <strong>Monotone Convergence Theorem</strong>, it must converge to a limit. We define this limit as $e$.</p>
+            
+            <div class="math-box" style="background: #e8f5e9; border-left: 5px solid #2e7d32; padding: 15px; margin: 20px 0;">
+                <strong>Definition:</strong>
+                $$ e = \lim_{n \to \infty} \left( 1 + \frac{1}{n} \right)^n \approx 2.71828\dots $$             </div>
+
+            <p>From the previous proof, we know that $2 < e \le 3.$</p>
+        </div>
+
+        <!-- ═══ STEP 5: The Sequence y_n ═══ -->
+        <div class="step">
+            <h2>Consider the second sequence $ y_n = 1 + \frac{1}{1!} + \frac{1}{2!} + \dots + \frac{1}{n!} = \sum_{k=0}^n \frac{1}{k!} $</h2>
+             $y_n = 1 + \frac{1}{1!} + \frac{1}{2!} + \dots + \frac{1}{n!}< 1 + \frac{1}{1!} + \frac{1}{2!} + \dots + \frac{1}{n!}+\frac{1}{(n+1)!}=y_{n+1}.$<br>
+             
+            <div class="tcolorbox purple">
+                <div class="tcolorbox-header">Relationship between $x_n$ and $y_n$ (Recall we already have that $\forall n \;\;\;\; x_n\le y_n.$)</div>
+                <div class="tcolorbox-content">
+                    <strong>1. Lower Bound for $x_n$:</strong>
+                    For any fixed $m < n$, consider the first $m+1$ terms of the binomial expansion of $x_n$:
+                    $$ x_n > 1 + \sum_{k=1}^m \frac{1}{k!} \left(1 - \frac{1}{n}\right)\cdots\left(1 - \frac{k-1}{n}\right) $$                     Taking the limit as $n \to \infty$, the factors $(1 - j/n) \to 1.$                     Thus, for any fixed $m$:
+                    $$ e = \lim_{n \to \infty} x_n \ge 1 + \sum_{k=1}^m \frac{1}{k!} = y_m $$                     Since this holds for all $m$, we have $e \ge  y_m.$ 
+                    <br>
+                     But we already have\;  $\forall n\;\;\; x_n < y_n.$                     Taking the limit as $n \to \infty$:
+                    $$ e = \lim_{n \to \infty} x_n \le \lim_{n \to \infty} y_n $$                     
+                    <br><br>
+                    <strong>Conclusion:</strong>
+                    Combining the two inequalities ($e \ge \lim y_n$ and $e \le \lim y_n$), we must have equality.
+                    $$ \lim_{n \to \infty} y_n = e $$                     Thus, both sequences converge to the same number $e$.
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ STEP 6: Illustration Table ═══ -->
+        <div class="step">
+            <h3>Illustration of Convergence</h3>
+            <div style="overflow-x:auto;">
+                <table>
+                    <tr>
+                        <th>$n$</th>
+                        <th>$x_n = (1 + 1/n)^n$</th>
+                        <th>$y_n = \sum_{k=0}^n 1/k!$</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>2.00000</td>
+                        <td>2.00000</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>2.25000</td>
+                        <td>2.50000</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>2.48832</td>
+                        <td>2.71667</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td>2.59374</td>
+                        <td>2.71828</td>
+                    </tr>
+                    <tr>
+                        <td>100</td>
+                        <td>2.70481</td>
+                        <td>2.71828</td>
+                    </tr>
+                    <tr style="font-weight:bold; background-color:#f0f4fb;">
+                        <td>$\infty$</td>
+                        <td>$e$</td>
+                        <td>$e$</td>
+                    </tr>
+                </table>
+            </div>
+            <p style="text-align:center; font-size:0.9rem; color:#666;">
+                Note: $y_n$ converges to $e$ much faster than $x_n$.
+            </p>
+        </div>
+
+        <!-- ═══ STEP 7: Irrationality Proof ═══ -->
+        <div class="step">
+            <h2>Irrationality of $e$</h2>
+            <p>We will prove that $e$ is irrational by contradiction. We use the  sequence $y_n$ for this proof.</p>
+
+            <div class="tcolorbox red">
+                <div class="tcolorbox-header">Key Estimate: The Remainder</div>
+                <div class="tcolorbox-content">
+                    Let $R_n = e - y_n$ be the remainder (the "tail" of the series).
+                    $$ R_n = \sum_{k=n+1}^\infty \frac{1}{k!} = \frac{1}{(n+1)!} + \frac{1}{(n+2)!} + \frac{1}{(n+3)!} + \dots $$                     
+                    We want to show that $0 < R_n < \frac{1}{n \cdot n!}.$                     <br>
+                    Factor out $\frac{1}{(n+1)!}$ from all terms:
+                    $$ \begin{aligned} R_n &= \frac{1}{(n+1)!} \left( 1 + \frac{1}{n+2} + \frac{1}{(n+2)(n+3)} + \dots \right) \end{aligned} $$                     
+                    Notice that for $k \ge 1$, $(n+k)! \ge (n+1)^k (n+1)!$. Thus $\frac{1}{(n+k)!} \le \frac{1}{(n+1)^k (n+1)!}$.
+                    Comparing the tail to a geometric series with ratio $r = \frac{1}{n+1} < 1$:
+                    $$ \begin{aligned} R_n &< \frac{1}{(n+1)!} \left( 1 + \frac{1}{n+1} + \frac{1}{(n+1)^2} + \dots \right) \\ &= \frac{1}{(n+1)!} \cdot \frac{1}{1 - \frac{1}{n+1}} \\ &= \frac{1}{(n+1)!} \cdot \frac{n+1}{n} = \frac{1}{n \cdot n!} \end{aligned} $$                     So, we have established the crucial inequality:
+                    $$ 0 < e - y_n < \frac{1}{n \cdot n!} $$                 </div>
+            </div>
+<!-- ═══ STEP 7: Irrationality Proof ═══ -->
+        <div class="step">
+            <div class="tcolorbox grey">
+                <div class="tcolorbox-header">Proof by Contradiction</div>
+                <div class="tcolorbox-content">
+                    <strong>Assumption:</strong> Suppose $e$ is rational. Then $e = \frac{p}{q}$ for some positive integers $p, q$ with $\gcd(p,q)=1.$                     
+                    <br>
+                    Consider the inequality for $n = q$:
+                    $$ 0 < e - y_q < \frac{1}{q \cdot q!} $$                     
+                    Multiply the entire inequality by $q!$:
+                    $$ 0 < q! e - q! y_q < \frac{q!}{q \cdot q!} = \frac{1}{q} < 1. $$                     
+                    <strong>Analyze the middle term $q! e - q! y_q$:</strong>
+                    <ol>
+                        <li>
+                            Since $e = p/q$, then $q! e = q! \frac{p}{q} = (q-1)! p.$                             This is clearly an integer.
+                        </li>
+                        <li>
+                            Look at $q! y_q = q! \left(1 + \frac{1}{1!} + \dots + \frac{1}{q!}\right)$.
+                            $$ q! y_q = q! + q! + \frac{q!}{2!} + \dots + \frac{q!}{q!} $$                             Each term in this sum is an integer. Thus $q! y_q$ is an integer.
+                        </li>
+                    </ol>
+                    Therefore, $q! e - q! y_q$ must be an <strong>integer</strong>.
+                    
+                    <br>
+                    <strong>The Contradiction:</strong>
+                    We have found an integer that lies strictly between $0$ and $1$:
+                    $$ 0 < \text{integer} < 1 $$                     This is impossible, as there are no integers in the interval $(0, 1).$                     <br><br>
+                    Therefore, our assumption that $e$ is rational is false.
+                    <span style="float:right; font-weight:bold;">$\blacksquare$</span>
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- /.container -->
+
+    <!-- ══════════════════════════════════════════
+         FIXED CONTROLS BAR
+    ══════════════════════════════════════════ -->
+    <div class="controls">
+        <span class="key-hint">Press <kbd>Enter</kbd> or <kbd>→</kbd> to advance</span>
+        <div class="progress-wrap">
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progressFill"></div>
+            </div>
+            <span class="progress-label" id="progressLabel">0 / 0</span>
+        </div>
+        <button class="btn-next" id="btnNext" onclick="revealNext()">Next &#9654;</button>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         STEP REVEAL JAVASCRIPT
+    ══════════════════════════════════════════ -->
+    <script>
+        const steps   = document.querySelectorAll('.step');
+        const fill    = document.getElementById('progressFill');
+        const label   = document.getElementById('progressLabel');
+        const btn     = document.getElementById('btnNext');
+        let   current = 0;
+
+        function updateUI() {
+            const pct = (current / steps.length) * 100;
+            fill.style.width  = pct + '%';
+            label.textContent = current + ' / ' + steps.length;
+            btn.disabled      = current >= steps.length;
+            btn.textContent   = current >= steps.length ? 'Done ✓' : 'Next \u25B6';
+        }
+
+        function revealNext() {
+            if (current >= steps.length) return;
+            const el = steps[current];
+            el.classList.add('visible');
+            if (window.MathJax) MathJax.typesetPromise([el]);
+            current++;
+            updateUI();
+            setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+        }
+
+        // Keyboard: Enter, Space, or → arrow
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight') {
+                e.preventDefault();
+                revealNext();
+            }
+        });
+
+        // Show step count on load, then reveal step 1 automatically
+        window.addEventListener('load', function() {
+            updateUI();
+            revealNext();
+        });
+    </script>
+
+</body>
+</html>

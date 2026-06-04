@@ -1,0 +1,2141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Sandwich Theorem — Sequences &amp; Applications</title>
+
+<script>
+    window.MathJax = {
+        tex: { inlineMath:[['$','$'],['\\(','\\)']], displayMath:[['$$','$$']] },
+        svg: { fontCache:'global' }
+    };
+</script>
+<script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+:root{
+    --primary:#2c3e50; --secondary:#3498db; --bg:#f4f7f6;
+    --green:#27ae60; --orange:#e67e22; --red:#c0392b;
+    --purple:#6a1b9a; --teal:#00695c; --gold:#b8860b;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+    line-height:1.78; color:var(--primary);
+    background:var(--bg); padding:20px 20px 110px;
+}
+.container{
+    max-width:920px; margin:auto; background:#fff;
+    padding:40px; border-radius:8px;
+    box-shadow:0 4px 18px rgba(0,0,0,.1);
+}
+h1{font-size:2rem;color:var(--primary);
+   border-bottom:3px solid var(--secondary);
+   padding-bottom:10px;margin-bottom:6px;}
+.subtitle{color:#7f8c8d;font-size:1rem;margin-bottom:28px;}
+h2{font-size:1.5rem;color:var(--primary);
+   border-bottom:1px solid #eee;padding-bottom:7px;margin-bottom:14px;}
+h3{font-size:1.15rem;color:var(--secondary);margin:16px 0 8px;}
+p{margin-bottom:1rem;}
+
+/* ── tcolorbox ──────────────────────────── */
+.tcolorbox{border-radius:6px;margin:14px 0;overflow:hidden;border:1px solid #ccc;}
+.tcolorbox-header{padding:9px 16px;font-weight:bold;font-size:1rem;color:#fff;}
+.tcolorbox-content{padding:15px 18px;}
+.tcolorbox.blue   .tcolorbox-header{background:#1565c0;}
+.tcolorbox.blue   .tcolorbox-content{background:#e3f2fd;}
+.tcolorbox.green  .tcolorbox-header{background:#2e7d32;}
+.tcolorbox.green  .tcolorbox-content{background:#e8f5e9;}
+.tcolorbox.orange .tcolorbox-header{background:#e65100;}
+.tcolorbox.orange .tcolorbox-content{background:#fff3e0;}
+.tcolorbox.purple .tcolorbox-header{background:#6a1b9a;}
+.tcolorbox.purple .tcolorbox-content{background:#f3e5f5;}
+.tcolorbox.red    .tcolorbox-header{background:#c62828;}
+.tcolorbox.red    .tcolorbox-content{background:#ffebee;}
+.tcolorbox.teal   .tcolorbox-header{background:#00695c;}
+.tcolorbox.teal   .tcolorbox-content{background:#e0f2f1;}
+.tcolorbox.indigo .tcolorbox-header{background:#283593;}
+.tcolorbox.indigo .tcolorbox-content{background:#e8eaf6;}
+.tcolorbox.brown  .tcolorbox-header{background:#4e342e;}
+.tcolorbox.brown  .tcolorbox-content{background:#efebe9;}
+.tcolorbox.amber  .tcolorbox-header{background:#f57f17;}
+.tcolorbox.amber  .tcolorbox-content{background:#fff8e1;}
+.tcolorbox.grey   .tcolorbox-header{background:#424242;}
+.tcolorbox.grey   .tcolorbox-content{background:#f5f5f5;}
+.tcolorbox.cyan   .tcolorbox-header{background:#00838f;}
+.tcolorbox.cyan   .tcolorbox-content{background:#e0f7fa;}
+.tcolorbox.lime   .tcolorbox-header{background:#558b2f;}
+.tcolorbox.lime   .tcolorbox-content{background:#f1f8e9;}
+.tcolorbox.pink   .tcolorbox-header{background:#ad1457;}
+.tcolorbox.pink   .tcolorbox-content{background:#fce4ec;}
+.tcolorbox.slate  .tcolorbox-header{background:#37474f;}
+.tcolorbox.slate  .tcolorbox-content{background:#eceff1;}
+
+/* ── proof block ──────────────────────── */
+.proof-block{
+    background:#f9f9f9;border-left:4px solid #7a6e64;
+    padding:14px 18px;margin:12px 0;border-radius:0 4px 4px 0;
+}
+.proof-label{font-weight:bold;color:#4e342e;display:block;margin-bottom:8px;}
+.qed{float:right;font-weight:bold;font-size:1.1rem;}
+
+/* ── math / rough box ─────────────────── */
+.math-box{
+    background:#e8f4fd;border-left:5px solid var(--secondary);
+    padding:14px 18px;margin:16px 0;border-radius:4px;
+}
+.rough-box{
+    background:#fffde7;border:2px dashed #f9a825;
+    border-radius:6px;padding:14px 18px;margin:16px 0;
+}
+.rough-title{font-weight:bold;color:#e65100;margin-bottom:8px;font-size:.95rem;display:block;}
+
+/* ── table ────────────────────────────── */
+table{width:100%;border-collapse:collapse;margin:14px 0;}
+th,td{border:1px solid #ddd;padding:10px 13px;text-align:left;}
+th{background:#f2f2f2;font-weight:600;}
+
+/* ── lists ────────────────────────────── */
+ul,ol{margin-left:1.5rem;margin-bottom:1rem;}
+li{margin-bottom:.42rem;}
+
+/* ── two-column ───────────────────────── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0;}
+@media(max-width:620px){.two-col{grid-template-columns:1fr;}}
+
+/* ── diagram ──────────────────────────── */
+.diagram-wrap{
+    background:#fafafa;border:1px solid #ddd;
+    border-radius:8px;padding:12px;margin:18px 0;
+    text-align:center;overflow-x:auto;
+}
+.diagram-caption{font-size:.88rem;color:#555;margin-top:8px;font-style:italic;}
+
+/* ── quiz card ────────────────────────── */
+.quiz-card{
+    background:#fdfefe;border:1px solid #e2e8f0;
+    border-left:5px solid var(--secondary);
+    padding:18px 20px;margin:14px 0;border-radius:5px;
+}
+.btn-sol{
+    background:transparent;border:1.5px solid var(--secondary);
+    color:var(--secondary);padding:7px 16px;border-radius:4px;
+    cursor:pointer;font-size:.88rem;font-weight:600;
+    transition:all .2s;margin-top:10px;
+}
+.btn-sol:hover{background:var(--secondary);color:#fff;}
+.solution{
+    display:none;margin-top:12px;padding:12px 14px;
+    background:#f8fafc;border-top:1px dashed #e2e8f0;
+    border-radius:4px;color:#4a5568;
+}
+.sol-label{font-weight:700;color:var(--primary);display:block;margin-bottom:6px;}
+
+/* ── section rule ─────────────────────── */
+.section-rule{border:none;border-top:2px dashed #c8b99a;margin:30px 0 22px;}
+
+/* ── STEP REVEAL ──────────────────────── */
+.step{opacity:0;max-height:0;overflow:hidden;
+      transition:opacity .4s ease,max-height .65s ease;}
+.step.visible{opacity:1;max-height:9000px;margin-bottom:8px;}
+
+/* ── CONTROLS BAR ─────────────────────── */
+.controls{
+    position:fixed;bottom:0;left:0;right:0;
+    background:#ede5d8;border-top:2px solid #c8b99a;
+    padding:12px 40px;display:flex;align-items:center;
+    justify-content:space-between;gap:20px;z-index:1000;
+    box-shadow:0 -2px 8px rgba(0,0,0,.08);
+}
+.progress-wrap{flex:1;display:flex;align-items:center;gap:12px;}
+.progress-bar-bg{flex:1;height:5px;background:#c8b99a;border-radius:3px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:#8b2500;border-radius:3px;
+                   width:0%;transition:width .4s ease;}
+.progress-label{font-size:14px;color:#8b2500;font-weight:700;
+                white-space:nowrap;min-width:55px;text-align:right;}
+.btn-next{background:var(--primary);color:#fff;border:none;
+          padding:10px 28px;font-size:15px;cursor:pointer;
+          border-radius:4px;transition:background .2s;}
+.btn-next:hover:not(:disabled){background:var(--secondary);}
+.btn-next:disabled{background:#c8b99a;cursor:default;}
+.key-hint{font-size:13px;color:#7a6e64;font-style:italic;white-space:nowrap;}
+</style>
+</head>
+<body>
+
+<nav style="max-width:920px;margin:0 auto 12px;font-size:.9rem;">
+    <a href="main.html">&larr; Course Home</a>
+</nav>
+
+<div class="container">
+<h1>The Sandwich Theorem for Sequences</h1>
+<p class="subtitle">
+    Statement, proof, five canonical applications, further worked examples,
+    the Nested Interval Theorem, and self-assessment.
+</p>
+
+<!-- ══════════════════════════════════════
+     STEP 1 — Statement & Proof
+══════════════════════════════════════ -->
+<div class="step">
+<h2>1. The Sandwich (Squeeze) Theorem</h2>
+
+<div class="tcolorbox blue">
+    <div class="tcolorbox-header">Theorem — Sandwich Lemma for Sequences</div>
+    <div class="tcolorbox-content">
+        Let $(a_n),\,(x_n),\,(b_n)$ be real sequences satisfying
+        $$a_n \;\le\; x_n \;\le\; b_n \qquad \text{for all } n \ge N_0$$
+        for some fixed $N_0\in\mathbb{N}.$
+        If $a_n\to L$ and $b_n\to L$ (the <em>same</em> limit $L$), then
+        $$x_n \;\longrightarrow\; L.$$
+    </div>
+</div>
+
+<div class="math-box">
+    <strong>Intuition.</strong>
+    $(x_n)$ is sandwiched between $(a_n)$ (floor) and $(b_n)$ (ceiling).
+    As both the floor and ceiling squeeze toward $L,$ the middle sequence
+    has nowhere to go but $L$ as well.
+</div>
+
+<!-- Sandwich SVG diagram -->
+<div class="diagram-wrap">
+<svg viewBox="0 0 700 210" width="100%" xmlns="http://www.w3.org/2000/svg"
+     style="max-height:210px;">
+<defs>
+    <marker id="ax" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+        <path d="M0,0 L7,2.5 L0,5 Z" fill="#607d8b"/>
+    </marker>
+</defs>
+<!-- axes -->
+<line x1="40" y1="160" x2="680" y2="160" stroke="#607d8b" stroke-width="1.5"
+      marker-end="url(#ax)"/>
+<line x1="60" y1="195" x2="60"  y2="15"  stroke="#607d8b" stroke-width="1.5"
+      marker-end="url(#ax)"/>
+<text x="682" y="168" font-size="10" fill="#555">$n$</text>
+<text x="64"  y="13"  font-size="10" fill="#555">$y$</text>
+
+<!-- L line -->
+<line x1="60" y1="100" x2="670" y2="100" stroke="#2e7d32"
+      stroke-width="2" stroke-dasharray="8,4"/>
+<text x="654" y="96"  font-size="11" fill="#2e7d32" font-weight="bold">$L$</text>
+
+<!-- b_n (upper): wavy curve approaching L from above -->
+<polyline points="100,48 140,60 180,70 220,78 260,85 300,90 340,94 380,97 420,99 460,100 500,100 560,100 620,100"
+          fill="none" stroke="#c0392b" stroke-width="2"/>
+<!-- dots on b_n -->
+<circle cx="100" cy="48"  r="4" fill="#c0392b"/>
+<circle cx="180" cy="70"  r="4" fill="#c0392b"/>
+<circle cx="260" cy="85"  r="4" fill="#c0392b"/>
+<circle cx="380" cy="97"  r="4" fill="#c0392b"/>
+<circle cx="500" cy="100" r="4" fill="#c0392b"/>
+<text x="104" y="42" font-size="10" fill="#c0392b" font-style="italic">$(b_n)$ (upper)</text>
+
+<!-- a_n (lower): curve approaching L from below -->
+<polyline points="100,152 140,140 180,130 220,122 260,115 300,110 340,106 380,103 420,101 460,100 500,100 560,100 620,100"
+          fill="none" stroke="#1565c0" stroke-width="2"/>
+<!-- dots on a_n -->
+<circle cx="100" cy="152" r="4" fill="#1565c0"/>
+<circle cx="180" cy="130" r="4" fill="#1565c0"/>
+<circle cx="260" cy="115" r="4" fill="#1565c0"/>
+<circle cx="380" cy="103" r="4" fill="#1565c0"/>
+<circle cx="500" cy="100" r="4" fill="#1565c0"/>
+<text x="104" y="168" font-size="10" fill="#1565c0" font-style="italic">$(a_n)$ (lower)</text>
+
+<!-- x_n (middle): oscillating between the two, squeezed -->
+<polyline points="100,95 140,110 180,95 220,105 260,97 300,103 340,99 380,101 420,100 460,100 500,100 560,100 620,100"
+          fill="none" stroke="#e67e22" stroke-width="2"/>
+<circle cx="100" cy="95"  r="4" fill="#e67e22"/>
+<circle cx="140" cy="110" r="4" fill="#e67e22"/>
+<circle cx="180" cy="95"  r="4" fill="#e67e22"/>
+<circle cx="260" cy="97"  r="4" fill="#e67e22"/>
+<circle cx="380" cy="101" r="4" fill="#e67e22"/>
+<text x="320" y="82" font-size="10" fill="#e67e22" font-style="italic">$(x_n)$ — squeezed</text>
+
+<!-- shaded region -->
+<text x="100" y="175" font-size="9" fill="#555">$N_0$</text>
+<line x1="100" y1="155" x2="100" y2="165" stroke="#555" stroke-width="1.5"/>
+
+<!-- squeeze arrows -->
+<line x1="590" y1="55" x2="590" y2="98" stroke="#999" stroke-width="1"
+      marker-end="url(#ax)"/>
+<line x1="590" y1="145" x2="590" y2="102" stroke="#999" stroke-width="1"
+      marker-end="url(#ax)"/>
+<text x="596" y="100" font-size="10" fill="#999">squeeze</text>
+</svg>
+<div class="diagram-caption">
+    Both the upper bound $(b_n)$ and lower bound $(a_n)$ converge to $L.$
+    The middle sequence $(x_n)$ is trapped between them and must also converge to $L.$
+</div>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof.</span>
+    Let $\varepsilon&gt;0.$
+    <br><br>
+    Since $a_n\to L,$ there exists $N_1\in\mathbb{N}$ such that $n\ge N_1\Rightarrow|a_n-L|&lt;\varepsilon,$
+    i.e., $L-\varepsilon&lt;a_n&lt;L+\varepsilon.$
+    <br>
+    Since $b_n\to L,$ there exists $N_2\in\mathbb{N}$ such that $n\ge N_2\Rightarrow|b_n-L|&lt;\varepsilon,$
+    i.e., $L-\varepsilon&lt;b_n&lt;L+\varepsilon.$
+    <br><br>
+    Set $N=\max(N_0,N_1,N_2).$ For all $n\ge N$:
+    $$L-\varepsilon \;<\; a_n \;\le\; x_n \;\le\; b_n \;<\; L+\varepsilon.$$
+    Hence $|x_n-L|&lt;\varepsilon$ for all $n\ge N.$
+    Since $\varepsilon&gt;0$ was arbitrary, $x_n\to L.$ $\blacksquare$
+    <span class="qed"></span>
+</div>
+
+<div class="tcolorbox amber">
+    <div class="tcolorbox-header">Important Remarks</div>
+    <div class="tcolorbox-content">
+        <ul>
+            <li>The inequality $a_n\le x_n\le b_n$ need hold only for all <em>sufficiently large</em> $n$
+                (i.e., beyond some $N_0$). Finitely many exceptions do not affect convergence.</li>
+            <li>Both bounds must converge to the <em>same</em> limit $L.$ If they converge
+                to different values, the theorem says nothing.</li>
+            <li>The theorem gives convergence but does not require us to guess the limit in advance —
+                the limit is automatically identified as $L.$</li>
+        </ul>
+    </div>
+</div>
+</div><!-- /step 1 -->
+
+<!-- ══════════════════════════════════════
+     STEP 2 — Applications 1 & 2
+══════════════════════════════════════ -->
+<div class="step">
+<h2>2. Applications — Part I</h2>
+
+<h3>Application 1 — Squeezing Any Sequence Toward a Point</h3>
+
+<div class="tcolorbox teal">
+    <div class="tcolorbox-header">Proposition</div>
+    <div class="tcolorbox-content">
+        Let $a\in\mathbb{R}.$ For each $n\in\mathbb{N},$ select <em>any</em> element
+        $x_n\in\!\left(a-\tfrac{1}{n},\,a+\tfrac{1}{n}\right).$
+        Then $x_n\to a.$
+    </div>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof.</span>
+    By definition of $x_n$:
+    $$a - \frac{1}{n} \;<\; x_n \;<\; a + \frac{1}{n}.$$
+    The sequences $\left(a-\tfrac{1}{n}\right)$ and $\left(a+\tfrac{1}{n}\right)$
+    both converge to $a$ (by the algebra of limits: constant $a$ plus $\pm 1/n\to 0$).
+    By the Sandwich Theorem, $x_n\to a.$ $\blacksquare$
+    <span class="qed"></span>
+</div>
+
+<div class="math-box">
+    <strong>Why this matters.</strong>
+    This is one of the most frequently used observations in real analysis.
+    It says: to produce a sequence converging to $a,$ just pick one element from each
+    shrinking interval around $a$ — no explicit formula is needed.
+    We use it repeatedly to prove density results and to construct sequences with prescribed limits.
+</div>
+
+<!-- Visual: shrinking intervals around a -->
+<div class="diagram-wrap">
+<svg viewBox="0 0 660 130" width="100%" xmlns="http://www.w3.org/2000/svg"
+     style="max-height:130px;">
+<defs>
+    <marker id="arr" markerWidth="6" markerHeight="4" refX="6" refY="2" orient="auto">
+        <path d="M0,0 L6,2 L0,4 Z" fill="#607d8b"/>
+    </marker>
+    <marker id="arrl" markerWidth="6" markerHeight="4" refX="0" refY="2" orient="auto">
+        <path d="M6,0 L0,2 L6,4 Z" fill="#607d8b"/>
+    </marker>
+</defs>
+<!-- Real line -->
+<line x1="30" y1="65" x2="630" y2="65" stroke="#607d8b" stroke-width="1.5"
+      marker-end="url(#arr)"/>
+<!-- a marker -->
+<line x1="330" y1="58" x2="330" y2="72" stroke="#2e7d32" stroke-width="2"/>
+<text x="326" y="88" font-size="11" fill="#2e7d32" font-weight="bold">$a$</text>
+<circle cx="330" cy="65" r="4" fill="#2e7d32"/>
+
+<!-- n=1: interval (a-1, a+1) -->
+<line x1="180" y1="18" x2="480" y2="18" stroke="#1565c0" stroke-width="3" opacity=".6"/>
+<circle cx="180" cy="18" r="4" fill="white" stroke="#1565c0" stroke-width="2"/>
+<circle cx="480" cy="18" r="4" fill="white" stroke="#1565c0" stroke-width="2"/>
+<text x="100" y="22" font-size="9" fill="#1565c0">$n=1$</text>
+<text x="190" y="12" font-size="9" fill="#1565c0">$a-1$</text>
+<text x="455" y="12" font-size="9" fill="#1565c0">$a+1$</text>
+<circle cx="350" cy="18" r="4" fill="#e67e22"/>
+<text x="354" y="12" font-size="8" fill="#e67e22">$x_1$</text>
+
+<!-- n=2: interval (a-1/2, a+1/2) -->
+<line x1="255" y1="38" x2="405" y2="38" stroke="#1565c0" stroke-width="3" opacity=".7"/>
+<circle cx="255" cy="38" r="4" fill="white" stroke="#1565c0" stroke-width="2"/>
+<circle cx="405" cy="38" r="4" fill="white" stroke="#1565c0" stroke-width="2"/>
+<text x="100" y="42" font-size="9" fill="#1565c0">$n=2$</text>
+<circle cx="295" cy="38" r="4" fill="#e67e22"/>
+<text x="299" y="32" font-size="8" fill="#e67e22">$x_2$</text>
+
+<!-- n=5: interval (a-1/5, a+1/5) -->
+<line x1="300" y1="55" x2="360" y2="55" stroke="#1565c0" stroke-width="3" opacity=".8"/>
+<circle cx="300" cy="55" r="4" fill="white" stroke="#1565c0" stroke-width="2"/>
+<circle cx="360" cy="55" r="4" fill="white" stroke="#1565c0" stroke-width="2"/>
+<text x="100" y="59" font-size="9" fill="#1565c0">$n=5$</text>
+<circle cx="340" cy="55" r="4" fill="#e67e22"/>
+<text x="344" y="50" font-size="8" fill="#e67e22">$x_5$</text>
+
+<!-- n=10: very small interval -->
+<line x1="315" y1="72" x2="345" y2="72" stroke="#1565c0" stroke-width="3" opacity=".9"/>
+<circle cx="315" cy="72" r="3" fill="white" stroke="#1565c0" stroke-width="2"/>
+<circle cx="345" cy="72" r="3" fill="white" stroke="#1565c0" stroke-width="2"/>
+<text x="100" y="76" font-size="9" fill="#1565c0">$n=10$</text>
+<circle cx="325" cy="72" r="3" fill="#e67e22"/>
+
+<!-- arrow squeezing toward a -->
+<text x="330" y="108" text-anchor="middle" font-size="10"
+      fill="#2e7d32" font-style="italic">
+    Intervals shrink to $\{a\}$; so $x_n\to a$ by Sandwich
+</text>
+</svg>
+<div class="diagram-caption">
+    Shrinking open intervals $(a-1/n,\,a+1/n)$ around $a.$
+    Any choice $x_n$ from each interval is squeezed to $a.$
+</div>
+</div>
+
+<h3>Application 2 — $\dfrac{\sin n}{n}\to 0$</h3>
+
+<div class="tcolorbox purple">
+    <div class="tcolorbox-header">Proposition</div>
+    <div class="tcolorbox-content">
+        $\displaystyle\lim_{n\to\infty}\frac{\sin n}{n} = 0.$
+    </div>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof.</span>
+    Since $-1\le\sin n\le 1$ for all $n\in\mathbb{N},$
+    dividing by $n&gt;0$ preserves the inequality:
+    $$-\frac{1}{n} \;\le\; \frac{\sin n}{n} \;\le\; \frac{1}{n}.$$
+    Both $-1/n$ and $1/n$ converge to $0.$ By the Sandwich Theorem, $\dfrac{\sin n}{n}\to 0.$ $\blacksquare$
+    <span class="qed"></span>
+</div>
+
+<div class="math-box">
+    <strong>Key pattern.</strong>
+    When a bounded sequence is multiplied by a sequence tending to $0,$
+    the product tends to $0.$ Here $|\sin n|\le 1$ and $1/n\to 0.$
+    This is a recurring Sandwich pattern:
+    $$ -\frac{B}{n}\le\frac{\text{bounded}}{n}\le\frac{B}{n}\;\to\;0.$$
+</div>
+
+<!-- sin n/n diagram -->
+<div class="diagram-wrap">
+<svg viewBox="0 0 680 170" width="100%" xmlns="http://www.w3.org/2000/svg"
+     style="max-height:170px;">
+<defs>
+    <marker id="ax2" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+        <path d="M0,0 L7,2.5 L0,5 Z" fill="#607d8b"/>
+    </marker>
+</defs>
+<line x1="40" y1="85" x2="660" y2="85" stroke="#607d8b" stroke-width="1.5"
+      marker-end="url(#ax2)"/>
+<line x1="60" y1="155" x2="60"  y2="18"  stroke="#607d8b" stroke-width="1.5"
+      marker-end="url(#ax2)"/>
+<text x="662" y="93" font-size="10" fill="#555">$n$</text>
+<text x="64"  y="16" font-size="10" fill="#555">$y$</text>
+<text x="42"  y="83" font-size="9"  fill="#555">$0$</text>
+<!-- 1/n upper bound -->
+<path d="M 100,38 Q 200,68 300,79 Q 400,83 500,84 Q 580,85 640,85"
+      fill="none" stroke="#c0392b" stroke-width="2" stroke-dasharray="6,3"/>
+<text x="108" y="34" font-size="10" fill="#c0392b">$1/n$</text>
+<!-- -1/n lower bound -->
+<path d="M 100,132 Q 200,102 300,91 Q 400,87 500,86 Q 580,85 640,85"
+      fill="none" stroke="#1565c0" stroke-width="2" stroke-dasharray="6,3"/>
+<text x="108" y="148" font-size="10" fill="#1565c0">$-1/n$</text>
+<!-- sin n / n: oscillating between the bounds -->
+<circle cx="100" cy="72"  r="4" fill="#6a1b9a"/>
+<circle cx="145" cy="55"  r="4" fill="#6a1b9a"/>
+<circle cx="190" cy="87"  r="4" fill="#6a1b9a"/>
+<circle cx="235" cy="98"  r="4" fill="#6a1b9a"/>
+<circle cx="280" cy="78"  r="4" fill="#6a1b9a"/>
+<circle cx="325" cy="82"  r="4" fill="#6a1b9a"/>
+<circle cx="370" cy="90"  r="4" fill="#6a1b9a"/>
+<circle cx="415" cy="83"  r="4" fill="#6a1b9a"/>
+<circle cx="460" cy="86"  r="4" fill="#6a1b9a"/>
+<circle cx="505" cy="85"  r="4" fill="#6a1b9a"/>
+<circle cx="550" cy="84"  r="4" fill="#6a1b9a"/>
+<circle cx="595" cy="85"  r="4" fill="#6a1b9a"/>
+<text x="270" y="56" font-size="10" fill="#6a1b9a" font-style="italic">$(\sin n)/n$</text>
+<!-- shaded region between bounds -->
+<text x="330" y="154" text-anchor="middle" font-size="10" fill="#2e7d32">
+    Squeezed to $0$ by Sandwich Theorem
+</text>
+</svg>
+<div class="diagram-caption">
+    $(\sin n)/n$ oscillates but is trapped between $\pm 1/n\to 0.$ Both bounds squeeze it to $0.$
+</div>
+</div>
+</div><!-- /step 2 -->
+
+<!-- ══════════════════════════════════════
+     STEP 3 — Applications 3, 4 & 5
+══════════════════════════════════════ -->
+<div class="step">
+<h2>3. Applications — Part II: Density and Least Upper Bounds</h2>
+
+<h3>Application 3 — Sequences Converging to Any Real Number</h3>
+
+<div class="tcolorbox indigo">
+    <div class="tcolorbox-header">Proposition</div>
+    <div class="tcolorbox-content">
+        For every real number $x,$ there exists a sequence $(x_n)$ of real numbers
+        with $x_n\to x.$
+    </div>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof.</span>
+    For each $n\in\mathbb{N},$ choose any $x_n$ satisfying $x-\dfrac{1}{n}&lt;x_n&lt;x.$
+    (Such $x_n$ exists: e.g. take $x_n=x-\dfrac{1}{2n}.$)
+    <br><br>
+    Then $x-\dfrac{1}{n}&lt;x_n&lt;x,$ so by the Sandwich Theorem (with bounds $x-1/n\to x$ and constant $x\to x$):
+    $x_n\to x.$ $\blacksquare$
+    <span class="qed"></span>
+</div>
+
+<h3>Application 4 — Rational and Irrational Sequences Converging to Any Real</h3>
+
+<div class="tcolorbox teal">
+    <div class="tcolorbox-header">Proposition — Density via Sandwich</div>
+    <div class="tcolorbox-content">
+        For every $x\in\mathbb{R}:$
+        <ul>
+            <li>There exists a sequence $(r_n)$ of <strong>rationals</strong> with $r_n\to x.$</li>
+            <li>There exists a sequence $(t_n)$ of <strong>irrationals</strong> with $t_n\to x.$</li>
+        </ul>
+    </div>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof — Rational sequence.</span>
+    For each $n\in\mathbb{N},$ the interval $\left(x-\dfrac{1}{n},\,x\right)$ is nonempty.
+    By the density of $\mathbb{Q}$ in $\mathbb{R},$ there exists a rational $r_n$ with
+    $$x - \frac{1}{n} \;<\; r_n \;<\; x.$$
+    Both bounds converge to $x.$ By the Sandwich Theorem, $r_n\to x.$ $\blacksquare$
+    <span class="qed"></span>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof — Irrational sequence.</span>
+    For each $n,$ by the density of irrationals, there exists an irrational $t_n$ with
+    $$x - \frac{1}{n} \;<\; t_n \;<\; x.$$
+    Again $t_n\to x$ by Sandwich. $\blacksquare$
+    <span class="qed"></span>
+</div>
+
+<div class="tcolorbox amber">
+    <div class="tcolorbox-header">Why Application 4 Matters</div>
+    <div class="tcolorbox-content">
+        This is the fundamental tool for proving results about continuity:
+        at any point $a,$ we can approach from the rationals and from the irrationals.
+        For example, the Dirichlet function is discontinuous everywhere precisely because
+        these two types of approaching sequences give different $f$-values.
+    </div>
+</div>
+
+<h3>Application 5 — The LUB is the Limit of a Sequence in the Set</h3>
+
+<div class="tcolorbox green">
+    <div class="tcolorbox-header">Proposition</div>
+    <div class="tcolorbox-content">
+        Let $A\subseteq\mathbb{R}$ be nonempty and bounded above, and let
+        $\alpha=\text{lub}(A).$ Then there exists a sequence $(a_n)$ with
+        $a_n\in A$ for all $n$ and $a_n\to\alpha.$
+        <br><br>
+        <em>Analogously:</em> if $\beta=\text{glb}(A),$ there exists a sequence
+        $(b_n)$ with $b_n\in A$ and $b_n\to\beta.$
+    </div>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof.</span>
+    Since $\alpha=\text{lub}(A),$ for each $n\in\mathbb{N}$ the number $\alpha-\dfrac{1}{n}$
+    is <em>not</em> an upper bound of $A$ (as it is strictly less than $\alpha$).
+    Hence there exists $a_n\in A$ with
+    $$\alpha - \frac{1}{n} \;<\; a_n \;\le\; \alpha.$$
+    By the Sandwich Theorem (with bounds $\alpha-1/n\to\alpha$ and $\alpha\to\alpha$):
+    $a_n\to\alpha.$ $\blacksquare$
+    <span class="qed"></span>
+</div>
+
+<!-- LUB sequence diagram -->
+<div class="diagram-wrap">
+<svg viewBox="0 0 660 120" width="100%" xmlns="http://www.w3.org/2000/svg"
+     style="max-height:120px;">
+<defs>
+    <marker id="ax3" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+        <path d="M0,0 L7,2.5 L0,5 Z" fill="#607d8b"/>
+    </marker>
+</defs>
+<!-- Real line -->
+<line x1="20" y1="60" x2="630" y2="60" stroke="#607d8b" stroke-width="1.5"
+      marker-end="url(#ax3)"/>
+<!-- alpha marker -->
+<line x1="540" y1="53" x2="540" y2="67" stroke="#2e7d32" stroke-width="2.5"/>
+<text x="533" y="85" font-size="11" fill="#2e7d32" font-weight="bold">$\alpha$</text>
+<circle cx="540" cy="60" r="5" fill="#2e7d32"/>
+<!-- alpha - 1/n markers (shrinking) -->
+<line x1="280" y1="55" x2="280" y2="65" stroke="#e67e22" stroke-width="1.5"/>
+<text x="258" y="88" font-size="9" fill="#e67e22">$\alpha-1$</text>
+<line x1="380" y1="55" x2="380" y2="65" stroke="#e67e22" stroke-width="1.5"/>
+<text x="360" y="88" font-size="9" fill="#e67e22">$\alpha-\tfrac12$</text>
+<line x1="450" y1="55" x2="450" y2="65" stroke="#e67e22" stroke-width="1.5"/>
+<text x="430" y="88" font-size="9" fill="#e67e22">$\alpha-\tfrac13$</text>
+<line x1="490" y1="55" x2="490" y2="65" stroke="#e67e22" stroke-width="1.5"/>
+<text x="471" y="88" font-size="9" fill="#e67e22">$\ldots$</text>
+
+<!-- a_n dots (in A, between alpha-1/n and alpha) -->
+<circle cx="310" cy="60" r="5" fill="#1565c0"/>
+<text x="306" y="45" font-size="9" fill="#1565c0">$a_1$</text>
+<circle cx="400" cy="60" r="5" fill="#1565c0"/>
+<text x="396" y="45" font-size="9" fill="#1565c0">$a_2$</text>
+<circle cx="460" cy="60" r="5" fill="#1565c0"/>
+<text x="456" y="45" font-size="9" fill="#1565c0">$a_3$</text>
+<circle cx="500" cy="60" r="5" fill="#1565c0"/>
+<text x="496" y="45" font-size="9" fill="#1565c0">$a_4$</text>
+<circle cx="520" cy="60" r="5" fill="#1565c0"/>
+<circle cx="530" cy="60" r="5" fill="#1565c0"/>
+
+<!-- label A -->
+<text x="260" y="38" font-size="10" fill="#1565c0" font-style="italic">
+    $a_n\in A$, squeezed toward $\alpha$ from below
+</text>
+
+<!-- bracket for A -->
+<text x="30" y="64" font-size="11" fill="#1565c0">$A$</text>
+<text x="30" y="55" font-size="18" fill="#1565c0">{</text>
+</svg>
+<div class="diagram-caption">
+    Elements $a_n\in A$ satisfying $\alpha-1/n&lt;a_n\le\alpha$ are sandwiched between
+    $\alpha-1/n\to\alpha$ and $\alpha\to\alpha,$ so $a_n\to\alpha.$
+</div>
+</div>
+
+<div class="tcolorbox amber">
+    <div class="tcolorbox-header">GLB Version</div>
+    <div class="tcolorbox-content">
+        If $\beta=\text{glb}(A),$ then $\beta+\tfrac{1}{n}$ is not a lower bound for $A,$
+        so there exists $b_n\in A$ with
+        $$\beta \;\le\; b_n \;&lt;\; \beta+\frac{1}{n}.$$
+        By Sandwich, $b_n\to\beta.$ $\blacksquare$
+    </div>
+</div>
+</div><!-- /step 3 -->
+
+<!-- ══════════════════════════════════════
+     STEP 4 — Further worked examples
+══════════════════════════════════════ -->
+<div class="step">
+<h2>4. Further Applications</h2>
+
+<h3>Application 6 — Bounded Times Zero: $a_n x_n\to 0$</h3>
+
+<div class="tcolorbox blue">
+    <div class="tcolorbox-header">Proposition</div>
+    <div class="tcolorbox-content">
+        Let $(a_n)$ be bounded (i.e. $|a_n|\le B$ for some $B&gt;0$ and all $n$)
+        and let $x_n\to 0.$ Then $a_n x_n\to 0.$
+    </div>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof.</span>
+    Since $|a_n|\le B$ for all $n$:
+    $$-B|x_n| \;\le\; a_n x_n \;\le\; B|x_n|.$$
+    Since $x_n\to 0,$ we have $|x_n|\to 0,$ so $B|x_n|\to 0$ and $-B|x_n|\to 0.$
+    By Sandwich, $a_n x_n\to 0.$ $\blacksquare$
+    <span class="qed"></span>
+</div>
+
+<div class="tcolorbox amber">
+    <div class="tcolorbox-header">Examples</div>
+    <div class="tcolorbox-content">
+        <ul>
+            <li>$\sin n\cdot\dfrac{1}{n}\to 0$ &ensp; ($|\sin n|\le 1$, $1/n\to 0$)</li>
+            <li>$(-1)^n\cdot\dfrac{1}{\sqrt{n}}\to 0$ &ensp; ($|(-1)^n|=1$, $1/\sqrt{n}\to 0$)</li>
+            <li>$\cos(n^2)\cdot r^n\to 0$ for $|r|&lt;1$ &ensp; ($|\cos(n^2)|\le 1$, $r^n\to 0$)</li>
+        </ul>
+    </div>
+</div>
+
+<h3>Application 7 — $\sqrt{n+1}-\sqrt{n}\to 0$</h3>
+
+<div class="tcolorbox purple">
+    <div class="tcolorbox-header">Proposition</div>
+    <div class="tcolorbox-content">
+        $\displaystyle\lim_{n\to\infty}\!\left(\sqrt{n+1}-\sqrt{n}\right)=0.$
+    </div>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof.</span>
+    Rationalise by multiplying by the conjugate:
+    $$\sqrt{n+1}-\sqrt{n}
+      = \frac{(\sqrt{n+1}-\sqrt{n})(\sqrt{n+1}+\sqrt{n})}{\sqrt{n+1}+\sqrt{n}}
+      = \frac{(n+1)-n}{\sqrt{n+1}+\sqrt{n}}
+      = \frac{1}{\sqrt{n+1}+\sqrt{n}}.$$
+    Since $\sqrt{n+1}+\sqrt{n}\ge 2\sqrt{n},$ we have:
+    $$0 \;\le\; \sqrt{n+1}-\sqrt{n} = \frac{1}{\sqrt{n+1}+\sqrt{n}} \;\le\; \frac{1}{2\sqrt{n}}.$$
+    Since $\dfrac{1}{2\sqrt{n}}\to 0,$ the Sandwich Theorem gives $\sqrt{n+1}-\sqrt{n}\to 0.$ $\blacksquare$
+    <span class="qed"></span>
+</div>
+
+<h3>Application 8 — A Telescoping Sum $\to 1$</h3>
+
+<div class="tcolorbox indigo">
+    <div class="tcolorbox-header">Proposition</div>
+    <div class="tcolorbox-content">
+        Let $x_n = \dfrac{1}{\sqrt{n^2+1}}+\dfrac{1}{\sqrt{n^2+2}}+\cdots+\dfrac{1}{\sqrt{n^2+n}}.$
+        Then $x_n\to 1.$
+    </div>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof.</span>
+    The sum $x_n$ has exactly $n$ terms. Since the function $t\mapsto 1/\sqrt{t}$
+    is decreasing, and $n^2+1\le n^2+k\le n^2+n$ for $k=1,\ldots,n$:
+    $$\frac{1}{\sqrt{n^2+n}} \;\le\; \frac{1}{\sqrt{n^2+k}} \;\le\; \frac{1}{\sqrt{n^2+1}}.$$
+    Summing over $k=1,\ldots,n$ (each side $n$ terms):
+    $$\frac{n}{\sqrt{n^2+n}} \;\le\; x_n \;\le\; \frac{n}{\sqrt{n^2+1}}.$$
+    Now compute the limits of the bounds:
+    $$\frac{n}{\sqrt{n^2+n}}
+      = \frac{1}{\sqrt{1+1/n}} \;\to\; \frac{1}{\sqrt{1+0}} = 1,$$
+    $$\frac{n}{\sqrt{n^2+1}}
+      = \frac{1}{\sqrt{1+1/n^2}} \;\to\; \frac{1}{\sqrt{1+0}} = 1.$$
+    By Sandwich, $x_n\to 1.$ $\blacksquare$
+    <span class="qed"></span>
+</div>
+
+<div class="math-box">
+    <strong>The pattern:</strong>
+    For sums of $n$ terms each of size roughly $1/n,$ the total is roughly $1.$
+    The Sandwich Theorem makes this precise by bounding each term above and below
+    by the largest and smallest term.
+</div>
+
+<h3>Application 9 — $(a^n+b^n)^{1/n}\to b$ for $0&lt;a&lt;b$</h3>
+
+<div class="tcolorbox cyan">
+    <div class="tcolorbox-header">Proposition</div>
+    <div class="tcolorbox-content">
+        Let $0&lt;a&lt;b.$ Then $\displaystyle\lim_{n\to\infty}(a^n+b^n)^{1/n}=b.$
+    </div>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof.</span>
+    Since $0&lt;a&lt;b$: $b^n\le a^n+b^n\le 2b^n.$
+    Taking $n$-th roots (which preserves inequalities for positive quantities):
+    $$b \;=\; (b^n)^{1/n} \;\le\; (a^n+b^n)^{1/n} \;\le\; (2b^n)^{1/n} = 2^{1/n}\cdot b.$$
+    Since $2^{1/n}\to 1$ (proved in the Important Limits lecture),
+    the right bound $2^{1/n}\cdot b\to 1\cdot b=b.$
+    The left bound is the constant sequence $b.$
+    By Sandwich, $(a^n+b^n)^{1/n}\to b.$ $\blacksquare$
+    <span class="qed"></span>
+</div>
+
+<table>
+    <tr><th>$a$</th><th>$b$</th><th>$n=5$</th><th>$n=10$</th><th>$n=20$</th><th>Limit</th></tr>
+    <tr><td>$1$</td><td>$2$</td>
+        <td>$(1+32)^{0.2}\approx2.01$</td>
+        <td>$(1+1024)^{0.1}\approx2.001$</td>
+        <td>$\approx 2.000$</td>
+        <td>$2$</td></tr>
+    <tr><td>$1$</td><td>$3$</td>
+        <td>$(1+243)^{0.2}\approx3.01$</td>
+        <td>$(1+3^{10})^{0.1}\approx3.001$</td>
+        <td>$\approx 3.000$</td>
+        <td>$3$</td></tr>
+</table>
+</div><!-- /step 4 -->
+
+<!-- ══════════════════════════════════════
+     STEP 5 — Nested Interval Theorem
+══════════════════════════════════════ -->
+<div class="step">
+<h2>5. The Nested Interval Theorem</h2>
+
+<div class="tcolorbox green">
+    <div class="tcolorbox-header">Theorem — Nested Interval Theorem (Standard Version)</div>
+    <div class="tcolorbox-content">
+        For each $n\in\mathbb{N},$ let $J_n=[a_n,b_n]$ be a closed bounded interval.
+        Suppose the intervals are <strong>nested</strong>:
+        $$J_1\supseteq J_2\supseteq J_3\supseteq\cdots$$
+        (equivalently: $a_n\le a_{n+1}$ and $b_{n+1}\le b_n$ for all $n$).
+        <br><br>
+        Assume further that $b_n-a_n\to 0$ (the lengths go to zero).
+        <br><br>
+        Then there exists a <strong>unique</strong> $c$ such that
+        $\displaystyle\bigcap_{n=1}^{\infty}J_n=\{c\}.$
+    </div>
+</div>
+
+<!-- Nested intervals diagram -->
+<div class="diagram-wrap">
+<svg viewBox="0 0 680 170" width="100%" xmlns="http://www.w3.org/2000/svg"
+     style="max-height:170px;">
+<defs>
+    <marker id="ax4" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+        <path d="M0,0 L7,2.5 L0,5 Z" fill="#607d8b"/>
+    </marker>
+</defs>
+<!-- Real line -->
+<line x1="20" y1="145" x2="650" y2="145" stroke="#607d8b" stroke-width="1.5"
+      marker-end="url(#ax4)"/>
+
+<!-- J1 -->
+<line x1="60"  y1="22" x2="590" y2="22" stroke="#1565c0" stroke-width="5" opacity=".3"/>
+<circle cx="60"  cy="22" r="5" fill="#1565c0" opacity=".5"/>
+<circle cx="590" cy="22" r="5" fill="#1565c0" opacity=".5"/>
+<text x="35"  y="26" font-size="9" fill="#1565c0">$a_1$</text>
+<text x="594" y="26" font-size="9" fill="#1565c0">$b_1$</text>
+<text x="326" y="17" text-anchor="middle" font-size="9" fill="#1565c0">$J_1$</text>
+
+<!-- J2 -->
+<line x1="130" y1="50" x2="510" y2="50" stroke="#1565c0" stroke-width="5" opacity=".45"/>
+<circle cx="130" cy="50" r="5" fill="#1565c0" opacity=".55"/>
+<circle cx="510" cy="50" r="5" fill="#1565c0" opacity=".55"/>
+<text x="108" y="54" font-size="9" fill="#1565c0">$a_2$</text>
+<text x="514" y="54" font-size="9" fill="#1565c0">$b_2$</text>
+<text x="320" y="45" text-anchor="middle" font-size="9" fill="#1565c0">$J_2$</text>
+
+<!-- J3 -->
+<line x1="200" y1="78" x2="430" y2="78" stroke="#1565c0" stroke-width="5" opacity=".6"/>
+<circle cx="200" cy="78" r="5" fill="#1565c0" opacity=".7"/>
+<circle cx="430" cy="78" r="5" fill="#1565c0" opacity=".7"/>
+<text x="180" y="82" font-size="9" fill="#1565c0">$a_3$</text>
+<text x="434" y="82" font-size="9" fill="#1565c0">$b_3$</text>
+<text x="315" y="73" text-anchor="middle" font-size="9" fill="#1565c0">$J_3$</text>
+
+<!-- J4 -->
+<line x1="255" y1="106" x2="370" y2="106" stroke="#1565c0" stroke-width="5" opacity=".75"/>
+<circle cx="255" cy="106" r="5" fill="#1565c0" opacity=".8"/>
+<circle cx="370" cy="106" r="5" fill="#1565c0" opacity=".8"/>
+<text x="235" y="110" font-size="9" fill="#1565c0">$a_4$</td>
+<text x="374" y="110" font-size="9" fill="#1565c0">$b_4$</text>
+
+<!-- J5 / converging to c -->
+<line x1="285" y1="130" x2="335" y2="130" stroke="#1565c0" stroke-width="5" opacity=".9"/>
+<circle cx="285" cy="130" r="4" fill="#1565c0"/>
+<circle cx="335" cy="130" r="4" fill="#1565c0"/>
+
+<!-- c = intersection -->
+<line x1="310" y1="125" x2="310" y2="148" stroke="#2e7d32" stroke-width="2.5"/>
+<circle cx="310" cy="145" r="6" fill="#2e7d32"/>
+<text x="304" y="162" font-size="11" fill="#2e7d32" font-weight="bold">$c$</text>
+
+<!-- a_n and b_n monotone arrows -->
+<line x1="60"  y1="135" x2="305" y2="135" stroke="#e67e22"
+      stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#ax4)"/>
+<text x="150" y="128" font-size="9" fill="#e67e22">$(a_n)$ increases toward $c$</text>
+<line x1="590" y1="135" x2="315" y2="135" stroke="#c0392b"
+      stroke-width="1.2" stroke-dasharray="4,3">
+    <animate attributeName="x2" values="590;315" dur="2s" repeatCount="indefinite"/>
+</line>
+<text x="410" y="128" font-size="9" fill="#c0392b">$(b_n)$ decreases toward $c$</text>
+</svg>
+<div class="diagram-caption">
+    Nested closed intervals $J_1\supseteq J_2\supseteq\cdots$ with lengths $b_n-a_n\to 0.$
+    Their intersection collapses to a single point $c.$
+    $(a_n)$ increases and $(b_n)$ decreases, both converging to $c.$
+</div>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof.</span>
+    <strong>Existence.</strong>
+    The sequence $(a_n)$ is monotone increasing (since $J_{n+1}\subseteq J_n$ implies
+    $a_n\le a_{n+1}$) and bounded above by $b_1.$
+    The sequence $(b_n)$ is monotone decreasing and bounded below by $a_1.$
+    By the Monotone Convergence Theorem:
+    $$\alpha = \text{lub}\{a_n\} = \lim_{n\to\infty}a_n
+      \qquad\text{and}\qquad
+      \beta  = \text{glb}\{b_n\} = \lim_{n\to\infty}b_n$$
+    both exist. Since $a_n\le b_n$ for all $n,$ passing to limits gives $\alpha\le\beta.$
+    <br><br>
+    Any $c\in[\alpha,\beta]$ satisfies $a_n\le\alpha\le c\le\beta\le b_n$ for all $n,$
+    so $c\in J_n$ for all $n,$ hence $c\in\bigcap_n J_n.$
+    <br><br>
+    <strong>Uniqueness.</strong>
+    Let $c,d\in\bigcap_n J_n.$ Assume $c\le d.$ Since $a_n\le c\le d\le b_n$:
+    $$0 \;\le\; d-c \;\le\; b_n-a_n.$$
+    Since $b_n-a_n\to 0,$ the Sandwich Theorem gives $d-c=0,$ i.e., $d=c.$
+    <br><br>
+    So $\bigcap_n J_n$ contains exactly one point, call it $c=\alpha=\beta.$ $\blacksquare$
+    <span class="qed"></span>
+</div>
+
+<div class="tcolorbox amber">
+    <div class="tcolorbox-header">Why "closed" intervals are essential</div>
+    <div class="tcolorbox-content">
+        The theorem fails for <strong>open</strong> intervals.
+        Example: $J_n=\left(0,\tfrac{1}{n}\right).$
+        These are nested and their lengths $1/n\to 0,$
+        yet $\displaystyle\bigcap_{n=1}^{\infty}\!\left(0,\tfrac{1}{n}\right)=\emptyset$
+        (any $x&gt;0$ is eventually excluded, and $0$ is not in any $J_n$).
+        The endpoint $0$ is the limit but is never included!
+    </div>
+</div>
+
+<div class="math-box">
+    <strong>The Sandwich argument at the heart of uniqueness.</strong>
+    The key line is $0\le d-c\le b_n-a_n\to 0,$
+    giving $d-c=0$ by Sandwich. This is the Sandwich Theorem applied to the
+    constant sequence $0$ and the sequence $b_n-a_n\to 0,$
+    with $d-c$ as the "middle" (constant) sequence.
+</div>
+</div><!-- /step 5 -->
+
+<!-- ══════════════════════════════════════
+     STEP 1 — The Six Limits (statement)
+══════════════════════════════════════ -->
+<div class="step">
+<h2>1. Theorem  — Six Important Limits</h2>
+
+<div class="tcolorbox blue">
+    <div class="tcolorbox-header">Theorem  — Important Limits</div>
+    <div class="tcolorbox-content">
+        <ol>
+            <li>Let $0\le r&lt;1$ and $x_n:=r^n.$ Then $x_n\to 0.$</li>
+            <li>Let $-1&lt;t&lt;1.$ Then $t^n\to 0.$</li>
+            <li>Let $|r|&lt;1.$ Then $nr^n\to 0.$</li>
+            <li>Let $a&gt;0.$ Then $a^{1/n}\to 1.$</li>
+            <li>$n^{1/n}\to 1.$</li>
+            <li>Fix $a\in\mathbb{R}.$ Then $\dfrac{a^n}{n!}\to 0.$</li>
+        </ol>
+    </div>
+</div>
+
+<div class="math-box">
+    <strong>Why these limits matter.</strong>
+    These are the building blocks of most convergence arguments in real analysis.
+    Limits (1)–(3) control geometric decay; limits (4)–(5) show that $n$-th roots
+    always normalise to $1$; limit (6) shows that factorials grow faster than any
+    exponential.
+</div>
+<h3>Numerical Glimpse</h3>
+<table>
+    <tr>
+        <th>Sequence</th>
+        <th>$n=1$</th><th>$n=5$</th><th>$n=10$</th>
+        <th>$n=50$</th><th>Limit</th>
+    </tr>
+    <tr>
+        <td>$(0.5)^n$</td>
+        <td>0.5</td><td>0.031</td><td>0.001</td><td>$&lt;10^{-15}$</td><td>$0$</td>
+    </tr>
+    <tr>
+        <td>$n(0.5)^n$</td>
+        <td>0.5</td><td>0.156</td><td>0.010</td><td>$4.4\times10^{-14}$</td><td>$0$</td>
+    </tr>
+    <tr>
+        <td>$2^{1/n}$</td>
+        <td>2</td><td>1.149</td><td>1.072</td><td>1.014</td><td>$1$</td>
+    </tr>
+    <tr>
+        <td>$n^{1/n}$</td>
+        <td>1</td><td>1.380</td><td>1.259</td><td>1.082</td><td>$1$</td>
+    </tr>
+    <tr>
+        <td>$2^n/n!$</td>
+        <td>2</td><td>0.267</td><td>0.000251</td><td>$\approx 0$</td><td>$0$</td>
+    </tr>
+</table>
+</div><!-- /step 1 -->
+
+<!-- ══════════════════════════════════════
+     STEP 2 — Proof of (1): r^n → 0
+══════════════════════════════════════ -->
+<div class="step">
+<h2>2. Proof of (1): $r^n\to 0$ for $0\le r&lt;1$</h2>
+
+<div class="tcolorbox amber">
+    <div class="tcolorbox-header">Key Tool — Bernoulli's Inequality</div>
+    <div class="tcolorbox-content">
+        For $h&gt;-1$ and $n\in\mathbb{N}$:
+        $$(1+h)^n \;\ge\; 1+nh.$$
+        Proof by induction: base $n=1$ clear; step $(1+h)^{k+1}=(1+h)^k(1+h)\ge(1+kh)(1+h)=1+(k+1)h+kh^2\ge 1+(k+1)h.$
+    </div>
+</div>
+
+<div class="rough-box">
+    <span class="rough-title">&#9999; Strategy</span>
+    For $r=0$: trivial. For $0&lt;r&lt;1$: write $r=\dfrac{1}{1+h}$ where $h=\dfrac{1-r}{r}&gt;0.$
+    Then $r^n=\dfrac{1}{(1+h)^n}.$
+    Bernoulli gives $(1+h)^n\ge 1+nh\ge nh,$ so
+    $0\le r^n\le\dfrac{1}{nh}\to 0$ by the Sandwich Lemma.
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof.</span>
+    The case $r=0$: $x_n=0$ for all $n,$ so $x_n\to 0.$ ✓
+    <br><br>
+    Let $0&lt;r&lt;1.$ Set $h=\dfrac{1}{r}-1=\dfrac{1-r}{r}&gt;0.$
+    Then $r=\dfrac{1}{1+h}$ and $r^n=\dfrac{1}{(1+h)^n}.$
+    <br><br>
+    By Bernoulli's Inequality:
+    $$(1+h)^n \;\ge\; 1+nh \;\ge\; nh.$$
+    Therefore
+    $$0 \;\le\; r^n = \frac{1}{(1+h)^n} \;\le\; \frac{1}{nh}.$$
+    Since $\dfrac{1}{nh}\to 0$ as $n\to\infty$ (fixed $h&gt;0$),
+    the Sandwich Lemma gives $r^n\to 0.$
+    <span class="qed">$\blacksquare$</span>
+</div>
+
+<!-- Diagram: r^n → 0 -->
+<div class="diagram-wrap">
+<svg viewBox="0 0 680 190" width="100%" xmlns="http://www.w3.org/2000/svg"
+     style="max-height:190px;">
+<defs>
+    <marker id="ax1" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+        <path d="M0,0 L7,2.5 L0,5 Z" fill="#607d8b"/>
+    </marker>
+</defs>
+<line x1="40" y1="160" x2="660" y2="160" stroke="#607d8b" stroke-width="1.5"
+      marker-end="url(#ax1)"/>
+<line x1="60" y1="175" x2="60" y2="15" stroke="#607d8b" stroke-width="1.5"
+      marker-end="url(#ax1)"/>
+<text x="662" y="168" font-size="10" fill="#555">$n$</text>
+<text x="64"  y="14"  font-size="10" fill="#555">$a_n$</text>
+<!-- axis ticks -->
+<line x1="55" y1="40" x2="65" y2="40" stroke="#aaa" stroke-width="1"/>
+<text x="38" y="44" font-size="9" fill="#555">$1$</text>
+
+<!-- r=0.8 curve -->
+<circle cx="105" cy="112" r="4.5" fill="#1565c0"/>
+<circle cx="150" cy="89" r="4.5" fill="#1565c0"/>
+<circle cx="195" cy="71" r="4.5" fill="#1565c0"/>
+<circle cx="240" cy="57" r="4.5" fill="#1565c0"/>
+<circle cx="285" cy="46" r="4.5" fill="#1565c0"/>
+<circle cx="330" cy="163" r="4" fill="#1565c0" opacity=".2"/>
+<path d="M105,112 C 150,89 195,71 240,57 C 280,45 330,42 380,40 C 430,38 480,38 540,38"
+      fill="none" stroke="#1565c0" stroke-width="2" stroke-dasharray="1,0"/>
+<text x="545" y="36" font-size="10" fill="#1565c0">$r=0.9$</text>
+
+<!-- r=0.5 curve -->
+<circle cx="105" cy="100" r="4.5" fill="#e67e22"/>
+<circle cx="150" cy="70"  r="4.5" fill="#e67e22"/>
+<circle cx="195" cy="55"  r="4.5" fill="#e67e22"/>
+<circle cx="240" cy="48"  r="4.5" fill="#e67e22"/>
+<circle cx="285" cy="43"  r="4.5" fill="#e67e22"/>
+<path d="M105,100 C 150,70 195,55 240,48 C 280,44 330,42 380,41 C 430,40 480,40 540,40"
+      fill="none" stroke="#e67e22" stroke-width="2"/>
+<text x="545" y="50" font-size="10" fill="#e67e22">$r=0.5$</text>
+
+<!-- r=0.2 curve -->
+<circle cx="105" cy="128" r="4.5" fill="#2e7d32"/>
+<circle cx="150" cy="162" r="4" fill="#2e7d32" opacity=".3"/>
+<path d="M105,128 Q 130,155 160,162" fill="none" stroke="#2e7d32" stroke-width="2"/>
+<text x="160" y="155" font-size="10" fill="#2e7d32">$r=0.2$ (fast)</text>
+
+<!-- L=0 line -->
+<line x1="60" y1="160" x2="650" y2="160" stroke="#2e7d32" stroke-width="1.5"
+      stroke-dasharray="6,3"/>
+<text x="635" y="156" font-size="9" fill="#2e7d32">$0$</text>
+
+<text x="105" y="175" font-size="9" fill="#555">$1$</text>
+<text x="150" y="175" font-size="9" fill="#555">$2$</text>
+<text x="195" y="175" font-size="9" fill="#555">$3$</text>
+<text x="240" y="175" font-size="9" fill="#555">$4$</text>
+<text x="285" y="175" font-size="9" fill="#555">$5$</text>
+</svg>
+<div class="diagram-caption">
+    $r^n$ for $r=0.2,0.5,0.9.$ All converge to $0;$ smaller $r$ converges faster.
+</div>
+</div>
+
+<div class="tcolorbox teal">
+    <div class="tcolorbox-header">Proof of (2): $t^n\to 0$ for $-1&lt;t&lt;1$</div>
+    <div class="tcolorbox-content">
+        $|t^n - 0| = |t|^n = |t|^n.$ Since $|t|\in[0,1),$ by (1) we have $|t|^n\to 0.$
+        Hence $t^n\to 0$ by the criterion $x_n\to 0\iff|x_n|\to 0.$ $\blacksquare$
+    </div>
+</div>
+</div><!-- /step 2 -->
+
+<!-- ══════════════════════════════════════
+     STEP 3 — Proof of (3): nr^n → 0
+══════════════════════════════════════ -->
+<div class="step">
+<h2>3. Proof of (3): $nr^n\to 0$ for $|r|&lt;1$</h2>
+
+<div class="tcolorbox orange">
+    <div class="tcolorbox-header">Why the estimate from (1) is insufficient</div>
+    <div class="tcolorbox-content">
+        Using (1) with $r\in(0,1)$: $r^n\le\dfrac{1}{nh}$ gives $nr^n\le\dfrac{1}{h},$
+        a constant — useless for showing $nr^n\to 0.$
+        <br>
+        We need a sharper bound, obtained by keeping the <strong>quadratic term</strong>
+        in the Binomial expansion.
+    </div>
+</div>
+
+<div class="rough-box">
+    <span class="rough-title">&#9999; Strategy — Keep the $h^2$ term</span>
+    Write $r=\dfrac{1}{1+h}$ with $h&gt;0.$ Use the Binomial Theorem:
+    $$(1+h)^n \;\ge\; \binom{n}{2}h^2 = \frac{n(n-1)}{2}h^2.$$
+    So $r^n\le\dfrac{2}{n(n-1)h^2}$ and $nr^n\le\dfrac{2}{(n-1)h^2}\to 0.$
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof (for $0&lt;r&lt;1$).</span>
+    It suffices to prove the result for $0&lt;r&lt;1$ (the case $r=0$ is trivial;
+    $-1&lt;r&lt;0$ follows since $|nr^n|=n|r|^n$).
+    <br><br>
+    Write $r=\dfrac{1}{1+h}$ with $h=\dfrac{1-r}{r}&gt;0.$ By the Binomial Theorem,
+    for $n\ge 2$:
+    $$(1+h)^n \;=\; 1+nh+\frac{n(n-1)}{2}h^2+\cdots
+      \;\ge\; \frac{n(n-1)}{2}h^2.$$
+    All terms are positive so we keep only the $k=2$ term.
+    Therefore:
+    $$0 \;\le\; nr^n = \frac{n}{(1+h)^n}
+      \;\le\; \frac{n}{\dfrac{n(n-1)}{2}h^2}
+      = \frac{2}{(n-1)h^2}.$$
+    Since $\dfrac{2}{(n-1)h^2}\to 0$ as $n\to\infty$ (fixed $h&gt;0$),
+    the Sandwich Lemma gives $nr^n\to 0.$
+    <span class="qed">$\blacksquare$</span>
+</div>
+
+<div class="math-box">
+    <strong>Remark: the Divide and Conquer trick.</strong>
+    Here is an alternative proof using the method described at the end of the textbook images.
+    For $0&lt;r&lt;1,$ choose $N$ such that $r&lt;1/N^{1/N}$ (possible since $N^{1/N}\to 1$).
+    Split the factors of $r^n$ into two groups.
+    The factorials proof below uses the same philosophy.
+</div>
+
+<!-- Interactive: nr^n diagram -->
+<div class="diagram-wrap">
+<svg viewBox="0 0 680 180" width="100%" xmlns="http://www.w3.org/2000/svg"
+     style="max-height:180px;">
+<defs>
+    <marker id="ax2" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+        <path d="M0,0 L7,2.5 L0,5 Z" fill="#607d8b"/>
+    </marker>
+</defs>
+<line x1="40" y1="155" x2="660" y2="155" stroke="#607d8b" stroke-width="1.5"
+      marker-end="url(#ax2)"/>
+<line x1="60" y1="168" x2="60" y2="15" stroke="#607d8b" stroke-width="1.5"
+      marker-end="url(#ax2)"/>
+<text x="662" y="163" font-size="10" fill="#555">$n$</text>
+<text x="64"  y="14"  font-size="10" fill="#555">$nr^n$</text>
+<line x1="55" y1="155" x2="65" y2="155" stroke="#aaa" stroke-width="1"/>
+<text x="38" y="159" font-size="9" fill="#555">$0$</text>
+
+<!-- nr^n for r=0.9 — peaks then decays -->
+<!-- approximate values: 1*0.9=0.9, 2*0.81=1.62, 3*0.729=2.19, 4*0.656=2.62, 5*0.59=2.95,
+     6*0.531=3.19, 7*0.478=3.35, 8*0.430=3.44(peak≈9.5), then decays  -->
+<polyline points="100,98 145,74 190,55 235,43 280,35 325,30 370,28 415,28 460,30
+                  505,35 550,42 595,52 640,65"
+          fill="none" stroke="#1565c0" stroke-width="2"/>
+<text x="545" y="42" font-size="10" fill="#1565c0">$r=0.9$</text>
+<!-- Dots -->
+<circle cx="100" cy="98" r="4" fill="#1565c0"/>
+<circle cx="145" cy="74" r="4" fill="#1565c0"/>
+<circle cx="190" cy="55" r="4" fill="#1565c0"/>
+<circle cx="370" cy="28" r="5" fill="#1565c0"/>
+<circle cx="640" cy="65" r="4" fill="#1565c0"/>
+
+<!-- nr^n for r=0.5 — peaks early then decays fast -->
+<polyline points="100,121 145,97 190,82 235,77 280,78 325,82 370,88 415,94 460,100
+                  505,106 550,111 595,115 640,118"
+          fill="none" stroke="#e67e22" stroke-width="2"/>
+<text x="430" cy="92" font-size="10" fill="#e67e22" x="430" y="92">$r=0.5$</text>
+<circle cx="100" cy="121" r="4" fill="#e67e22"/>
+<circle cx="235" cy="77" r="5" fill="#e67e22"/>
+<circle cx="640" cy="118" r="4" fill="#e67e22"/>
+
+<!-- L=0 line -->
+<line x1="60" y1="155" x2="650" y2="155" stroke="#2e7d32"
+      stroke-width="1.5" stroke-dasharray="6,3"/>
+<text x="634" y="151" font-size="9" fill="#2e7d32">$0$</text>
+
+<text x="97"  y="170" font-size="9" fill="#555">$1$</text>
+<text x="142" y="170" font-size="9" fill="#555">$5$</text>
+<text x="187" y="170" font-size="9" fill="#555">$10$</text>
+<text x="370" y="170" font-size="9" fill="#555">peak</text>
+</svg>
+<div class="diagram-caption">
+    $nr^n$: increases to a peak (the $n$ factor wins initially) then decays to $0$
+    (the $r^n$ factor eventually dominates). Both curves converge to $0.$
+</div>
+</div>
+</div><!-- /step 3 -->
+
+<!-- ══════════════════════════════════════
+     STEP 4 — Proofs of (4) and (5)
+══════════════════════════════════════ -->
+<div class="step">
+<h2>4. Proofs of (4) $a^{1/n}\to 1$ and (5) $n^{1/n}\to 1$</h2>
+
+<h3>Proof of (4): $a^{1/n}\to 1$ for $a&gt;0$</h3>
+
+<div class="tcolorbox indigo">
+    <div class="tcolorbox-header">The three cases</div>
+    <div class="tcolorbox-content">
+        <strong>Case $a=1$:</strong> $a^{1/n}=1$ always. ✓
+        <br><br>
+        <strong>Case $a&gt;1$:</strong> Write $a^{1/n}=1+h_n$ where $h_n&gt;0$
+        (since $a^{1/n}&gt;1$ when $a&gt;1$).
+        By Bernoulli: $a=(1+h_n)^n\ge 1+nh_n,$ so $h_n\le\dfrac{a-1}{n}\to 0.$
+        By Sandwich, $h_n\to 0,$ hence $a^{1/n}\to 1.$
+        <br><br>
+        <strong>Case $0&lt;a&lt;1$:</strong> Set $b=1/a&gt;1.$
+        By the case above, $b^{1/n}\to 1.$
+        Then $a^{1/n}=1/b^{1/n}\to 1/1=1.$ ✓
+    </div>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Formal Proof (case $a&gt;1$).</span>
+    Since $a&gt;1,$ we have $a^{1/n}&gt;1.$ Write $a^{1/n}=1+h_n$ with $h_n&gt;0.$
+    Then $a=(1+h_n)^n\ge 1+nh_n$ by Bernoulli's Inequality.
+    So $h_n\le\dfrac{a-1}{n}.$ Since $0\le h_n\le\dfrac{a-1}{n}\to 0,$
+    the Sandwich Lemma gives $h_n\to 0.$ Hence $a^{1/n}=1+h_n\to 1.$
+    <span class="qed">$\blacksquare$</span>
+</div>
+
+<h3>Proof of (5): $n^{1/n}\to 1$</h3>
+
+<div class="rough-box">
+    <span class="rough-title">&#9999; Strategy — Use the quadratic Binomial term</span>
+    Write $n^{1/n}=1+h_n$ with $h_n\ge 0$ for $n\ge 1.$
+    Need $h_n\to 0.$ Cube the Binomial:
+    $(1+h_n)^n\ge\binom{n}{2}h_n^2=\dfrac{n(n-1)}{2}h_n^2.$
+    So $n\ge\dfrac{n(n-1)}{2}h_n^2,$ giving
+    $h_n^2\le\dfrac{2}{n-1}\to 0,$ hence $h_n\to 0.$
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof.</span>
+    For $n=1$: $n^{1/n}=1.$ For $n\ge 2$: $n^{1/n}&gt;1,$ so write $n^{1/n}=1+h_n$
+    with $h_n&gt;0.$
+    <br><br>
+    Using the Binomial Theorem (keeping only the $k=2$ term, all others positive):
+    $$n=(1+h_n)^n \;\ge\; \binom{n}{2}h_n^2 = \frac{n(n-1)}{2}h_n^2.$$
+    Dividing by $n&gt;0$:
+    $$h_n^2 \;\le\; \frac{2}{n-1}.$$
+    Since $h_n\ge 0$: $0\le h_n\le\sqrt{\dfrac{2}{n-1}}\to 0.$
+    By Sandwich, $h_n\to 0,$ so $n^{1/n}=1+h_n\to 1.$
+    <span class="qed">$\blacksquare$</span>
+</div>
+
+<div class="tcolorbox teal">
+    <div class="tcolorbox-header">Connection between (4) and (5)</div>
+    <div class="tcolorbox-content">
+        For $a\ge 1$: since $a^{1/n}\le n^{1/n}$ when $n\ge a,$
+        and both sides $\to 1$ as $n\to\infty,$ the Sandwich Lemma gives
+        $a^{1/n}\to 1$ as an <em>alternative</em> to the proof above.
+        <br><br>
+        Also: $1\le a^{1/n}\le n^{1/n}$ for $n\ge a,$
+        and $n^{1/n}\to 1,$ so $a^{1/n}\to 1$ by Sandwich. ✓
+    </div>
+</div>
+
+<!-- Diagram: a^{1/n} and n^{1/n} -->
+<div class="diagram-wrap">
+<svg viewBox="0 0 680 200" width="100%" xmlns="http://www.w3.org/2000/svg"
+     style="max-height:200px;">
+<defs>
+    <marker id="ax3" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+        <path d="M0,0 L7,2.5 L0,5 Z" fill="#607d8b"/>
+    </marker>
+</defs>
+<line x1="40" y1="165" x2="660" y2="165" stroke="#607d8b" stroke-width="1.5"
+      marker-end="url(#ax3)"/>
+<line x1="60" y1="180" x2="60" y2="15" stroke="#607d8b" stroke-width="1.5"
+      marker-end="url(#ax3)"/>
+<text x="662" y="173" font-size="10" fill="#555">$n$</text>
+<text x="64"  y="14"  font-size="10" fill="#555">$y$</text>
+<!-- L=1 line -->
+<line x1="60" y1="130" x2="650" y2="130" stroke="#2e7d32"
+      stroke-width="1.5" stroke-dasharray="7,4"/>
+<text x="638" y="126" font-size="10" fill="#2e7d32">$1$</text>
+
+<!-- n^{1/n}: peaks at n=3 -->
+<polyline points="105,130 150,90 195,82 240,95 285,103 330,110 375,116
+                  420,120 465,123 510,126 555,127 600,129 645,130"
+          fill="none" stroke="#6a1b9a" stroke-width="2.5"/>
+<circle cx="105" cy="130" r="4" fill="#6a1b9a"/>
+<circle cx="150" cy="90" r="4" fill="#6a1b9a"/>
+<circle cx="195" cy="82" r="5" fill="#6a1b9a"/>
+<circle cx="240" cy="95" r="4" fill="#6a1b9a"/>
+<text x="175" y="75" font-size="10" fill="#6a1b9a">$n^{1/n}$ (peak at $n=3$)</text>
+
+<!-- 100^{1/n}: starts high, decreases to 1 -->
+<polyline points="105,28 150,62 195,82 240,97 285,107 330,113 375,118
+                  420,122 465,125 510,127 555,128 600,129 645,130"
+          fill="none" stroke="#1565c0" stroke-width="2"/>
+<circle cx="105" cy="28" r="4" fill="#1565c0"/>
+<text x="108" y="25" font-size="10" fill="#1565c0">$100^{1/n}$</text>
+
+<!-- 0.01^{1/n}: starts low (below 1 since a&lt;1 at n=1), increases to 1 -->
+<polyline points="105,185 150,175 195,165 240,155 285,148 330,142 375,138
+                  420,135 465,133 510,132 555,131 600,130 645,130"
+          fill="none" stroke="#e67e22" stroke-width="2"/>
+<circle cx="105" cy="185" r="4" fill="#e67e22"/>
+<text x="108" y="183" font-size="10" fill="#e67e22">$(0.01)^{1/n}$</text>
+
+<text x="97"  y="180" font-size="9" fill="#555">$1$</text>
+<text x="142" y="180" font-size="9" fill="#555">$2$</text>
+<text x="187" y="180" font-size="9" fill="#555">$3$</text>
+<text x="282" y="180" font-size="9" fill="#555">$5$</text>
+</svg>
+<div class="diagram-caption">
+    $n^{1/n}$ (purple) peaks at $n=3$ then decreases to $1.$
+    $100^{1/n}$ (blue) decreases from $100$ to $1.$
+    $(0.01)^{1/n}$ (orange) increases from $0.01$ to $1.$
+    All converge to $1.$
+</div>
+</div>
+</div><!-- /step 4 -->
+
+<!-- ══════════════════════════════════════
+     STEP 5 — Proof of (6): a^n/n! → 0
+══════════════════════════════════════ -->
+<div class="step">
+<h2>5. Proof of (6): $\dfrac{a^n}{n!}\to 0$</h2>
+
+<div class="tcolorbox purple">
+    <div class="tcolorbox-header">Proposition: Factorials beat exponentials</div>
+    <div class="tcolorbox-content">
+        For any fixed $a\in\mathbb{R},$
+        $$\lim_{n\to\infty}\frac{a^n}{n!} = 0.$$
+        This says $n!$ grows <em>much faster</em> than $a^n$ for any fixed $a.$
+    </div>
+</div>
+
+<div class="rough-box">
+    <span class="rough-title">&#9999; Strategy — Divide and Conquer</span>
+    It suffices to show $\dfrac{a^n}{n!}\to 0$ for $a&gt;0$ (replace $a$ by $|a|$ otherwise).
+    <br><br>
+    Choose $N\in\mathbb{N}$ with $N&gt;a$ (Archimedean). For $n\ge N,$ split:
+    $$\frac{a^n}{n!} = \underbrace{\frac{a}{1}\cdot\frac{a}{2}\cdots\frac{a}{N}}_{\text{first }N\text{ factors}=:C}
+      \cdot\underbrace{\frac{a}{N+1}\cdot\frac{a}{N+2}\cdots\frac{a}{n}}_{\text{remaining }n-N\text{ factors}}.$$
+    Each factor in the second group is $\dfrac{a}{k}\le\dfrac{a}{N+1}=:r&lt;1.$
+    So the second group is $\le r^{n-N}.$
+    Hence $\dfrac{a^n}{n!}\le C\cdot r^{n-N}=C'\cdot r^n\to 0.$
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof.</span>
+    We may assume $a&gt;0$ (replacing $a$ by $|a|$ if needed).
+    By the Archimedean Property there exists $N\in\mathbb{N}$ with $N&gt;a.$
+    For $n\ge N,$ write:
+    $$\frac{a^n}{n!} = \frac{a^N}{N!}\cdot\frac{a}{N+1}\cdot\frac{a}{N+2}\cdots\frac{a}{n}.$$
+    Set $C=\dfrac{a^N}{N!}&gt;0$ and $r=\dfrac{a}{N+1}&lt;1$ (since $N+1&gt;a$).
+    Each factor $\dfrac{a}{k}\le r$ for $k\ge N+1.$ Therefore:
+    $$0\le\frac{a^n}{n!}\le C\cdot r^{n-N} = \frac{C}{r^N}\cdot r^n.$$
+    Since $r\in(0,1),$ by limit (1) we have $r^n\to 0,$ so $\dfrac{C}{r^N}r^n\to 0.$
+    By the Sandwich Lemma, $\dfrac{a^n}{n!}\to 0.$
+    <span class="qed">$\blacksquare$</span>
+</div>
+
+<table>
+    <tr>
+        <th>$n$</th><th>$2^n/n!$</th><th>$10^n/n!$</th><th>$100^n/n!$</th>
+    </tr>
+    <tr><td>5</td>  <td>0.267</td><td>2520</td><td>$8.3\times10^9$</td></tr>
+    <tr><td>10</td> <td>0.000251</td><td>2755.73</td><td>$7.4\times10^{17}$</td></tr>
+    <tr><td>20</td> <td>$\approx 0$</td><td>0.000000165</td><td>$1.5\times10^{24}$</td></tr>
+    <tr><td>100</td><td>$\approx 0$</td><td>$\approx 0$</td><td>$\approx 0$</td></tr>
+    <tr><td>$\infty$</td><td>$0$</td><td>$0$</td><td>$0$</td></tr>
+</table>
+<div style="font-size:.88rem;color:#555;font-style:italic;margin-top:-8px;">
+    For $a=100$: the ratio first grows enormously (until $n\approx 100$) then plummets to $0.$
+    Factorials always win in the end.
+</div>
+</div><!-- /step 5 -->
+
+
+<!-- ══════════════════════════════════════
+     STEP 8 — Cesàro Means
+══════════════════════════════════════ -->
+<div class="step">
+<h2>8. Cesàro Means (Theorem 2.5.3)</h2>
+
+<div class="tcolorbox purple">
+    <div class="tcolorbox-header">Theorem 2.5.3 — Cesàro Means</div>
+    <div class="tcolorbox-content">
+        Let $x_n\to 0.$ Define the arithmetic means (averages)
+        $$s_n \;:=\; \frac{x_1+x_2+\cdots+x_n}{n}.$$
+        Then $s_n\to 0.$
+        <br><br>
+        <em>More generally:</em> if $x_n\to L,$ then $s_n\to L.$
+    </div>
+</div>
+
+<div class="rough-box">
+    <span class="rough-title">&#9999; Divide and Conquer Strategy</span>
+    We need to estimate $|s_n|=\left|\dfrac{1}{n}\sum_{k=1}^n x_k\right|.$
+    Split the sum at index $N$ (to be chosen):
+    $$|s_n|\le\frac{1}{n}\sum_{k=1}^N|x_k| + \frac{1}{n}\sum_{k=N+1}^n|x_k|.$$
+    <strong>Second part:</strong> since $x_k\to 0,$ for $k&gt;N$ we have $|x_k|&lt;\varepsilon/2.$
+    The second sum $\le\dfrac{n-N}{n}\cdot\dfrac{\varepsilon}{2}&lt;\dfrac{\varepsilon}{2}.$
+    <br>
+    <strong>First part:</strong> the numerator $\displaystyle\sum_{k=1}^N|x_k|$ is a fixed finite number $M.$
+    Choose $n$ large enough that $M/n&lt;\varepsilon/2.$
+    Then the first part $&lt;\varepsilon/2.$
+    Combining: $|s_n|&lt;\varepsilon.$
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof (case $x_n\to 0$).</span>
+    Let $\varepsilon&gt;0.$
+    Since $x_n\to 0,$ there exists $N\in\mathbb{N}$ such that $|x_k|&lt;\varepsilon/2$ for all $k&gt;N.$
+    <br><br>
+    For $n&gt;N$:
+    $$|s_n| = \left|\frac{1}{n}\sum_{k=1}^n x_k\right|
+      \le \frac{1}{n}\sum_{k=1}^N|x_k| + \frac{1}{n}\sum_{k=N+1}^n|x_k|.$$
+    The second sum: each $|x_k|&lt;\varepsilon/2,$ so
+    $\dfrac{1}{n}\displaystyle\sum_{k=N+1}^n|x_k|\le\dfrac{n-N}{n}\cdot\dfrac{\varepsilon}{2}&lt;\dfrac{\varepsilon}{2}.$
+    <br><br>
+    Set $M=\displaystyle\sum_{k=1}^N|x_k|$ (finite). Choose $n_0&gt;N$ with $M/n_0&lt;\varepsilon/2.$
+    For $n\ge n_0$: $\dfrac{M}{n}\le\dfrac{M}{n_0}&lt;\dfrac{\varepsilon}{2}.$
+    <br><br>
+    So for all $n\ge n_0$:
+    $|s_n|&lt;\dfrac{\varepsilon}{2}+\dfrac{\varepsilon}{2}=\varepsilon.$ $\quad\blacksquare$
+    <br><br>
+    <em>General case $x_n\to L$:</em> Apply the above to $y_n=x_n-L\to 0.$
+    Its Cesàro means are $\dfrac{s_n^{(x)}-nL}{n}=s_n^{(y)}\to 0,$
+    so $s_n^{(x)}\to L.$
+    <span class="qed">$\blacksquare$</span>
+</div>
+
+<div class="tcolorbox amber">
+    <div class="tcolorbox-header">Remark: Converse is False</div>
+    <div class="tcolorbox-content">
+        If $s_n\to L,$ it does <em>not</em> follow that $x_n\to L.$
+        Example: $x_n=(-1)^n$ diverges, but
+        $s_n=\dfrac{0\text{ or }1/n}{1}\to 0$ (the partial sums are $0$ or $-1/n$).
+        <br>
+        Actually: $s_n = 0$ for odd $n$ and $s_n = 0$ for even $n$ here, so $s_n\to 0.$
+        Cesàro convergence is weaker than ordinary convergence.
+    </div>
+</div>
+
+<div class="tcolorbox teal">
+    <div class="tcolorbox-header">Corollary</div>
+    <div class="tcolorbox-content">
+        If $x_n\to L,$ then the arithmetic means $\dfrac{x_1+\cdots+x_n}{n}\to L.$
+        <br><br>
+        In particular: if $x_n=f(n)$ for some function converging to $L,$
+        its running average also converges to $L$ — useful in ergodic theory
+        and in numerical approximation.
+    </div>
+</div>
+</div><!-- /step 8 -->
+
+
+<!-- ══════════════════════════════════════
+     STEP 6 — Self-Assessment Part A
+══════════════════════════════════════ -->
+<div class="step">
+<hr class="section-rule">
+<h2>6. Self-Assessment — Part A: Applying the Sandwich Theorem</h2>
+<div class="quiz-card">
+    <p><strong>Q1.</strong>
+        Using limit (1), show $\left(\dfrac{3}{4}\right)^n\to 0$ and find the
+        smallest $N$ such that $\left(\tfrac{3}{4}\right)^n&lt;0.01$ for all $n&gt;N.$
+    </p>
+    <button class="btn-sol" onclick="tog('a1')">Show / Hide Solution</button>
+    <div class="solution" id="a1">
+        <span class="sol-label">Solution.</span>
+        $r=3/4\in[0,1),$ so $(3/4)^n\to 0$ by limit (1). ✓
+        <br>
+        $(3/4)^n&lt;0.01\iff n\ln(3/4)&lt;\ln(0.01)\iff n&gt;\dfrac{\ln 0.01}{\ln(3/4)}
+        =\dfrac{-4.605}{-0.2877}\approx 16.00.$
+        So $N=16$ works: for $n\ge 17,$ $(3/4)^n&lt;0.01.$
+    </div>
+</div>
+<!-- Q2 -->
+<div class="quiz-card">
+    <p><strong>Q2.</strong>
+        Use limit (3) to show $n(0.9)^n\to 0,$ and deduce that $n^2(0.9)^n\to 0.$
+    </p>
+    <button class="btn-sol" onclick="tog('a2')">Show / Hide Solution</button>
+    <div class="solution" id="a2">
+        <span class="sol-label">Solution.</span>
+        By limit (3) with $r=0.9$: $n(0.9)^n\to 0.$ ✓
+        <br><br>
+        For $n^2(0.9)^n$: write $r'=\sqrt{0.9}\approx 0.949&lt;1.$
+        Then $n^2(0.9)^n=n^2(r')^{2n}=\bigl[n(r')^n\bigr]^2\cdot\dfrac{1}{n^0}$...
+        <br>
+        Better: $n^2(0.9)^n=n\cdot[n(0.9)^{n/2}]\cdot(0.9)^{n/2}/(n)$.
+        Most directly: by limit (3) applied twice, $n\cdot r^{n/2}\to 0$ and
+        $n^2 r^n=(n r^{n/2})^2\cdot r^0$... The cleanest approach:
+        <br>
+        $n^2(0.9)^n = n\cdot[n(0.9)^n]\to n\cdot 0= 0$?  No — $n$ diverges.
+        <br>
+        Use: write $0.9=(0.95)^2$. Then $n^2(0.9)^n=n^2(0.95)^{2n}=[n(0.95)^n]^2\to 0$ since $n(0.95)^n\to 0.$ ✓
+    </div>
+</div>
+
+
+<!-- Q4 -->
+<div class="quiz-card">
+    <p><strong>Q4.</strong>
+        Show that $\dfrac{n^{100}}{1.01^n}\to 0.$
+        (<em>This illustrates that exponentials beat any polynomial.</em>)
+    </p>
+    <button class="btn-sol" onclick="tog('a4')">Show / Hide Solution</button>
+    <div class="solution" id="a4">
+        <span class="sol-label">Solution.</span>
+        Write $1.01^n=e^{n\ln 1.01}.$ This grows exponentially.
+        By limit (6) with $a=1/\ln 1.01\approx 100.5$:
+        $\dfrac{(1/\ln 1.01)^n}{n!}\to 0.$
+        <br><br>
+        More directly: by limit (3) applied $100$ times inductively,
+        $n^{100}r^n\to 0$ for any $r\in(0,1).$ Take $r=1/1.01.$ Then
+        $\dfrac{n^{100}}{1.01^n}=n^{100}\cdot r^n\to 0.$ ✓
+    </div>
+</div>
+
+<!-- Q5 -->
+<div class="quiz-card">
+    <p><strong>Q5.</strong>
+        Prove: $\sqrt[n]{n!}\to\infty.$
+        (<em>Hint:</em> show $\sqrt[n]{n!}\ge\sqrt{n}/\sqrt{2}$ for even $n.$)
+    </p>
+    <button class="btn-sol" onclick="tog('a5')">Show / Hide Solution</button>
+    <div class="solution" id="a5">
+        <span class="sol-label">Proof.</span>
+        For even $n$: $n!\ge\left(\dfrac{n}{2}\right)^{n/2}$ since at least $n/2$ of the
+        factors in $n!$ are $\ge n/2.$
+        So $(n!)^{1/n}\ge\left(\dfrac{n}{2}\right)^{1/2}=\sqrt{n/2}\to\infty.$ $\blacksquare$
+        <br><br>
+        By Stirling's formula (not proved here): $(n!)^{1/n}\sim n/e\to\infty.$
+    </div>
+</div>
+
+
+
+<!-- Q1 -->
+<div class="quiz-card">
+    <p><strong>Q1.</strong>
+        Show that $\dfrac{\cos n}{n^2}\to 0.$
+    </p>
+    <button class="btn-sol" onclick="tog('a1')">Show / Hide Solution</button>
+    <div class="solution" id="a1">
+        <span class="sol-label">Proof.</span>
+        Since $-1\le\cos n\le 1$:
+        $-\dfrac{1}{n^2}\le\dfrac{\cos n}{n^2}\le\dfrac{1}{n^2}.$
+        Both bounds $\to 0.$ By Sandwich, $\dfrac{\cos n}{n^2}\to 0.$ $\blacksquare$
+    </div>
+</div>
+
+<!-- Q2 -->
+<div class="quiz-card">
+    <p><strong>Q2.</strong>
+        Prove $x_n:=\dfrac{n}{n^2+1}\to 0.$
+    </p>
+    <button class="btn-sol" onclick="tog('a2')">Show / Hide Solution</button>
+    <div class="solution" id="a2">
+        <span class="sol-label">Proof.</span>
+        $0\le\dfrac{n}{n^2+1}\le\dfrac{n}{n^2}=\dfrac{1}{n}\to 0.$ By Sandwich, $x_n\to 0.$ $\blacksquare$
+    </div>
+</div>
+
+<!-- Q3 -->
+<div class="quiz-card">
+    <p><strong>Q3.</strong>
+        Show $y_n=\dfrac{1}{n+1}+\dfrac{1}{n+2}+\cdots+\dfrac{1}{2n}\to\ln 2.$
+        <br><em>(You may use the fact that this equals a Riemann sum; or just show it is trapped between
+        known bounds.)</em>
+    </p>
+    <button class="btn-sol" onclick="tog('a3')">Show / Hide Solution</button>
+    <div class="solution" id="a3">
+        <span class="sol-label">Hint / Bounds.</span>
+        $y_n$ has $n$ terms. The smallest term is $\tfrac{1}{2n}$ and the largest is $\tfrac{1}{n+1}.$
+        So $\dfrac{n}{2n}\le y_n\le\dfrac{n}{n+1},$ i.e., $\dfrac{1}{2}\le y_n\le\dfrac{n}{n+1}.$
+        The right bound $\to 1,$ but this Sandwich only gives $1/2\le\lim y_n\le 1.$
+        <br><br>
+        The exact limit is $\ln 2\approx 0.693$ (from the Riemann sum of $\int_1^2(1/x)\,dx$),
+        which requires integral calculus to establish precisely.
+        The Sandwich here confirms $y_n$ is bounded; the exact limit needs a refined argument.
+    </div>
+</div>
+
+<!-- Q4 -->
+<div class="quiz-card">
+    <p><strong>Q4.</strong>
+        Suppose $(a_n)$ is bounded and $r^n\to 0$ for some $|r|&lt;1.$
+        Prove $a_n r^n\to 0.$
+    </p>
+    <button class="btn-sol" onclick="tog('a4')">Show / Hide Solution</button>
+    <div class="solution" id="a4">
+        <span class="sol-label">Proof.</span>
+        By Application 6: $(a_n)$ bounded and $r^n\to 0$ (which means $x_n=r^n\to 0$).
+        By Application 6, $a_n r^n\to 0.$ $\blacksquare$
+        <br><br>
+        Direct: $|a_n|\le B,$ so $-B|r|^n\le a_nr^n\le B|r|^n.$ Since $|r|^n\to 0,$
+        both bounds $\to 0.$ Sandwich gives $a_nr^n\to 0.$ $\blacksquare$
+    </div>
+</div>
+<!-- Q6 -->
+<div class="quiz-card">
+    <p><strong>Q6.</strong>
+        Show that $\left(1+\dfrac{1}{n}\right)^{n+1}$ is monotone <em>decreasing</em>
+        and bounded below by $e.$ Conclude it also converges to $e.$
+    </p>
+    <button class="btn-sol" onclick="tog('b1')">Show / Hide Solution</button>
+    <div class="solution" id="b1">
+        <span class="sol-label">Solution.</span>
+        Let $b_n=\left(1+\tfrac{1}{n}\right)^{n+1}.$
+        Apply AM-GM to $n+1$ copies of $\left(1-\tfrac{1}{n+1}\right)$ and one copy of $1$,
+        or note $b_n/b_{n+1}=\left(\dfrac{(n+1)^2}{n(n+2)}\right)^{n+1}\cdot\dfrac{n+2}{n+1}&gt;1.$
+        <br><br>
+        $(b_n)$ decreases. Since $b_n=a_n\left(1+\tfrac1n\right)\ge a_n\ge 2,$ it is bounded below.
+        By MCT, $b_n\to L.$ But $b_n=a_n\cdot\left(1+\tfrac1n\right)\to e\cdot 1=e,$ so $L=e.$
+        We have $a_n\le e\le b_n$ for all $n.$ ✓
+    </div>
+</div>
+
+<!-- Q7 -->
+<div class="quiz-card">
+    <p><strong>Q7.</strong>
+        Use the series $e=\sum_{k=0}^{\infty}\dfrac{1}{k!}$ to prove $e&gt;2.7.$
+    </p>
+    <button class="btn-sol" onclick="tog('b2')">Show / Hide Solution</button>
+    <div class="solution" id="b2">
+        <span class="sol-label">Proof.</span>
+        $e = 1+1+\dfrac{1}{2}+\dfrac{1}{6}+\dfrac{1}{24}+\dfrac{1}{120}+\cdots$
+        $&gt; 1+1+0.5+0.1\overline{6}+0.04166\ldots+0.00833\ldots = 2.71666\ldots&gt;2.7.$ $\blacksquare$
+    </div>
+</div>
+
+<!-- Q8 -->
+<div class="quiz-card">
+    <p><strong>Q8.</strong>
+        The proof that $e$ is irrational uses $T=q!\cdot R_q\ge 1$ and $T&lt;1/q.$
+        <br>
+        (a) Write out $T$ explicitly for $q=3.$
+        (b) Verify $T\in(0,1)$ numerically.
+    </p>
+    <button class="btn-sol" onclick="tog('b3')">Show / Hide Solution</button>
+    <div class="solution" id="b3">
+        <span class="sol-label">Solution.</span>
+        $q=3$: $T=3!\cdot R_3=6\cdot\left(\dfrac{1}{4!}+\dfrac{1}{5!}+\cdots\right)
+        =\dfrac{6}{24}+\dfrac{6}{120}+\cdots=\dfrac{1}{4}+\dfrac{1}{20}+\dfrac{1}{120}+\cdots$
+        $=0.25+0.05+0.00833\ldots+\cdots\approx 0.3096\ldots$
+        <br>
+        $0&lt;T\approx 0.31&lt;1.$ ✓ Not an integer, consistent with $e$ being irrational.
+        <br><br>
+        Also $T\le 1/q=1/3\approx 0.333,$ check: $0.31&lt;0.333.$ ✓
+    </div>
+</div>
+
+<!-- Q9 -->
+<div class="quiz-card">
+    <p><strong>Q9.</strong>
+        Prove that $e$ is not a root of any polynomial of degree $2$ with integer coefficients,
+        i.e., $ae^2+be+c\ne 0$ for $a,b,c\in\mathbb{Z}$ not all zero.
+        (<em>Note: This is a weaker statement than $e$ being transcendental — harder to prove in general.</em>
+        Give an argument using the irrationality of $e.$)
+    </p>
+    <button class="btn-sol" onclick="tog('b4')">Show / Hide Solution</button>
+    <div class="solution" id="b4">
+        <span class="sol-label">Partial Argument.</span>
+        If $ae^2+be+c=0$ with $a\ne 0,$ then $e^2 = -\tfrac{b}{a}e-\tfrac{c}{a}.$
+        This would mean $e^2$ is a rational linear combination of $e$ and $1.$
+        Since $e$ is irrational, $b/a\ne 0$ would be needed, making $e$ satisfy a
+        quadratic over $\mathbb{Q},$ i.e., $e$ would be algebraic of degree $\le 2.$
+        It is a theorem (Lindemann 1882) that $e$ is transcendental — not a root of
+        any non-zero polynomial with rational coefficients — but this requires tools
+        beyond our course. The irrationality proof does not directly give this.
+    </div>
+</div>
+
+<!-- Q10 -->
+<div class="quiz-card">
+    <p><strong>Q10.</strong>
+        Show $\displaystyle\lim_{n\to\infty}\left(1+\frac{x}{n}\right)^n = e^x$ for all $x\in\mathbb{R}.$
+        (<em>Use $\left(1+\frac{x}{n}\right)^n = \left[\left(1+\frac{1}{n/x}\right)^{n/x}\right]^x$
+        and limit (1+1/n)^n → e.</em>)
+    </p>
+    <button class="btn-sol" onclick="tog('b5')">Show / Hide Solution</button>
+    <div class="solution" id="b5">
+        <span class="sol-label">Sketch.</span>
+        For $x&gt;0$: $\left(1+\dfrac{x}{n}\right)^n=\left[\left(1+\dfrac{1}{n/x}\right)^{n/x}\right]^x.$
+        As $n\to\infty,$ $m:=n/x\to\infty$ and $\left(1+\tfrac{1}{m}\right)^m\to e.$
+        Hence $\left(1+\tfrac{x}{n}\right)^n=\left[\left(1+\tfrac{1}{m}\right)^m\right]^x\to e^x.$
+        (Continuity of $t\mapsto t^x$ is used.)
+        <br><br>
+        For $x&lt;0$: use $\left(1+\tfrac{x}{n}\right)^n=1/\left(1-\tfrac{x}{n}\right)^n\cdot(\text{correction})\to e^x.$
+        The argument is more delicate but the result holds.
+    </div>
+</div>
+<!-- Q11 -->
+<div class="quiz-card">
+    <p><strong>Q11.</strong>
+        Let $a_n=\displaystyle\sum_{k=1}^n\dfrac{1}{k}$ (the harmonic series partial sums).
+        Show $a_n\to\infty,$ i.e., the harmonic series diverges.
+        (<em>Group: $a_{2^n}&gt;1+n/2.$</em>)
+    </p>
+    <button class="btn-sol" onclick="tog('c1')">Show / Hide Solution</button>
+    <div class="solution" id="c1">
+        <span class="sol-label">Proof.</span>
+        Group:
+        $a_{2^n}=1+\tfrac{1}{2}+\left(\tfrac13+\tfrac14\right)+\left(\tfrac15+\cdots+\tfrac18\right)+\cdots$
+        Each group $\left(\tfrac{1}{2^{k-1}+1}+\cdots+\tfrac{1}{2^k}\right)&gt;2^{k-1}\cdot\dfrac{1}{2^k}=\tfrac12.$
+        So $a_{2^n}&gt;1+n\cdot\tfrac12=1+n/2\to\infty.$ $\blacksquare$
+    </div>
+</div>
+
+<!-- Q12 -->
+<div class="quiz-card">
+    <p><strong>Q12.</strong>
+        Prove: if $x_n\to L,$ then the Cesàro means $s_n:=\dfrac{x_1+\cdots+x_n}{n}\to L.$
+        (Do this directly from the Divide and Conquer proof without reducing to $L=0.$)
+    </p>
+    <button class="btn-sol" onclick="tog('c2')">Show / Hide Solution</button>
+    <div class="solution" id="c2">
+        <span class="sol-label">Proof.</span>
+        Let $\varepsilon&gt;0.$ Since $x_n\to L,$ there exists $N$ with $|x_k-L|&lt;\varepsilon/2$
+        for all $k&gt;N.$
+        <br>
+        For $n&gt;N$: $\left|s_n-L\right|=\left|\dfrac{\sum_{k=1}^n(x_k-L)}{n}\right|
+        \le\dfrac{1}{n}\sum_{k=1}^N|x_k-L|+\dfrac{n-N}{n}\cdot\dfrac{\varepsilon}{2}.$
+        <br>
+        Set $M=\sum_{k=1}^N|x_k-L|.$ Choose $n_0$ with $M/n_0&lt;\varepsilon/2.$
+        For $n\ge n_0$: $|s_n-L|&lt;\varepsilon/2+\varepsilon/2=\varepsilon.$ $\blacksquare$
+    </div>
+</div>
+
+<!-- Q13 -->
+<div class="quiz-card">
+    <p><strong>Q13 (Exercise 2.5.2 from text).</strong>
+        Let $a&gt;1.$ Show $\dfrac{n}{a^n}\to 0.$
+        (<em>Use $nr^n\to 0$ with $r=1/a&lt;1.$</em>)
+    </p>
+    <button class="btn-sol" onclick="tog('c3')">Show / Hide Solution</button>
+    <div class="solution" id="c3">
+        <span class="sol-label">Proof.</span>
+        $\dfrac{n}{a^n}=n\cdot\left(\dfrac{1}{a}\right)^n=n\cdot r^n$ where $r=1/a\in(0,1).$
+        By limit (3), $nr^n\to 0.$ $\blacksquare$
+    </div>
+</div>
+
+<!-- Q14 -->
+<div class="quiz-card">
+    <p><strong>Q14.</strong>
+        Show that $\left(\dfrac{n^2+3n}{n^2+1}\right)^n\to e^3.$
+    </p>
+    <button class="btn-sol" onclick="tog('c4')">Show / Hide Solution</button>
+    <div class="solution" id="c4">
+        <span class="sol-label">Solution.</span>
+        Write $\dfrac{n^2+3n}{n^2+1}=1+\dfrac{3n-1}{n^2+1}=1+\dfrac{3-1/n}{n+1/n}
+        \approx 1+\dfrac{3}{n}$ for large $n.$
+        More precisely:
+        $$\left(\frac{n^2+3n}{n^2+1}\right)^n=\left(1+\frac{3n-1}{n^2+1}\right)^n.$$
+        Let $u_n=\dfrac{3n-1}{n^2+1}.$ Then $nu_n=\dfrac{n(3n-1)}{n^2+1}\to 3.$
+        Since $\left(1+\dfrac{x}{n}\right)^n\to e^x$ and $nu_n\to 3,$
+        the expression $\to e^3.$ $\blacksquare$
+    </div>
+</div>
+
+<!-- Q15 -->
+<div class="quiz-card">
+    <p><strong>Q15.</strong>
+        Prove: $\displaystyle\lim_{n\to\infty}\frac{1\cdot 3\cdot 5\cdots(2n-1)}{2\cdot 4\cdot 6\cdots(2n)}=0.$
+    </p>
+    <button class="btn-sol" onclick="tog('c5')">Show / Hide Solution</button>
+    <div class="solution" id="c5">
+        <span class="sol-label">Proof.</span>
+        Let $P_n=\dfrac{1\cdot3\cdots(2n-1)}{2\cdot4\cdots(2n)}.$
+        Note that $P_n^2\le\dfrac{1}{2n+1}$ by the Wallis product bound (each factor
+        $\dfrac{2k-1}{2k}\cdot\dfrac{2k-1}{2k}&lt;\dfrac{2k-1}{2k}\cdot\dfrac{2k+1}{2k+1}$, telescoping).
+        More directly: $P_n\le\dfrac{1}{\sqrt{2n+1}}\to 0$ (Wallis), so $P_n\to 0.$ $\blacksquare$
+    </div>
+</div>
+
+<!-- Q16 -->
+<div class="quiz-card">
+    <p><strong>Q16 (Bonus).</strong>
+        Prove that $e$ is not equal to $8/3,$ $5/2,$ or any simple fraction by using the
+        numerical bounds $2&lt;e&lt;3$ and the alternating series for $e-S_n.$
+    </p>
+    <button class="btn-sol" onclick="tog('c6')">Show / Hide Solution</button>
+    <div class="solution" id="c6">
+        <span class="sol-label">Illustration.</span>
+        $S_5=1+1+\tfrac12+\tfrac16+\tfrac{1}{24}+\tfrac{1}{120}=\tfrac{109}{45}\approx 2.7\overline{1}.$
+        $S_6=S_5+\tfrac{1}{720}\approx 2.71805.$
+        $S_5&lt;e&lt;S_5+\tfrac{1}{6!}\cdot\dfrac{1}{1-1/7}$... one can trap $e$ in the interval
+        $(2.71828,2.71829)$ using $S_8.$
+        Since $8/3\approx 2.6\overline{6},$ $5/2=2.5$ — neither lies in this interval.
+        More generally, the irrationality proof handles all fractions at once. $\blacksquare$
+    </div>
+</div>
+
+
+</div><!-- /step 6 -->
+
+<!-- ══════════════════════════════════════
+     STEP 7 — Self-Assessment Part B
+══════════════════════════════════════ -->
+<div class="step">
+<h2>7. Self-Assessment — Part B: Proofs &amp; Extensions</h2>
+
+<!-- Q6 -->
+<div class="quiz-card">
+    <p><strong>Q6.</strong>
+        Prove: if $0\le a_n\le\dfrac{1}{n}$ for all $n,$ then $a_n\to 0.$
+        Is the condition $a_n\ge 0$ necessary?
+    </p>
+    <button class="btn-sol" onclick="tog('b1')">Show / Hide Solution</button>
+    <div class="solution" id="b1">
+        <span class="sol-label">Answer.</span>
+        $0\le a_n\le 1/n.$ Both bounds $\to 0.$ By Sandwich, $a_n\to 0.$ $\blacksquare$
+        <br><br>
+        The condition $a_n\ge 0$ is needed to apply Sandwich (lower bound $=0$).
+        Without it: $a_n$ could be e.g. $a_n=-n,$ satisfying $a_n\le 1/n$ but $a_n\not\to 0.$
+        The Sandwich still works with the bounds $-1/n\le a_n\le 1/n$ if that holds;
+        the key is that <em>both</em> bounds must be given.
+    </div>
+</div>
+
+<!-- Q7 -->
+<div class="quiz-card">
+    <p><strong>Q7.</strong>
+        Compute $\displaystyle\lim_{n\to\infty}\frac{\sin n+\cos n}{n}$ and justify fully.
+    </p>
+    <button class="btn-sol" onclick="tog('b2')">Show / Hide Solution</button>
+    <div class="solution" id="b2">
+        <span class="sol-label">Solution.</span>
+        $|\sin n+\cos n|\le|\sin n|+|\cos n|\le 1+1=2.$
+        So $-\dfrac{2}{n}\le\dfrac{\sin n+\cos n}{n}\le\dfrac{2}{n}.$
+        Both bounds $\to 0.$ Limit $= 0.$ $\blacksquare$
+    </div>
+</div>
+
+<!-- Q8 -->
+<div class="quiz-card">
+    <p><strong>Q8.</strong>
+        Let $f:\mathbb{R}\to\mathbb{R}$ be continuous at $a.$ Let $r_n\to a$ with
+        $r_n\in\mathbb{Q}.$ Prove $f(r_n)\to f(a)$ using sequential continuity.
+        Conclude that $f$ on $\mathbb{R}$ is determined by its values on $\mathbb{Q}.$
+    </p>
+    <button class="btn-sol" onclick="tog('b3')">Show / Hide Solution</button>
+    <div class="solution" id="b3">
+        <span class="sol-label">Proof.</span>
+        By sequential continuity: any sequence $x_n\to a$ gives $f(x_n)\to f(a).$
+        Apply this with $x_n=r_n\in\mathbb{Q}$: $f(r_n)\to f(a).$ ✓
+        <br><br>
+        Now suppose $g:\mathbb{R}\to\mathbb{R}$ is also continuous with $g(r)=f(r)$ for all $r\in\mathbb{Q}.$
+        For any $a\in\mathbb{R},$ choose rationals $r_n\to a$ (Application 4).
+        Then $f(a)=\lim f(r_n)=\lim g(r_n)=g(a).$ So $f=g.$ $\blacksquare$
+    </div>
+</div>
+
+<!-- Q9 -->
+<div class="quiz-card">
+    <p><strong>Q9.</strong>
+        Show that $\displaystyle\sum_{k=1}^{n}\frac{1}{\sqrt{n^2+k}}\to 1.$
+        (<em>Use the same technique as Application 8.</em>)
+    </p>
+    <button class="btn-sol" onclick="tog('b4')">Show / Hide Solution</button>
+    <div class="solution" id="b4">
+        <span class="sol-label">Proof.</span>
+        Each term satisfies $\dfrac{1}{\sqrt{n^2+n}}\le\dfrac{1}{\sqrt{n^2+k}}\le\dfrac{1}{\sqrt{n^2+1}}$
+        for $k=1,\ldots,n.$
+        Summing $n$ terms:
+        $\dfrac{n}{\sqrt{n^2+n}}\le\displaystyle\sum_{k=1}^n\frac{1}{\sqrt{n^2+k}}\le\dfrac{n}{\sqrt{n^2+1}}.$
+        <br>
+        Both bounds $\to 1$ (divide top and bottom by $n$). Sandwich gives limit $=1.$ $\blacksquare$
+    </div>
+</div>
+
+<!-- Q10 -->
+<div class="quiz-card">
+    <p><strong>Q10.</strong>
+        Prove: for any $k\in\mathbb{N},$
+        $\displaystyle\lim_{n\to\infty}\frac{n^k}{n!}=0.$
+        (<em>Hint: bound from above by a geometric sequence for large $n.$</em>)
+    </p>
+    <button class="btn-sol" onclick="tog('b5')">Show / Hide Solution</button>
+    <div class="solution" id="b5">
+        <span class="sol-label">Proof.</span>
+        For $n&gt;2k$: $\dfrac{n^k}{n!}=\underbrace{\dfrac{n}{n}\cdot\dfrac{n}{n-1}\cdots\dfrac{n}{n-k+1}}_{\le\,2^k}\cdot\dfrac{1}{(n-k)!}.$
+        <br>
+        More directly: choose $N&gt;2k.$ For $n\ge N$:
+        $\dfrac{n^k}{n!}=\dfrac{n\cdot n\cdots n}{1\cdot2\cdots n}
+        \le\dfrac{n^k}{(n/2)^{n/2}}\to 0$ (exponentials beat polynomials).
+        <br><br>
+        Sandwich: $0\le\dfrac{n^k}{n!}\le C\cdot\left(\dfrac{1}{2}\right)^n\to 0$ for suitable $C.$ $\blacksquare$
+    </div>
+</div>
+
+<!-- Q11 -->
+<div class="quiz-card">
+    <p><strong>Q11.</strong>
+        The Nested Interval Theorem requires $b_n-a_n\to 0.$
+        Give an example of nested closed intervals $[a_n,b_n]$ with
+        $\bigcap_n[a_n,b_n]$ being an entire interval (not a single point).
+    </p>
+    <button class="btn-sol" onclick="tog('b6')">Show / Hide Solution</button>
+    <div class="solution" id="b6">
+        <span class="sol-label">Example.</span>
+        Take $[a_n,b_n]=[0,1+1/n].$
+        Then $[a_1,b_1]=[0,2]\supseteq[0,3/2]\supseteq\cdots$
+        and $\bigcap_n[0,1+1/n]=[0,1]$ — an interval, not a point.
+        <br><br>
+        The lengths $b_n-a_n=1+1/n\to 1\ne 0,$ so the hypothesis $b_n-a_n\to 0$ fails,
+        and accordingly uniqueness fails. ✓
+    </div>
+</div>
+</div><!-- /step 7 -->
+
+<!-- ══════════════════════════════════════
+     STEP 8 — Self-Assessment Part C (Challenge)
+══════════════════════════════════════ -->
+<div class="step">
+<h2>8. Self-Assessment — Part C: Challenge</h2>
+
+<!-- Q12 -->
+<div class="quiz-card">
+    <p><strong>Q12.</strong>
+        Prove: if $a_n\ge 0$ for all $n$ and $a_n\to L,$ then $L\ge 0.$
+        (<em>Use Sandwich with lower bound $0.$</em>)
+    </p>
+    <button class="btn-sol" onclick="tog('c1')">Show / Hide Solution</button>
+    <div class="solution" id="c1">
+        <span class="sol-label">Proof.</span>
+        We have $0\le a_n$ for all $n.$ Taking limits: $0\le\lim a_n=L.$
+        <br><br>
+        More carefully: suppose $L&lt;0.$ Set $\varepsilon=-L/2&gt;0.$ There exists $N$ with
+        $|a_n-L|&lt;\varepsilon=-L/2$ for $n\ge N,$ i.e., $a_n&lt;L-L/2=L/2&lt;0.$
+        But $a_n\ge 0$ — contradiction. So $L\ge 0.$ $\blacksquare$
+    </div>
+</div>
+
+<!-- Q13 -->
+<div class="quiz-card">
+    <p><strong>Q13.</strong>
+        Let $\alpha=\text{lub}(A)$ with $\alpha\notin A.$
+        Using Application 5, show that $\alpha$ is a limit point of $A$
+        (i.e., every open interval around $\alpha$ contains a point of $A$ other than $\alpha$).
+    </p>
+    <button class="btn-sol" onclick="tog('c2')">Show / Hide Solution</button>
+    <div class="solution" id="c2">
+        <span class="sol-label">Proof.</span>
+        By Application 5, there exists $(a_n)$ with $a_n\in A$ and $a_n\to\alpha.$
+        Since $\alpha\notin A,$ we have $a_n\ne\alpha$ for all $n.$
+        For any $\varepsilon&gt;0,$ eventually $|a_n-\alpha|&lt;\varepsilon,$
+        so $a_n\in(\alpha-\varepsilon,\alpha+\varepsilon)\cap A$ with $a_n\ne\alpha.$
+        Hence $\alpha$ is a limit point of $A.$ $\blacksquare$
+    </div>
+</div>
+
+<!-- Q14 -->
+<div class="quiz-card">
+    <p><strong>Q14 (Bolzano–Weierstrass via Nested Intervals).</strong>
+        Let $(x_n)$ be a bounded sequence: $|x_n|\le M.$
+        Use the Nested Interval Theorem (via bisection) to prove
+        $(x_n)$ has a convergent subsequence.
+    </p>
+    <button class="btn-sol" onclick="tog('c3')">Show / Hide Solution</button>
+    <div class="solution" id="c3">
+        <span class="sol-label">Proof sketch.</span>
+        Start with $J_0=[-M,M].$ Bisect into $[-M,0]$ and $[0,M].$
+        At least one half contains infinitely many terms; call it $J_1.$
+        Repeat: bisect $J_1$ and choose the half with infinitely many terms — call it $J_2.$
+        Continue: we get nested closed intervals $J_0\supseteq J_1\supseteq J_2\supseteq\cdots$
+        each of length $M\cdot 2^{1-k}\to 0,$
+        each containing infinitely many terms of $(x_n).$
+        <br><br>
+        By the Nested Interval Theorem, $\bigcap_k J_k=\{c\}$ for some $c.$
+        Pick indices $n_1&lt;n_2&lt;\cdots$ with $x_{n_k}\in J_k.$
+        Then $x_{n_k}\in J_k$ and $|x_{n_k}-c|\le\text{length}(J_k)\to 0.$
+        So $x_{n_k}\to c.$ $\blacksquare$
+    </div>
+</div>
+
+<!-- Q15 -->
+<div class="quiz-card">
+    <p><strong>Q15 (Cesàro Means).</strong>
+        Suppose $x_n\to 0.$ Define the arithmetic mean $s_n=\dfrac{x_1+\cdots+x_n}{n}.$
+        Use the Sandwich Theorem (Divide and Conquer) to show $s_n\to 0.$
+    </p>
+    <button class="btn-sol" onclick="tog('c4')">Show / Hide Solution</button>
+    <div class="solution" id="c4">
+        <span class="sol-label">Proof.</span>
+        Let $\varepsilon&gt;0.$ Choose $N$ with $|x_k|&lt;\varepsilon/2$ for $k&gt;N.$
+        <br>
+        For $n&gt;N$:
+        $$|s_n|\le\frac{1}{n}\sum_{k=1}^N|x_k|+\frac{1}{n}\sum_{k=N+1}^n|x_k|
+        \le\frac{M}{n}+\frac{n-N}{n}\cdot\frac{\varepsilon}{2}$$
+        where $M=\sum_{k=1}^N|x_k|$ is fixed. Choose $n_0&gt;N$ with $M/n_0&lt;\varepsilon/2.$
+        For $n\ge n_0$: $|s_n|&lt;\varepsilon/2+\varepsilon/2=\varepsilon.$
+        <br><br>
+        Since $-|s_n|\le s_n\le|s_n|$ and $|s_n|\to 0$: Sandwich gives $s_n\to 0.$ $\blacksquare$
+    </div>
+</div>
+
+
+<hr class="section-rule">
+
+<!-- Summary table -->
+<div class="tcolorbox lime">
+    <div class="tcolorbox-header">Summary — The Sandwich Theorem and Its Applications</div>
+    <div class="tcolorbox-content">
+        <table>
+            <tr>
+                <th>Application</th><th>Sandwich</th><th>Result</th>
+            </tr>
+            <tr>
+                <td>Any $x_n\in(a-1/n,\,a+1/n)$</td>
+                <td>$a-1/n\le x_n\le a+1/n$</td>
+                <td>$x_n\to a$</td>
+            </tr>
+            <tr>
+                <td>$\sin n/n$</td>
+                <td>$-1/n\le(\sin n)/n\le 1/n$</td>
+                <td>$(\sin n)/n\to 0$</td>
+            </tr>
+            <tr>
+                <td>Rational seq. to $x$</td>
+                <td>$x-1/n &lt; r_n &lt; x$</td>
+                <td>$r_n\to x,\;r_n\in\mathbb{Q}$</td>
+            </tr>
+            <tr>
+                <td>$\text{lub}(A)$ as a limit</td>
+                <td>$\alpha-1/n &lt; a_n\le\alpha$</td>
+                <td>$a_n\to\alpha,\;a_n\in A$</td>
+            </tr>
+            <tr>
+                <td>Bounded $\times$ zero</td>
+                <td>$-B|x_n|\le a_n x_n\le B|x_n|$</td>
+                <td>$a_n x_n\to 0$</td>
+            </tr>
+            <tr>
+                <td>$\sqrt{n+1}-\sqrt{n}$</td>
+                <td>$0\le\text{expr}\le 1/(2\sqrt{n})$</td>
+                <td>$\to 0$</td>
+            </tr>
+            <tr>
+                <td>Telescoping sum (App. 8)</td>
+                <td>$n/\sqrt{n^2+n}\le x_n\le n/\sqrt{n^2+1}$</td>
+                <td>$x_n\to 1$</td>
+            </tr>
+            <tr>
+                <td>$(a^n+b^n)^{1/n}$, $a&lt;b$</td>
+                <td>$b\le\text{expr}\le 2^{1/n}b$</td>
+                <td>$\to b$</td>
+            </tr>
+            <tr>
+                <td>Nested Interval Theorem (uniqueness)</td>
+                <td>$0\le d-c\le b_n-a_n\to 0$</td>
+                <td>$d=c$ (unique point)</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<hr class="section-rule">
+<div class="tcolorbox lime">
+    <div class="tcolorbox-header">Summary — The Six Limits at a Glance</div>
+    <div class="tcolorbox-content">
+        <table>
+            <tr>
+                <th>#</th><th>Limit</th><th>Key tool</th><th>Rate</th>
+            </tr>
+            <tr>
+                <td>(1)</td><td>$r^n\to 0,\;0\le r&lt;1$</td>
+                <td>Bernoulli (linear term)</td><td>$r^n\le 1/(nh)$</td>
+            </tr>
+            <tr>
+                <td>(2)</td><td>$t^n\to 0,\;|t|&lt;1$</td>
+                <td>Reduce to (1) via $|t^n|=|t|^n$</td><td>Same as (1)</td>
+            </tr>
+            <tr>
+                <td>(3)</td><td>$nr^n\to 0,\;|r|&lt;1$</td>
+                <td>Bernoulli (quadratic term)</td><td>$nr^n\le 2/(n-1)h^2$</td>
+            </tr>
+            <tr>
+                <td>(4)</td><td>$a^{1/n}\to 1,\;a&gt;0$</td>
+                <td>Bernoulli on $a^{1/n}=1+h_n$</td><td>$h_n\le(a-1)/n$</td>
+            </tr>
+            <tr>
+                <td>(5)</td><td>$n^{1/n}\to 1$</td>
+                <td>Bernoulli quadratic on $n^{1/n}=1+h_n$</td><td>$h_n\le\sqrt{2/(n-1)}$</td>
+            </tr>
+            <tr>
+                <td>(6)</td><td>$a^n/n!\to 0,\;a\in\mathbb{R}$</td>
+                <td>Divide &amp; Conquer at $N&gt;a$</td><td>$a^n/n!\le Cr^n$</td>
+            </tr>
+            <tr>
+                <td>+</td><td>$(1+1/n)^n\to e$</td>
+                <td>MCT (monotone + bounded)</td><td>$e-a_n\approx e/(2n)$</td>
+            </tr>
+        </table>
+        <br>
+        <strong>Hierarchy:</strong> $\ln n \ll n^\alpha \ll a^n \ll n! \ll n^n$ as $n\to\infty$
+        (for any $\alpha&gt;0$ and $a&gt;1$).
+    </div>
+</div>
+</div>
+
+<!-- /step 8 -->
+
+</div><!-- /.container -->
+
+<!-- CONTROLS BAR -->
+<div class="controls">
+    <span class="key-hint">Press <kbd>Enter</kbd> or <kbd>→</kbd> to advance</span>
+    <div class="progress-wrap">
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="pFill"></div>
+        </div>
+        <span class="progress-label" id="pLbl">0 / 0</span>
+    </div>
+    <button class="btn-next" id="btnNext" onclick="revealNext()">Next &#9654;</button>
+</div>
+
+<script>
+const steps   = document.querySelectorAll('.step');
+const fill    = document.getElementById('pFill');
+const lbl     = document.getElementById('pLbl');
+const btn     = document.getElementById('btnNext');
+let   current = 0;
+
+function updateUI(){
+    fill.style.width = (current/steps.length*100)+'%';
+    lbl.textContent  = current+' / '+steps.length;
+    btn.disabled     = current >= steps.length;
+    btn.textContent  = current >= steps.length ? 'Done \u2713' : 'Next \u25B6';
+}
+function revealNext(){
+    if(current >= steps.length) return;
+    const el = steps[current];
+    el.classList.add('visible');
+    if(window.MathJax) MathJax.typesetPromise([el]);
+    current++;
+    updateUI();
+    setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+function tog(id){
+    const s = document.getElementById(id);
+    const show = s.style.display !== 'block';
+    s.style.display = show ? 'block' : 'none';
+    if(show && window.MathJax) MathJax.typesetPromise([s]);
+}
+document.addEventListener('keydown', function(e){
+    if(e.key==='Enter'||e.key==='ArrowRight'||
+       (e.key===' '&&e.target.tagName!=='BUTTON')){
+        e.preventDefault(); revealNext();
+    }
+});
+window.addEventListener('load', function(){ updateUI(); revealNext(); });
+</script>
+</body>
+</html>

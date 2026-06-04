@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Monotone Convergence Theorem &amp; Applications</title>
+
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <style>
+        :root { --primary: #2c3e50; --secondary: #3498db; --bg: #f4f7f6; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: var(--primary);
+            background: var(--bg);
+            padding: 20px 20px 100px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3, h4 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 8px;
+        }
+
+        .math-box {
+            background: #e8f4fd;
+            border-left: 5px solid var(--secondary);
+            padding: 15px 18px;
+            margin: 18px 0;
+            border-radius: 4px;
+        }
+
+        /* ── tcolorbox ─────────────────────────────────────── */
+        .tcolorbox { border-radius: 6px; margin: 14px 0; overflow: hidden; border: 1px solid #ccc; }
+        .tcolorbox-header { padding: 8px 15px; font-weight: bold; font-size: 1rem; color: white; }
+        .tcolorbox-content { padding: 15px 18px; }
+
+        .tcolorbox.blue        .tcolorbox-header  { background-color: #1565c0; }
+        .tcolorbox.blue        .tcolorbox-content { background-color: #e3f2fd; }
+        .tcolorbox.green       .tcolorbox-header  { background-color: #2e7d32; }
+        .tcolorbox.green       .tcolorbox-content { background-color: #e8f5e9; }
+        .tcolorbox.orange      .tcolorbox-header  { background-color: #e65100; }
+        .tcolorbox.orange      .tcolorbox-content { background-color: #fff3e0; }
+        .tcolorbox.purple      .tcolorbox-header  { background-color: #6a1b9a; }
+        .tcolorbox.purple      .tcolorbox-content { background-color: #f3e5f5; }
+        .tcolorbox.red         .tcolorbox-header  { background-color: #c62828; }
+        .tcolorbox.red         .tcolorbox-content { background-color: #ffebee; }
+        .tcolorbox.teal        .tcolorbox-header  { background-color: #00695c; }
+        .tcolorbox.teal        .tcolorbox-content { background-color: #e0f2f1; }
+        .tcolorbox.indigo      .tcolorbox-header  { background-color: #283593; }
+        .tcolorbox.indigo      .tcolorbox-content { background-color: #e8eaf6; }
+        .tcolorbox.brown       .tcolorbox-header  { background-color: #4e342e; }
+        .tcolorbox.brown       .tcolorbox-content { background-color: #efebe9; }
+        .tcolorbox.cyan        .tcolorbox-header  { background-color: #00838f; }
+        .tcolorbox.cyan        .tcolorbox-content { background-color: #e0f7fa; }
+        .tcolorbox.lime        .tcolorbox-header  { background-color: #558b2f; }
+        .tcolorbox.lime        .tcolorbox-content { background-color: #f1f8e9; }
+        .tcolorbox.amber       .tcolorbox-header  { background-color: #f57f17; }
+        .tcolorbox.amber       .tcolorbox-content { background-color: #fff8e1; }
+        .tcolorbox.grey        .tcolorbox-header  { background-color: #424242; }
+        .tcolorbox.grey        .tcolorbox-content { background-color: #f5f5f5; }
+        .tcolorbox.deep-purple .tcolorbox-header  { background-color: #4527a0; }
+        .tcolorbox.deep-purple .tcolorbox-content { background-color: #ede7f6; }
+        .tcolorbox.slate       .tcolorbox-header  { background-color: #37474f; }
+        .tcolorbox.slate       .tcolorbox-content { background-color: #eceff1; }
+        .tcolorbox.pink        .tcolorbox-header  { background-color: #ad1457; }
+        .tcolorbox.pink        .tcolorbox-content { background-color: #fce4ec; }
+
+        /* ── Table ─────────────────────────────────────────── */
+        table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+        th, td { border: 1px solid #ddd; padding: 11px 14px; text-align: left; }
+        th { background-color: #f2f2f2; font-weight: 600; }
+        td.center, th.center { text-align: center; }
+
+        /* ── Proof block ────────────────────────────────────── */
+        .proof-block {
+            background: #f9f9f9;
+            border-left: 4px solid #7a6e64;
+            padding: 14px 18px;
+            margin: 12px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .proof-block .proof-label {
+            font-weight: bold;
+            color: #4e342e;
+            margin-bottom: 8px;
+            display: block;
+            font-style: normal;
+        }
+        .qed { float: right; font-weight: bold; font-size: 1.1rem; }
+
+        /* ── Section divider ────────────────────────────────── */
+        .section-rule {
+            border: none;
+            border-top: 2px dashed #c8b99a;
+            margin: 32px 0 24px 0;
+        }
+
+        /* ── Step label chip ────────────────────────────────── */
+        .step-chip {
+            display: inline-block;
+            background: #2c3e50;
+            color: white;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            padding: 3px 10px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            vertical-align: middle;
+        }
+
+        /* ── Details / quiz ─────────────────────────────────── */
+        details { margin: 8px 0; }
+        summary {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #e0e0e0;
+            border: 1px solid #bbb;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+        summary:hover { background: #cfcfcf; }
+        .alert-secondary {
+            background: #f8f9fa;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px 14px;
+            margin-top: 6px;
+            font-size: 0.95rem;
+        }
+
+        /* ── Sequence terms display ─────────────────────────── */
+        .seq-terms {
+            font-family: 'Courier New', monospace;
+            background: #f0f4f8;
+            border: 1px solid #c5d5e8;
+            border-radius: 4px;
+            padding: 10px 14px;
+            margin: 10px 0;
+            font-size: 0.95rem;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        /* ── STEP REVEAL SYSTEM ────────────────────────────── */
+        .step {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.4s ease, max-height 0.65s ease;
+        }
+        .step.visible {
+            opacity: 1;
+            max-height: 6000px;
+            margin-bottom: 8px;
+        }
+
+        /* ── FIXED CONTROLS BAR ────────────────────────────── */
+        .controls {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: #ede5d8;
+            border-top: 2px solid #c8b99a;
+            padding: 12px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            z-index: 1000;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+        }
+        .progress-wrap { flex: 1; display: flex; align-items: center; gap: 12px; }
+        .progress-bar-bg {
+            flex: 1; height: 5px; background: #c8b99a;
+            border-radius: 3px; overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%; background: #8b2500;
+            border-radius: 3px; width: 0%;
+            transition: width 0.4s ease;
+        }
+        .progress-label {
+            font-size: 14px; color: #8b2500; font-weight: bold;
+            white-space: nowrap; min-width: 55px; text-align: right;
+        }
+        .btn-next {
+            background: #2c3e50; color: white; border: none;
+            padding: 10px 28px; font-family: 'Segoe UI', sans-serif;
+            font-size: 15px; cursor: pointer; border-radius: 4px;
+            transition: background 0.2s; letter-spacing: 0.03em;
+        }
+        .btn-next:hover:not(:disabled) { background: #3498db; }
+        .btn-next:disabled { background: #c8b99a; cursor: default; }
+        .key-hint { font-size: 13px; color: #7a6e64; font-style: italic; white-space: nowrap; }
+    </style>
+</head>
+
+<body>
+<nav>
+    <a href="main.html">&larr; Back to Course Home</a>
+    &nbsp;|&nbsp;
+    <a href="L3.html">&larr; Previous Lecture</a>
+    &nbsp;|&nbsp;
+    <a href="L5.html">Next Lecture &rarr;</a>
+</nav>
+
+<div class="container">
+
+    <h1>Monotone Convergence Theorem</h1>
+    <p>
+        This lecture develops the <strong>Monotone Convergence Theorem</strong> (MCT) — one of the
+        most powerful tools for proving that a sequence converges without knowing the limit in advance
+        — and applies it to a rich collection of recursively defined sequences.
+    </p>
+
+    <!-- ═══════════════════════════════════════════
+         STEP 1  —  MCT: Statement & Proof
+    ═══════════════════════════════════════════ -->
+    <div class="step">
+        <span class="step-chip">STEP 1</span>
+        <h2>The Monotone Convergence Theorem</h2>
+
+        <h3>Definitions</h3>
+        <div class="tcolorbox grey">
+            <div class="tcolorbox-header">Definition &mdash; Monotone Sequences</div>
+            <div class="tcolorbox-content">
+                A sequence $(a_n)$ of real numbers is called:
+                <ul>
+                    <li><strong>Monotone increasing</strong> if $a_n \le a_{n+1}$ for all $n\in\mathbb{N}.$</li>
+                    <li><strong>Strictly increasing</strong> if $a_n < a_{n+1}$ for all $n\in\mathbb{N}.$</li>
+                    <li><strong>Monotone decreasing</strong> if $a_n \ge a_{n+1}$ for all $n\in\mathbb{N}.$</li>
+                    <li><strong>Strictly decreasing</strong> if $a_n > a_{n+1}$ for all $n\in\mathbb{N}.$</li>
+                    <li><strong>Monotone</strong> if it is either monotone increasing or monotone decreasing.</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>The Theorem</h3>
+        <div class="tcolorbox blue">
+            <div class="tcolorbox-header">Theorem &mdash; Monotone Convergence Theorem (MCT)</div>
+            <div class="tcolorbox-content">
+                <ol>
+                    <li>
+                        If $(a_n)$ is <strong>monotone increasing</strong> and <strong>bounded above</strong>,
+                        then $(a_n)$ converges and
+                        $$\lim_{n\to\infty} a_n \;=\; \text{lub}\,\{\,a_n \mid n\in\mathbb{N}\,\}.$$
+                    </li>
+                    <li>
+                        If $(a_n)$ is <strong>monotone decreasing</strong> and <strong>bounded below</strong>,
+                        then $(a_n)$ converges and
+                        $$\lim_{n\to\infty} a_n \;=\; \text{glb}\,\{\,a_n \mid n\in\mathbb{N}\,\}.$$
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="math-box">
+            <strong>Key insight:</strong> To show a sequence converges using MCT, we need only
+            establish two things &mdash; <em>monotonicity</em> and <em>boundedness</em> &mdash;
+            without ever computing the limit explicitly. The limit is then identified by
+            an algebraic equation.
+        </div>
+
+        <h3>Proof of Part (1)</h3>
+
+        <div class="proof-block">
+            <span class="proof-label">Proof.</span>
+            Let $S = \{\,a_n \mid n\in\mathbb{N}\,\}.$ Since $(a_n)$ is bounded above,
+            $S$ is a nonempty set bounded above. By the <strong>Completeness Axiom</strong>,
+            $L = \text{lub}(S)$ exists in $\mathbb{R}.$
+            <br><br>
+            We claim $a_n \to L.$ Let $\varepsilon > 0.$ By the alternate definition of
+            least upper bound, there exists $N\in\mathbb{N}$ such that
+            $$a_N > L - \varepsilon.$$
+            Since $(a_n)$ is monotone increasing, for all $n \ge N$ we have
+            $$a_n \;\ge\; a_N \;>\; L - \varepsilon.$$
+            Since $L$ is an upper bound of $S$, we also have $a_n \le L < L + \varepsilon.$
+            <br><br>
+            Combining: $L - \varepsilon < a_n \le L < L + \varepsilon,$ i.e.,
+            $$|a_n - L| < \varepsilon \quad \text{for all } n \ge N.$$
+            Hence $a_n \to L = \text{lub}\,S.$
+            <span class="qed">$\blacksquare$</span>
+        </div>
+
+        <div class="tcolorbox amber">
+            <div class="tcolorbox-header">Proof of Part (2) &mdash; by symmetry</div>
+            <div class="tcolorbox-content">
+                If $(a_n)$ is monotone decreasing and bounded below, apply Part (1)
+                to $(-a_n)$, which is monotone increasing and bounded above.
+                One obtains $(-a_n)\to \text{lub}\{-a_n\} = -\text{glb}\{a_n\},$
+                so $a_n \to \text{glb}\{a_n\}.$
+            </div>
+        </div>
+
+        <h3>Strategy for Applying MCT</h3>
+        <table>
+            <tr>
+                <th>Step</th>
+                <th>Task</th>
+                <th>Tool</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Show $(a_n)$ is monotone (increasing or decreasing)</td>
+                <td>Induction, or sign of $a_{n+1}-a_n$</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Show $(a_n)$ is bounded (above if increasing, below if decreasing)</td>
+                <td>Induction, AM-GM, algebraic bound</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Conclude convergence by MCT</td>
+                <td>MCT</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Find the limit $L$</td>
+                <td>Take limit in the recurrence: $L = f(L)$</td>
+            </tr>
+        </table>
+    </div><!-- /step 1 -->
+    <!-- ═══════════════════════════════════════════
+         STEP 2  —  a_1=1, a_2=1, recurrence average
+    ═══════════════════════════════════════════ -->
+    <div class="step">
+        <span class="step-chip">STEP 2</span>
+        <h2>Application 1: $a_1=1,\; a_2=1,\; a_{n+2}=\dfrac{a_{n+1}+a_n}{2}$</h2>
+
+        <div class="tcolorbox purple">
+            <div class="tcolorbox-header">Recurrence &mdash; Average of Consecutive Terms</div>
+            <div class="tcolorbox-content">
+                Define $a_1 = 1,\; a_2 = 1,$ and for $n \ge 1$:
+                $$a_{n+2} = \frac{a_{n+1} + a_n}{2}.$$
+                Each term is the <em>arithmetic mean</em> of the two preceding terms.
+            </div>
+        </div>
+
+        <div class="seq-terms">
+            a&#8321;=1, &nbsp;a&#8322;=1, &nbsp;a&#8323;=1, &nbsp;a&#8324;=1, &nbsp;&hellip;
+        </div>
+
+        <div class="proof-block">
+            <span class="proof-label">Observation.</span>
+            Since $a_1 = a_2 = 1,$
+            $$a_3 = \frac{a_2+a_1}{2} = \frac{1+1}{2} = 1.$$
+            By induction, if $a_n = a_{n+1} = 1$ then $a_{n+2} = 1.$
+            Hence $(a_n)$ is the constant sequence $a_n = 1$ for all $n.$
+            <br><br>
+            <strong>This sequence is trivially monotone (both increasing and decreasing)
+            and bounded. It converges to $\mathbf{1}.$</strong>
+            <span class="qed">$\blacksquare$</span>
+        </div>
+
+        <div class="tcolorbox amber">
+            <div class="tcolorbox-header">Key observation</div>
+            <div class="tcolorbox-content">
+                When $a_1 = a_2,$ the recurrence $a_{n+2} = \tfrac{a_{n+1}+a_n}{2}$ produces a
+                constant sequence.   The interesting behaviour arises when $a_1 \ne a_2$ — as in the next step.
+            </div>
+        </div>
+
+        <div class="math-box">
+            <strong>General pattern (preview):</strong>
+            The recurrence $a_{n+2} = \frac{a_{n+1}+a_n}{2}$ has characteristic roots $r=1$ and
+            $r=-\frac{1}{2},$ giving the general term
+            $$a_n = A + B\!\left(-\tfrac{1}{2}\right)^{\!n}.$$
+            Since $|{-}\tfrac{1}{2}| < 1,$ the term $B(-\tfrac{1}{2})^n \to 0,$ so every solution
+            converges to $A = \lim_{n\to\infty} a_n.$
+        </div>
+    </div>
+    <!-- /step 2 -->
+    
+  <!-- ═══════════════════════════════════════════
+         STEP 3  —  a + 1/n → a
+    ═══════════════════════════════════════════ -->
+    <div class="step">
+        <span class="step-chip">STEP 3</span>
+        <h2>Application 2: $a_n = a + \dfrac{1}{n} \to a$</h2>
+
+        <div class="tcolorbox slate">
+            <div class="tcolorbox-header">Setup &mdash; The Archimedean Property in Action</div>
+            <div class="tcolorbox-content">
+                Let $a\in\mathbb{R}$ be any real number. Define $a_n = a + \dfrac{1}{n}$ for $n\ge 1.$
+                We show $(a_n)$ converges to $a.$
+            </div>
+        </div>
+
+        <div class="seq-terms">
+            (a=5 example): &nbsp;a&#8321;=6, &nbsp;a&#8322;=5.5, &nbsp;a&#8323;&asymp;5.333, &nbsp;a&#8321;&#8320;=5.1, &nbsp;a&#8321;&#8320;&#8320;=5.01&hellip; &nbsp;&rarr;&nbsp; 5 = a
+        </div>
+
+        <div class="proof-block">
+            <span class="proof-label">Step 1 &mdash; Monotone decreasing.</span>
+            $$a_{n+1} - a_n = \left(a+\frac{1}{n+1}\right)-\left(a+\frac{1}{n}\right)
+            = \frac{1}{n+1}-\frac{1}{n} = \frac{n-(n+1)}{n(n+1)} = \frac{-1}{n(n+1)} < 0.$$
+            So $(a_n)$ is strictly decreasing.
+            <span class="qed">$\blacksquare$</span>
+        </div>
+
+        <div class="proof-block">
+            <span class="proof-label">Step 2 &mdash; Bounded below by $a.$</span>
+            Since $\dfrac{1}{n} > 0$ for all $n\ge 1,$ we have $a_n = a+\dfrac{1}{n} > a.$
+            So $a$ is a lower bound.
+            <span class="qed">$\blacksquare$</span>
+        </div>
+
+        <div class="proof-block">
+            <span class="proof-label">Step 3 &mdash; MCT gives convergence.</span>
+            $(a_n)$ is monotone decreasing and bounded below.
+            By MCT, $L = \lim a_n = \text{glb}\{a_n\}$ exists.
+            <span class="qed">$\blacksquare$</span>
+        </div>
+
+        <div class="proof-block">
+            <span class="proof-label">Step 4 &mdash; Identifying $L = a.$</span>
+            We show $\text{glb}\{a_n\} = a.$
+            <br><br>
+            <em>$a$ is a lower bound:</em> $a_n > a$ for all $n$ (Step 2). &#10003;
+            <br><br>
+            <em>$a$ is the greatest lower bound:</em>
+            Let $m > a.$ Then $m - a > 0.$ By the <strong>Archimedean Property</strong>,
+            there exists $N\in\mathbb{N}$ with $\dfrac{1}{N} < m-a,$ i.e.,
+            $a_N = a+\dfrac{1}{N} < a + (m-a) = m.$
+            So $m$ is not a lower bound for $\{a_n\}.$
+            <br><br>
+            Therefore $\text{glb}\{a_n\} = a,$ and hence $\displaystyle\lim_{n\to\infty}\left(a+\frac{1}{n}\right) = a.$
+            <span class="qed">$\blacksquare$</span>
+        </div>
+
+        <div class="math-box">
+            <strong>Direct $\varepsilon$-$N$ verification:</strong>
+            Given $\varepsilon>0,$ by the Archimedean Property choose $N$ with $\dfrac{1}{N}<\varepsilon.$
+            Then for all $n\ge N$:
+            $$\left|\left(a+\frac{1}{n}\right)-a\right| = \frac{1}{n} \le \frac{1}{N} < \varepsilon.$$
+            So $a_n \to a$ directly from the definition of convergence — consistent with MCT.
+        </div>
+
+    
+    <!-- ═══════════════════════════════════════════
+         STEP 4  —  a_{n+1} = sqrt(1 + a_n)
+    ═══════════════════════════════════════════ -->
+    <div class="step">
+        <span class="step-chip">STEP 4</span>
+        <h2>Application 3: $a_1=1,\;\; a_{n+1}=\sqrt{1+a_n}$</h2>
+
+        <div class="tcolorbox green">
+            <div class="tcolorbox-header">Setup</div>
+            <div class="tcolorbox-content">
+                Define $a_1=1$ and $a_{n+1} = \sqrt{1+a_n}$ for $n\ge 1.$
+                The limit of this sequence is the famous <strong>Golden Ratio</strong>
+                $\varphi = \dfrac{1+\sqrt{5}}{2}\approx 1.618.$
+            </div>
+        </div>
+
+        <div class="seq-terms">
+            a&#8321;=1, &nbsp;a&#8322;&asymp;1.414, &nbsp;a&#8323;&asymp;1.554, &nbsp;a&#8324;&asymp;1.598, &nbsp;a&#8325;&asymp;1.610, &nbsp;a&#8326;&asymp;1.614&hellip; &nbsp;&rarr;&nbsp; &phi; = (1+&#8730;5)/2 &asymp; 1.6180
+        </div>
+
+        <p>
+            The fixed points of $f(x) = \sqrt{1+x}$ satisfy $L = \sqrt{1+L},$ i.e.,
+            $L^2 = 1+L,$ i.e., $L^2-L-1=0,$ giving $L = \tfrac{1\pm\sqrt{5}}{2}.$
+            Since $L > 0$ (all terms are positive), $L = \tfrac{1+\sqrt{5}}{2} = \varphi.$
+        </p>
+
+        <div class="proof-block">
+            <span class="proof-label">Step 1 &mdash; Bounded above by $\varphi.$</span>
+            Note $\varphi^2 = \varphi + 1$ (defining property of the golden ratio).
+            <br><br>
+            <strong>Base case:</strong> $a_1 = 1 < \varphi \approx 1.618.$ &#10003;
+            <br><br>
+            <strong>Induction:</strong> Suppose $a_n < \varphi.$ Then
+            $$a_{n+1} = \sqrt{1+a_n} < \sqrt{1+\varphi} = \sqrt{\varphi^2} = \varphi.$$
+            So $a_n < \varphi$ for all $n.$
+            <span class="qed">$\blacksquare$</span>
+        </div>
+
+        <div class="proof-block">
+            <span class="proof-label">Step 2 &mdash; Strictly increasing.</span>
+            <strong>Base case:</strong> $a_2 = \sqrt{1+1}=\sqrt{2}\approx 1.414 > 1 = a_1.$ &#10003;
+            <br><br>
+            <strong>Induction:</strong> Suppose $a_n < a_{n+1}.$ Then
+            $$a_{n+2} = \sqrt{1+a_{n+1}} > \sqrt{1+a_n} = a_{n+1}.$$
+            So $a_{n+1} < a_{n+2}$ and the sequence is strictly increasing.
+            <span class="qed">$\blacksquare$</span>
+        </div>
+
+        <div class="proof-block">
+            <span class="proof-label">Step 3 &mdash; Convergence and limit.</span>
+            $(a_n)$ is strictly increasing and bounded above by $\varphi.$
+            By MCT, $L = \lim a_n$ exists.
+            Taking limits in $a_{n+1} = \sqrt{1+a_n}$:
+            $$L = \sqrt{1+L} \;\Longrightarrow\; L^2 = 1+L \;\Longrightarrow\; L^2-L-1=0
+            \;\Longrightarrow\; L = \frac{1+\sqrt{5}}{2} = \varphi.$$
+            <span class="qed">$\blacksquare$</span>
+        </div>
+
+        <div class="tcolorbox amber">
+            <div class="tcolorbox-header">Connection to Continued Fractions</div>
+            <div class="tcolorbox-content">
+                The sequence $a_{n+1}=\sqrt{1+a_n}$ is related to the <em>nested radical</em>:
+                $$\varphi \;=\; \sqrt{1+\sqrt{1+\sqrt{1+\sqrt{1+\cdots}}}}$$
+                This is the limit of exactly the sequence we studied, starting from $a_1=1.$
+            </div>
+        </div>
+    </div><!-- /step 3 -->
+
+<!-- ═══════════════════════════════════════════
+         STEP 5  —  a_{n+1} = 4 - 1/a_n
+    ═══════════════════════════════════════════ -->
+    <div class="step">
+        <span class="step-chip">STEP 5</span>
+        <h2>Application 4: $a_1=1,\;\; a_{n+1}=4-\dfrac{1}{a_n}$</h2>
+
+        <div class="tcolorbox teal">
+            <div class="tcolorbox-header">Setup</div>
+            <div class="tcolorbox-content">
+                Define $a_1 = 1$ and $a_{n+1} = 4 - \dfrac{1}{a_n}$ for $n\ge 1.$
+            </div>
+        </div>
+
+        <div class="seq-terms">
+            a&#8321;=1, &nbsp;a&#8322;=3, &nbsp;a&#8323;&asymp;3.667, &nbsp;a&#8324;&asymp;3.727, &nbsp;a&#8325;&asymp;3.732&hellip; &nbsp;&rarr;&nbsp; 2+&#8730;3 &asymp; 3.7321
+        </div>
+
+        <p>
+            The fixed points of $f(x)=4-1/x$ satisfy $L = 4-1/L,$ i.e.,
+            $L^2-4L+1=0,$ giving $L = 2\pm\sqrt{3}.$
+            Since $a_1=1>0$ and the sequence is increasing (shown below), we expect $L=2+\sqrt{3}\approx 3.732.$
+        </p>
+
+        <div class="proof-block">
+            <span class="proof-label">Claim: $a_n \in (2-\sqrt{3},\, 2+\sqrt{3})$ for all $n.$</span>
+            Note $2-\sqrt{3}\approx 0.268$ and $2+\sqrt{3}\approx 3.732.$
+            <br><br>
+            <strong>Base case:</strong> $a_1=1\in(0.268, 3.732).$ &#10003;
+            <br><br>
+            <strong>Induction:</strong> Suppose $2-\sqrt{3} < a_n < 2+\sqrt{3}$ (and $a_n>0$).
+            <br>
+            <em>Upper bound:</em>
+            $a_{n+1} = 4-\tfrac{1}{a_n} < 2+\sqrt{3}
+            \;\Leftrightarrow\; \tfrac{1}{a_n} > 2-\sqrt{3}
+            \;\Leftrightarrow\; a_n < \tfrac{1}{2-\sqrt{3}} = 2+\sqrt{3}.$ &#10003; (by hypothesis)
+            <br>
+            <em>Lower bound:</em>
+            $a_{n+1} = 4-\tfrac{1}{a_n} > 2-\sqrt{3}
+            \;\Leftrightarrow\; \tfrac{1}{a_n} < 2+\sqrt{3}
+            \;\Leftrightarrow\; a_n > \tfrac{1}{2+\sqrt{3}} = 2-\sqrt{3}.$ &#10003; (by hypothesis)
+            <span class="qed">$\blacksquare$</span>
+        </div>
+
+        <div class="proof-block">
+            <span class="proof-label">Claim: $(a_n)$ is strictly increasing.</span>
+            $$a_{n+1} - a_n = 4-\frac{1}{a_n} - a_n = \frac{4a_n - 1 - a_n^2}{a_n}
+            = \frac{-(a_n^2-4a_n+1)}{a_n}.$$
+            Since $a_n\in(2-\sqrt{3},\,2+\sqrt{3}),$ the quadratic $a_n^2-4a_n+1 < 0$
+            (it is negative between its roots $2\pm\sqrt{3}$).
+            Also $a_n > 0.$ Therefore $a_{n+1}-a_n > 0.$
+            <span class="qed">$\blacksquare$</span>
+        </div>
+
+        <div class="proof-block">
+            <span class="proof-label">Convergence and limit.</span>
+            $(a_n)$ is monotone increasing and bounded above by $2+\sqrt{3}.$
+            By MCT, $(a_n)$ converges. Let $L = \lim a_n.$
+            Taking limits in $a_{n+1} = 4 - \dfrac{1}{a_n}$:
+            $$L = 4 - \frac{1}{L} \;\Longrightarrow\; L^2 - 4L + 1 = 0
+            \;\Longrightarrow\; L = 2\pm\sqrt{3}.$$
+            Since the sequence is increasing starting from $a_1=1 > 2-\sqrt{3},$
+            the limit must be $L = 2+\sqrt{3}.$
+            <span class="qed">$\blacksquare$</span>
+        </div>
+    </div><!-- /step 5 -->
+
+
+    <!-- ═══════════════════════════════════════════
+         STEP 6  —  r^n for 0 < r < 1
+    ═══════════════════════════════════════════ -->
+    <div class="step">
+        <span class="step-chip">STEP 6</span>
+        <h2>Application 5: $r^n \to 0$ for $0 < r < 1$</h2>
+
+        <div class="tcolorbox teal">
+            <div class="tcolorbox-header">Proposition</div>
+            <div class="tcolorbox-content">
+                Let $0 < r < 1.$ Define $a_n = r^n.$ Then $(a_n)$ converges and $\displaystyle\lim_{n\to\infty} r^n = 0.$
+            </div>
+        </div>
+
+        <div class="seq-terms">
+            r = 0.5 &nbsp;&rarr;&nbsp; a&#8321;=0.5, &nbsp;a&#8322;=0.25, &nbsp;a&#8323;=0.125, &nbsp;a&#8324;=0.0625, &nbsp;&hellip; &nbsp;&rarr;&nbsp; 0
+        </div>
+
+        <div class="proof-block">
+            <span class="proof-label">Proof via MCT.</span>
+            <strong>Step 1 &mdash; Monotone decreasing.</strong>
+            $$\frac{a_{n+1}}{a_n} = \frac{r^{n+1}}{r^n} = r < 1
+            \;\Longrightarrow\; a_{n+1} < a_n \text{ for all } n.$$
+            So $(a_n)$ is strictly decreasing.
+            <br><br>
+            <strong>Step 2 &mdash; Bounded below.</strong>
+            Since $r > 0,$ we have $a_n = r^n > 0$ for all $n.$ Thus $0$ is a lower bound.
+            <br><br>
+            <strong>Step 3 &mdash; MCT.</strong>
+            By the Monotone Convergence Theorem (Part 2), $(a_n)$ converges.
+            Let $L = \displaystyle\lim_{n\to\infty} r^n.$
+            <br><br>
+            <strong>Step 4 &mdash; Finding $L$.</strong>
+            Since $a_{n+1} = r \cdot a_n$ and both sides converge:
+            $$L = r \cdot L \;\Longrightarrow\; L(1-r) = 0.$$
+            Since $r \ne 1,$ we have $1 - r \ne 0,$ so $L = 0.$
+            <span class="qed">$\blacksquare$</span>
+        </div>
+
+        <div class="math-box">
+            <strong>Remark:</strong>
+            For $r = 1$: the sequence is constant at $1$, so $r^n \to 1.$
+            For $r > 1$: $r^n \to \infty$ (diverges). For $r \le 0$: the sequence oscillates or is $0.$
+            MCT applies precisely in the case $0 < r < 1$ (and also $r=1$, trivially).
+        </div>
+    </div><!-- /step 6 -->
+<!-- ═══════════════════════════════════════════
+         STEP 7  —  Geometric Series ($r \neq 0$)
+    ═══════════════════════════════════════════ -->
+    <div class="step">
+        <span class="step-chip">STEP 7</span>
+        <h2>Application 6: Geometric Series for $0 < r < 1$</h2>
+
+        <div class="math-box">
+            <strong>Sequence:</strong> Consider the sequence of partial sums of the geometric series with ratio $r$:
+            $$ a_n = 1 + r + r^2 + \dots + r^n = \sum_{k=0}^n r^k $$             We assume $0 \le r < 1.$         </div>
+
+        <div class="tcolorbox grey">
+            <div class="tcolorbox-header">Special Case: $r = 0$</div>
+            <div class="tcolorbox-content">
+                If $r=0$, the sequence is $a_n = 1 + 0 + \dots + 0 = 1$ for all $n.$                 This is a constant sequence, so it converges to 1.
+                <br>
+                Note: The general formula below also works for $r=0$ (as $0^{n+1}=0$).
+            </div>
+        </div>
+
+        <div class="tcolorbox blue">
+            <div class="tcolorbox-header">Proof of Convergence ($0 < r < 1$)</div>
+            <div class="tcolorbox-content">
+                
+                <strong>Step 1: Show $(a_n)$ is increasing.</strong>
+                Observe that $a_{n+1} = a_n + r^{n+1}.$                 Since $r > 0,$ the term $r^{n+1}$ is strictly positive.
+                Therefore:
+                $$ a_{n+1} = a_n + \text{positive} > a_n $$                 So $(a_n)$ is strictly increasing.
+                
+                <br><br>
+                <strong>Step 2: Show $(a_n)$ is bounded above.</strong>
+                Using the formula for the sum of a finite geometric series:
+                $$ a_n = \frac{1(1 - r^{n+1})}{1 - r} = \frac{1}{1-r} - \frac{r^{n+1}}{1-r} $$                 
+                Since $0 < r < 1$, we have $0 < r^{n+1} < 1.$ Thus $0 < \frac{r^{n+1}}{1-r} < \frac{1}{1-r}.$                 Therefore, the term we subtract is positive, meaning:
+                $$ a_n = \text{constant} - \text{positive} < \text{constant} $$                 So $a_n < \frac{1}{1-r}$ for all $n.$ The sequence is bounded above.
+
+                <div class="diagram-container">
+                    <svg width="100%" height="180" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Axis -->
+                        <line x1="50" y1="130" x2="550" y2="130" stroke="#343a40" stroke-width="2"/>
+                        <text x="550" y="145" text-anchor="middle" font-size="12" fill="#343a40">Partial Sums $a_n$</text>
+
+                        <!-- Limit Line (1/(1-r)) -->
+                        <line x1="50" y1="80" x2="550" y2="80" stroke="#2e7d32" stroke-width="2" stroke-dasharray="6,4"/>
+                        <text x="560" y="85" text-anchor="middle" font-weight="bold" fill="#2e7d32">Limit = 1/(1-r)</text>
+
+                        <!-- Bars a_n (r=0.5 example visual) -->
+                        <!-- Bar 1: 1 -->
+                        <rect x="100" y="100" width="100" height="30" fill="#3498db" opacity="0.9"/>
+                        <text x="150" y="120" text-anchor="middle" fill="#1565c0">1</text>
+
+                        <!-- Bar 2: r (0.5) -->
+                        <rect x="200" y="100" width="50" height="30" fill="#3498db" opacity="0.9"/>
+                        <text x="225" y="120" text-anchor="middle" fill="#1565c0">r</text>
+
+                        <!-- Bar 3: r^2 (0.25) -->
+                        <rect x="250" y="100" width="25" height="30" fill="#3498db" opacity="0.9"/>
+                        
+                        <!-- The Gap -->
+                        <rect x="275" y="100" width="1" height="30" fill="none" stroke="#e65100" stroke-width="2"/>
+                        
+                        <!-- Annotation -->
+                        <text x="450" y="50" text-anchor="middle" font-size="14" fill="#e65100">
+                            The "Gap" decreases as n increases
+                        </text>
+                    </svg>
+                </div>
+
+                <br><br>
+                <strong>Step 3: Apply Monotone Convergence Theorem (MCT).</strong>
+                Since $(a_n)$ is increasing and bounded above, by the MCT, it must converge to some limit $L.$ 
+                <br><br>
+                <strong>Step 4: Find the Limit.</strong>
+                Since limits distribute over addition and scalar multiplication:
+                $$ \lim_{n \to \infty} a_n = \lim_{n \to \infty} \left( \frac{1}{1-r} - \frac{r^{n+1}}{1-r} \right) $$                 The first term $\frac{1}{1-r}$ is constant.
+                The second term is $\frac{1}{1-r} \lim_{n \to \infty} r^{n+1}.$                 From Step 6, we know that for $0 < r < 1,$ $\lim_{n \to \infty} r^{n+1} = 0.$                 Therefore:
+                $$ \lim_{n \to \infty} a_n = \frac{1}{1-r} - \frac{1}{1-r}(0) = \frac{1}{1-r} $$                 <span class="qed">$\blacksquare$</span>                        
+             
+    </div> 
+    <!-- /step 7 -->
+   
+    <!-- ═══════════════════════════════════════════
+         STEP 8  —  a_1=1, a_2=2
+    ═══════════════════════════════════════════ -->
+    <div class="step">
+        <span class="step-chip">STEP 8</span>
+        <h2>Application 7 : $a_1=1,\; a_2=2,\; a_{n+2}=\dfrac{a_{n+1}+a_n}{2}$</h2>
+
+        <div class="tcolorbox indigo">
+            <div class="tcolorbox-header">Setup</div>
+            <div class="tcolorbox-content">
+                Define $a_1=1,\;a_2=2,$ and $a_{n+2} = \dfrac{a_{n+1}+a_n}{2}$ for $n\ge 1.$
+            </div>
+        </div>
+
+        <div class="seq-terms">
+            a&#8321;=1, &nbsp;a&#8322;=2, &nbsp;a&#8323;=1.5, &nbsp;a&#8324;=1.75, &nbsp;a&#8325;=1.625, &nbsp;a&#8326;=1.6875, &nbsp;a&#8327;=1.65625&hellip; &nbsp;&rarr;&nbsp; 5/3 &asymp; 1.6667
+        </div>
+
+        <p>
+            This sequence <em>oscillates</em> — it is not globally monotone.
+            However, the <strong>odd-indexed</strong> and <strong>even-indexed</strong>
+            subsequences are each monotone, and MCT applies to both.
+        </p>
+
+        <div class="proof-block">
+            <span class="proof-label">Step 1 &mdash; All terms lie in $[1, 2].$</span>
+            <strong>Base case:</strong> $a_1=1\in[1,2]$ and $a_2=2\in[1,2].$
+            <br>
+            <strong>Induction:</strong> Suppose $1\le a_n\le 2$ and $1\le a_{n+1}\le 2.$ Then
+            $$1 = \frac{1+1}{2} \;\le\; a_{n+2} = \frac{a_{n+1}+a_n}{2} \;\le\; \frac{2+2}{2} = 2.$$
+            So $1\le a_n\le 2$ for all $n.$
+            <span class="qed">$\blacksquare$</span>
+        </div>
+
+        <div class="proof-block">
+            <span class="proof-label">Step 2 &mdash; Odd-indexed terms are increasing.</span>
+            We show $a_{2k-1} \le a_{2k+1}$ for all $k\ge 1.$
+            <br><br>
+            Note $a_{2k+1} - a_{2k-1} = \dfrac{a_{2k}+a_{2k-1}}{2} - a_{2k-1}
+            = \dfrac{a_{2k}-a_{2k-1}}{2}.$
+            <br><br>
+            Similarly, $a_{2k} - a_{2k-1} = \dfrac{a_{2k-1}+a_{2k-2}}{2} - a_{2k-1}
+            = \dfrac{a_{2k-2}-a_{2k-1}}{2}.$
+            <br><br>
+            By induction one shows $a_{2k} \ge a_{2k-1}$ (even terms $\ge$ preceding odd term),
+            so $a_{2k+1} - a_{2k-1} \ge 0.$
+            Hence $(a_{2k-1})$ is monotone increasing and bounded above by $2.$ By MCT it converges.
+        </div>
+
+        <div class="proof-block">
+            <span class="proof-label">Step 3 &mdash; Even-indexed terms are decreasing.</span>
+            By a symmetric argument, $a_{2k+2} - a_{2k} = \dfrac{a_{2k+1}-a_{2k}}{2} \le 0,$
+            so $(a_{2k})$ is monotone decreasing and bounded below by $1.$ By MCT it converges.
+        </div>
+
+        <div class="proof-block">
+            <span class="proof-label">Step 4 &mdash; Both subsequences share the same limit.</span>
+            Let $L_{\text{odd}} = \lim a_{2k-1}$ and $L_{\text{even}} = \lim a_{2k}.$
+            From the recurrence $a_{2k+1} = \dfrac{a_{2k}+a_{2k-1}}{2},$ taking $k\to\infty$:
+            $$L_{\text{odd}} = \frac{L_{\text{even}} + L_{\text{odd}}}{2}
+            \;\Longrightarrow\; L_{\text{odd}} = L_{\text{even}} =: L.$$
+            Since every term of $(a_n)$ belongs to one of the two subsequences and both converge to $L,$
+            the full sequence converges: $a_n \to L.$
+            <br><br>
+            <strong>Finding $L$:</strong> Taking limits in the recurrence $a_{n+2}=\dfrac{a_{n+1}+a_n}{2}$
+            gives $L = L$ (automatically satisfied), so we use the closed form. The general solution is
+            $a_n = A + B(-\tfrac{1}{2})^n.$ Using $a_1=1,\;a_2=2$ gives $A = \tfrac{5}{3}.$
+            Hence $\displaystyle\lim_{n\to\infty} a_n = \frac{5}{3}.$
+            <span class="qed">$\blacksquare$</span>
+        </div>
+    </div><!-- /step 8 -->
+
+    <!-- ═══════════════════════════════════════════
+         STEP 9  —  a_1=a, a_2=b, general
+    ═══════════════════════════════════════════ -->
+    <div class="step">
+        <span class="step-chip">STEP 9</span>
+        <h2>Application 8: $a_1=a,\; a_2=b,\; a_{n+2}=\dfrac{a_{n+1}+a_n}{2}$</h2>
+
+        <div class="tcolorbox purple">
+            <div class="tcolorbox-header">General Initial Conditions</div>
+            <div class="tcolorbox-content">
+                Let $a,b\in\mathbb{R}$ with $a \ne b.$ Define $a_1=a,\;a_2=b,$ and
+                $a_{n+2} = \dfrac{a_{n+1}+a_n}{2}.$
+            </div>
+        </div>
+
+        <div class="proof-block">
+            <span class="proof-label">Closed form and limit.</span>
+            The characteristic equation of $a_{n+2} = \tfrac{1}{2}a_{n+1}+\tfrac{1}{2}a_n$ is
+            $$r^2 = \tfrac{1}{2}r + \tfrac{1}{2}, \quad\Longrightarrow\quad 2r^2 - r - 1 = 0
+            \quad\Longrightarrow\quad (r-1)(2r+1) = 0.$$
+            Roots: $r = 1$ and $r = -\tfrac{1}{2}.$
+            <br><br>
+            General solution: $\;a_n = A \cdot 1^n + B\cdot\!\left(-\tfrac{1}{2}\right)^{\!n} = A + B\!\left(-\tfrac{1}{2}\right)^{\!n}.$
+            <br><br>
+            Applying $a_1 = a$ and $a_2 = b$:
+            $$A - \tfrac{B}{2} = a, \qquad A + \tfrac{B}{4} = b.$$
+            Subtracting: $\tfrac{3B}{4} = b - a,$ so $B = \tfrac{4(b-a)}{3}.$
+            Then $A = a + \tfrac{B}{2} = a + \tfrac{2(b-a)}{3} = \dfrac{a+2b}{3}.$
+            <br><br>
+            Since $\left(-\tfrac{1}{2}\right)^n \to 0,$ we conclude:
+            $$\lim_{n\to\infty} a_n = A = \frac{a + 2b}{3}.$$
+            <span class="qed">$\blacksquare$</span>
+        </div>
+
+        <div class="math-box">
+            <strong>Verification of special cases:</strong>
+            <ul>
+                <li>$a=b=1$: limit $= \dfrac{1+2}{3} = 1.$ &#10003; &nbsp;(Step 3)</li>
+                <li>$a=1,\;b=2$: limit $= \dfrac{1+4}{3} = \dfrac{5}{3}.$ &#10003; &nbsp;(Step 4)</li>
+                <li>$a=0,\;b=1$: limit $= \dfrac{0+2}{3} = \dfrac{2}{3}.$</li>
+            </ul>
+        </div>
+
+        <div class="tcolorbox amber">
+            <div class="tcolorbox-header">Where does the $\frac{a+2b}{3}$ come from geometrically?</div>
+            <div class="tcolorbox-content">
+                The limit $\dfrac{a+2b}{3}$ is the point that divides the segment $[a,b]$
+                in the ratio $2:1$ from $a$ towards $b.$ The averaging process "forgets" the initial
+                term $a_1$ faster than $a_2$, giving $a_2$ twice the weight.
+            </div>
+        </div>
+    </div><!-- /step 8 -->
+
+    
+    
+    <!-- ═══════════════════════════════════════════
+         STEP 10  —  Babylonian method  a_{n+1} = a_n/2 + 1/(2a_n)
+    ═══════════════════════════════════════════ -->
+    <div class="step">
+        <span class="step-chip">STEP 10</span>
+        <h2>Application 9: $a_1=2,\;\; a_{n+1}=\dfrac{a_n}{2}+\dfrac{1}{2a_n}$</h2>
+
+        <div class="tcolorbox brown">
+            <div class="tcolorbox-header">Setup &mdash; Newton–Raphson / Babylonian Method</div>
+            <div class="tcolorbox-content">
+                Define $a_1=2$ and $a_{n+1} = \dfrac{a_n}{2}+\dfrac{1}{2a_n} = \dfrac{a_n^2+1}{2a_n}.$
+                <br><br>
+                This is Newton's method applied to $f(x)=x^2-1,$ converging to $\sqrt{1}=1.$
+                (Replacing $1$ by any $c>0$ gives $a_{n+1}=\tfrac{a_n}{2}+\tfrac{c}{2a_n}$,
+                which converges to $\sqrt{c}$ — the classical Babylonian square-root algorithm.)
+            </div>
+        </div>
+
+        <div class="seq-terms">
+            a&#8321;=2, &nbsp;a&#8322;=1.25, &nbsp;a&#8323;=1.025, &nbsp;a&#8324;&asymp;1.0003, &nbsp;a&#8325;&asymp;1.000000045&hellip; &nbsp;&rarr;&nbsp; 1
+        </div>
+
+        <div class="proof-block">
+            <span class="proof-label">Step 1 &mdash; Bounded below by $1$ for $n\ge 2.$</span>
+            By the <strong>AM-GM inequality</strong>: for any $a_n > 0,$
+            $$a_{n+1} = \frac{a_n}{2}+\frac{1}{2a_n} = \frac{1}{2}\!\left(a_n + \frac{1}{a_n}\right)
+            \;\ge\; \frac{1}{2}\cdot 2\sqrt{a_n\cdot\frac{1}{a_n}} = 1.$$
+            So $a_n \ge 1$ for all $n\ge 2.$
+            <span class="qed">$\blacksquare$</span>
+        </div>
+
+        <div class="proof-block">
+            <span class="proof-label">Step 2 &mdash; Monotone decreasing for $n\ge 2.$</span>
+            For $n\ge 2$ we have $a_n \ge 1 > 0.$ Then:
+            $$a_{n+1} - a_n = \frac{a_n}{2}+\frac{1}{2a_n} - a_n = \frac{1}{2a_n} - \frac{a_n}{2}
+            = \frac{1-a_n^2}{2a_n}.$$
+            When $a_n > 1$: $1 - a_n^2 < 0,$ so $a_{n+1} - a_n < 0.$ Decreasing. &#10003;
+            <br>
+            (At $a_n=1$: $a_{n+1}=1,$ the sequence is at its fixed point.)
+            <span class="qed">$\blacksquare$</span>
+        </div>
+
+        <div class="proof-block">
+            <span class="proof-label">Step 3 &mdash; Convergence and limit.</span>
+            For $n\ge 2,$ $(a_n)$ is monotone decreasing and bounded below by $1.$
+            By MCT, $L = \lim a_n$ exists.
+            Taking limits in $a_{n+1}=\dfrac{a_n}{2}+\dfrac{1}{2a_n}$:
+            $$L = \frac{L}{2}+\frac{1}{2L} \;\Longrightarrow\; 2L^2 = L^2+1
+            \;\Longrightarrow\; L^2 = 1 \;\Longrightarrow\; L = 1 \quad (\text{since }L\ge 1>0).$$
+            <span class="qed">$\blacksquare$</span>
+        </div>
+
+        <div class="tcolorbox lime">
+            <div class="tcolorbox-header">Rate of convergence &mdash; Quadratic!</div>
+            <div class="tcolorbox-content">
+                Let $e_n = a_n - 1$ (error from the limit). Then:
+                $$e_{n+1} = a_{n+1}-1 = \frac{a_n^2+1}{2a_n}-1 = \frac{(a_n-1)^2}{2a_n} = \frac{e_n^2}{2a_n}.$$
+                So $e_{n+1} \approx \dfrac{e_n^2}{2}$ for large $n.$ This is <strong>quadratic convergence</strong>:
+                the number of correct digits roughly <em>doubles</em> with each step.
+            </div>
+        </div>
+    </div><!-- /step 9 -->
+
+    <!-- ═══════════════════════════════════════════
+         STEP 11  —  (1 + 1/n)^n → e
+    ═══════════════════════════════════════════ -->
+    <div class="step">
+        <span class="step-chip">STEP 11</span>
+        <h2>Application 10: $a_n = \!\left(1+\dfrac{1}{n}\right)^{\!n} \to e$</h2>
+
+        <div class="tcolorbox pink">
+            <div class="tcolorbox-header">Setup &mdash; The Definition of Euler's Number $e$</div>
+            <div class="tcolorbox-content">
+                Define $a_n = \left(1+\dfrac{1}{n}\right)^n$ for $n\ge 1.$
+                We show $(a_n)$ is monotone increasing and bounded above,
+                hence converges. Its limit defines <strong>Euler's number</strong>
+                $$e \;=\; \lim_{n\to\infty}\left(1+\frac{1}{n}\right)^n \;\approx\; 2.71828\ldots$$
+            </div>
+        </div>
+
+        <div class="seq-terms">
+            a&#8321;=2, &nbsp;a&#8322;=2.25, &nbsp;a&#8323;&asymp;2.370, &nbsp;a&#8321;&#8320;&asymp;2.594, &nbsp;a&#8321;&#8320;&#8320;&asymp;2.705, &nbsp;a&#8321;&#8320;&#8320;&#8320;&asymp;2.7169&hellip; &nbsp;&rarr;&nbsp; e &asymp; 2.71828
+        </div>
+
+        <div class="proof-block">
+            <span class="proof-label">Step 1 &mdash; $(a_n)$ is strictly increasing.</span>
+            We use the <strong>AM-GM inequality</strong> applied to $n+1$ numbers.
+            Consider the $n+1$ numbers: $n$ copies of $\left(1+\dfrac{1}{n}\right)$ and one copy of $1.$
+            Their arithmetic mean is:
+            $$\frac{n\cdot\left(1+\tfrac{1}{n}\right)+1}{n+1} = \frac{n+1+1}{n+1} = 1+\frac{1}{n+1} = \frac{n+2}{n+1}.$$
+            Their geometric mean is:
+            $$\left[\left(1+\tfrac{1}{n}\right)^n\cdot 1\right]^{1/(n+1)} = a_n^{1/(n+1)}.$$
+            By AM-GM, GM $\le$ AM:
+            $$a_n^{1/(n+1)} \;\le\; \frac{n+2}{n+1} = 1+\frac{1}{n+1}.$$
+            Therefore $a_n \le \left(1+\dfrac{1}{n+1}\right)^{n+1} = a_{n+1}.$
+            So $(a_n)$ is monotone increasing.
+            <span class="qed">$\blacksquare$</span>
+        </div>
+
+        <div class="proof-block">
+            <span class="proof-label">Step 2 &mdash; Bounded above by $3.$</span>
+            By the Binomial Theorem:
+            $$a_n = \left(1+\frac{1}{n}\right)^n = \sum_{k=0}^{n}\binom{n}{k}\frac{1}{n^k}.$$
+            Each term satisfies:
+            $$\binom{n}{k}\frac{1}{n^k} = \frac{n(n-1)\cdots(n-k+1)}{k!\,n^k}
+            = \frac{1}{k!}\cdot\underbrace{\frac{n}{n}\cdot\frac{n-1}{n}\cdots\frac{n-k+1}{n}}_{\le\,1}
+            \;\le\; \frac{1}{k!}.$$
+            Therefore:
+            $$a_n \;\le\; \sum_{k=0}^{n}\frac{1}{k!} \;\le\; 1+1+\frac{1}{2}+\frac{1}{4}+\cdots
+            = 1 + \frac{1}{1-\frac{1}{2}} = 3.$$
+            (Using $\dfrac{1}{k!}\le\dfrac{1}{2^{k-1}}$ for $k\ge 1.$)
+            <span class="qed">$\blacksquare$</span>
+        </div>
+
+        <div class="proof-block">
+            <span class="proof-label">Step 3 &mdash; Convergence.</span>
+            $(a_n)$ is monotone increasing and bounded above by $3.$
+            By MCT, $\displaystyle\lim_{n\to\infty} a_n$ exists. This limit is defined to be $e.$
+            One can show $2 < e < 3$ (since $a_1=2$ and $a_n<3$ for all $n$).
+            <span class="qed">$\blacksquare$</span>
+        </div>
+
+        <div class="tcolorbox amber">
+            <div class="tcolorbox-header">Historical &amp; Practical Note</div>
+            <div class="tcolorbox-content">
+                $e$ arises naturally in <em>continuous compounding</em>: if &pound;1 is invested at
+                $100\%$ annual interest compounded $n$ times per year, the value after one year is $a_n.$
+                As $n\to\infty$ (compounding continuously), the value approaches $e\approx \pounds 2.718.$
+            </div>
+        </div>
+    </div><!-- /step 10 -->    
+        <!-- ═══════════════════════════════════════════
+         STEP 12  —  Summary
+    ═══════════════════════════════════════════ -->
+    <div class="step">
+        <span class="step-chip">STEP 12</span>
+    
+        <hr class="section-rule">
+        <h3>Summary of All Examples</h3>
+        <table>
+            <tr>
+                <th>Step</th>
+                <th>Sequence</th>
+                <th>Monotone?</th>
+                <th>Bounded?</th>
+                <th>Limit</th>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>$r^n, 0< r<1$ </td>
+                <td>Decreasing</td>
+                <td>Below by $0$</td>
+                <td>$0$</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>$a_1=a_2=1,\;a_{n+2}=\tfrac{a_{n+1}+a_n}{2}$</td>
+                <td>Constant</td>
+                <td>Yes</td>
+                <td>$1$</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>$a_1=1,a_2=2,\;a_{n+2}=\tfrac{a_{n+1}+a_n}{2}$</td>
+                <td>Subsequences monotone</td>
+                <td>In $[1,2]$</td>
+                <td>$\tfrac{5}{3}$</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>$a_1=a,a_2=b,\;a_{n+2}=\tfrac{a_{n+1}+a_n}{2}$</td>
+                <td>Subsequences monotone</td>
+                <td>In $[\min,\max]$</td>
+                <td>$\tfrac{a+2b}{3}$</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>$a_1=1,\;a_{n+1}=4-\tfrac{1}{a_n}$</td>
+                <td>Increasing</td>
+                <td>Above by $2+\sqrt{3}$</td>
+                <td>$2+\sqrt{3}$</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>$a_1=1,\;a_{n+1}=\sqrt{1+a_n}$</td>
+                <td>Increasing</td>
+                <td>Above by $\varphi$</td>
+                <td>$\varphi=\tfrac{1+\sqrt{5}}{2}$</td>
+            </tr>
+            <tr>
+                <td>11</td>
+                <td>$a_1=2,\;a_{n+1}=\tfrac{a_n}{2}+\tfrac{1}{2a_n}$</td>
+                <td>Decreasing</td>
+                <td>Below by $1$</td>
+                <td>$1$</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>$a_n=\left(1+\tfrac{1}{n}\right)^n$</td>
+                <td>Increasing</td>
+                <td>Above by $3$</td>
+                <td>$e$</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>$a_n = a + \tfrac{1}{n}$</td>
+                <td>Decreasing</td>
+                <td>Below by $a$</td>
+                <td>$a$</td>
+            </tr>
+        </table>
+    </div><!-- /step 10 -->
+
+    <div class="step py-6 border-t border-slate-200">
+    <div class="inline-flex items-center gap-2 bg-blue-50 px-3 py-1.5 rounded-xl border border-blue-200 mb-4">
+        <i class="fa-solid fa-shuffle text-blue-600"></i>
+        <span class="text-sm font-semibold text-blue-800">Advanced Sequence Mechanics</span>
+    </div>
+    <h2 class="heading text-4xl text-slate-900 mb-2">Theorem: Convergence of Interleaved Sequences</h2>
+    <p class="text-lg text-slate-600 mb-6">
+        Let \((x_n)\) and \((y_n)\) be real sequences, and let \((z_n)\) be the interleaved sequence defined by 
+        \(z_n = (x_1, y_1, x_2, y_2, x_3, y_3, \dots)\).
+    </p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-1 space-y-4">
+            <div class="card-amber shadow-sm">
+                <div class="font-bold text-lg text-amber-950 mb-2">
+                    <i class="fa-solid fa-triangle-exclamation mr-1.5"></i>The Hidden Caveat
+                </div>
+                <p class="text-base text-amber-900 leading-relaxed">
+                    The statement <em>"\(z_n\) converges if and only if both \((x_n)\) and \((y_n)\) converge"</em> carries a critical real analysis prerequisite: 
+                    <strong class="text-amber-950 block mt-1">The sequences must converge to the EXACT SAME limit!</strong>
+                    If \(\lim x_n \neq \lim y_n\), the combined tail will permanently oscillate, forcing \((z_n)\) to diverge.
+                </div>
+            </div>
+            
+            <div class="card-slate shadow-sm">
+                <div class="font-bold text-base text-slate-800 mb-2">Subsequence Structure</div>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    Mathematically, the components are systematically mapped to odd and even index subsets:
+                </p>
+                <ul class="text-sm font-mono text-indigo-700 bg-white p-3 border border-slate-200 rounded-xl mt-2 space-y-1">
+                    <li>z_{2n-1} = x_n \quad \text{(Odd Subsequence)}</li>
+                    <li>z_{2n} = y_n \quad \;\,\text{(Even Subsequence)}</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="lg:col-span-2">
+            <div class="proof-block bg-white shadow-sm border-l-4 border-indigo-600">
+                <div class="font-bold text-xl text-slate-800 mb-3">Rigorous Subsequential Proof</div>
+                
+                <div class="mb-4">
+                    <span class="badge badge-blue mb-2">Forward Direction (\(\Longrightarrow\))</span>
+                    <p class="text-base text-slate-700">
+                        Assume the interleaved sequence \((z_n)\) converges to a real limit \(L\). 
+                        By definition, any structural subsequence of a convergent sequence must converge to that very same limit. 
+                    </p>
+                    <p class="text-base text-slate-700 mt-2">
+                        Since \((x_n) = (z_{2n-1})\) is the subsequence of odd terms, and \((y_n) = (z_{2n})\) is the subsequence of even terms, both must converge directly to \(L\):
+                        \[\lim_{n\to\infty} x_n = L \quad\text{and}\quad \lim_{n\to\infty} y_n = L\]
+                    </p>
+                </div>
+
+                <hr class="section-rule my-4">
+
+                <div>
+                    <span class="badge badge-green mb-2">Backward Direction (\(\Longleftarrow\))</span>
+                    <p class="text-base text-slate-700">
+                        Assume both \((x_n)\) and \((y_n)\) converge to a shared value \(L\). Let \(\varepsilon > 0\).
+                    </p>
+                    <ul class="list-disc pl-6 my-2 text-base text-slate-700 space-y-1">
+                        <li>Since \(x_n \to L\), \(\exists N_1 \in \mathbb{N}\) such that \(\forall n \ge N_1\), \(|x_n - L| < \varepsilon\).</li>
+                        <li>Since \(y_n \to L\), \(\exists N_2 \in \mathbb{N}\) such that \(\forall n \ge N_2\), \(|y_n - L| < \varepsilon\).</li>
+                    </ul>
+                    <p class="text-base text-slate-700">
+                        Let us define a unified ceiling threshold index: \(N = \max(2N_1 - 1, 2N_2)\). For any general term index \(k \ge N\):
+                    </p>
+                    <div class="math-box bg-slate-50 border border-slate-200">
+                        \[
+                        |z_k - L| = \begin{cases} 
+                        |x_n - L| < \varepsilon & \text{if } k = 2n-1 \text{ (odd index, } n \ge N_1) \\ 
+                        |y_n - L| < \varepsilon & \text{if } k = 2n \text{ (even index, } n \ge N_2) 
+                        \end{cases}
+                        \]
+                    </div>
+                    <p class="text-base text-slate-700 mt-2">
+                        Because \(|z_k - L| < \varepsilon\) holds true universally for all index allocations beyond \(N\), we conclusively establish that \(\lim_{k\to\infty} z_k = L\). \(\blacksquare\)
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+ <!-- The main proof block – can be embedded directly into any larger HTML file -->
+    <div class="proof-card">
+        <div class="proof-title">
+            📐 Convergence of maximum and minimum of sequences
+        </div>
+        <div class="proof-subtitle">
+            Using the identities:  
+            $\(\displaystyle \max(a,b)=\frac{1}{2}\bigl(a+b+|a-b|\bigr),\qquad 
+            \min(a,b)=\frac{1}{2}\bigl(a+b-|a-b|\bigr)\)$
+        </div>
+        <div class="proof-content">
+            <p><strong>Statement:</strong>  
+            Let $\((x_n)_{n\in\mathbb{N}}\) and \((y_n)_{n\in\mathbb{N}}\)$ be real sequences such that  
+            $\(x_n \to x\)$ and $\(y_n \to y\)$ .  
+            Define  
+            $\[
+            s_n = \max\{x_n,\; y_n\}, \qquad t_n = \min\{x_n,\; y_n\}.
+            \] $ 
+            Then  
+            $
+            s_n \;\longrightarrow\; \max\{x,\; y\}, \qquad 
+            t_n \;\longrightarrow\; \min\{x,\; y\}.
+            $
+            </p>
+            
+            <div class="step">📌 Step 1: Rewrite max and min using absolute values.</div>
+            <p>
+            Using the given identities for any real numbers \(a,b\):
+            $$
+            \max(a,b)=\frac{a+b+|a-b|}{2}, \qquad 
+            \min(a,b)=\frac{a+b-|a-b|}{2}.
+            $$
+            Therefore,
+            \[
+            s_n = \frac{x_n + y_n + |x_n - y_n|}{2}, \qquad 
+            t_n = \frac{x_n + y_n - |x_n - y_n|}{2},
+            \]
+            and similarly for the limits:
+            $$
+            \max\{x,y\} = \frac{x + y + |x - y|}{2}, \qquad 
+            \min\{x,y\} = \frac{x + y - |x - y|}{2}.
+            $$
+            </p>
+            
+            <div class="step">📌 Step 2: Examine the difference \(s_n - \max\{x,y\}\).</div>
+            <p>
+            \[
+            s_n - \max\{x,y\} 
+            = \frac{1}{2}\Bigl[(x_n - x) + (y_n - y) + \bigl(|x_n - y_n| - |x - y|\bigr)\Bigr].
+            \]
+            By hypothesis, \(x_n - x \to 0\) and \(y_n - y \to 0\).  
+            It remains to prove that \(|x_n - y_n| - |x - y| \to 0\).
+            </p>
+            
+            <div class="step">📌 Step 3: Show \(|x_n - y_n| \to |x - y|\) using the reverse triangle inequality.</div>
+            <p>
+            For any real numbers \(u,v\), the reverse triangle inequality gives
+            \[
+            \bigl||u| - |v|\bigr| \le |u - v|.
+            \]
+            Applying it with \(u = x_n - y_n\) and \(v = x - y\):
+            \[
+            \bigl||x_n - y_n| - |x - y|\bigr| \le \bigl| (x_n - y_n) - (x - y) \bigr| 
+            = \bigl| (x_n - x) - (y_n - y) \bigr|.
+            \]
+            By the triangle inequality,
+            \[
+            \bigl| (x_n - x) - (y_n - y) \bigr| \le |x_n - x| + |y_n - y|.
+            \]
+            Since \(x_n \to x\) and \(y_n \to y\), we have \(|x_n - x| + |y_n - y| \to 0\).  
+            Hence by the squeeze (or sandwich) theorem,
+            \[
+            \bigl||x_n - y_n| - |x - y|\bigr| \to 0 \quad\Longrightarrow\quad |x_n - y_n| \to |x - y|.
+            \]
+            </p>
+            
+            <div class="step">📌 Step 4: Conclude convergence of \(s_n\) to \(\max\{x,y\}\).</div>
+            <p>
+            Because each term in the bracket converges to \(0\):
+            \[
+            (x_n - x) \to 0,\quad (y_n - y) \to 0,\quad \bigl(|x_n - y_n| - |x - y|\bigr) \to 0,
+            \]
+            the sum \((x_n - x) + (y_n - y) + \bigl(|x_n - y_n| - |x - y|\bigr) \to 0\).  
+            Multiplying by \(\frac12\) preserves convergence to \(0\). Thus
+            \[
+            s_n - \max\{x,y\} \longrightarrow 0 \quad\Longrightarrow\quad s_n \longrightarrow \max\{x,y\}.
+            \]
+            </p>
+            
+            <div class="step">📌 Step 5: Analogous proof for $\(t_n = \min\{x_n, y_n\}\).$</div>
+            <p>
+            The difference for the minimum is
+            $$
+            t_n - \min\{x,y\} 
+            = \frac{1}{2}\Bigl[(x_n - x) + (y_n - y) - \bigl(|x_n - y_n| - |x - y|\bigr)\Bigr].
+            $$
+            As already established, $\((x_n - x) \to 0,\; (y_n - y) \to 0,\) and \(|x_n - y_n| - |x - y| \to 0\).$  
+            Therefore the whole expression tends to \(0\), giving
+            $$
+            t_n \longrightarrow \min\{x,y\}.
+            $$
+            </p>
+            
+            <div class="theorem-box">
+                ✅ <strong>Conclusion:</strong>  
+                If $\(x_n \to x\) and \(y_n \to y\),$ then  
+                $\(\displaystyle \max\{x_n, y_n\} \to \max\{x, y\}\)$ and  
+                $\(\displaystyle \min\{x_n, y_n\} \to \min\{x, y\}\).$
+            </div>
+            <div class="qed">
+                ∎
+            </div>
+            <hr>
+            <p style="font-size: 0.85rem; color: #4b5563; margin-top: 0.5rem;">
+            🔍 <strong>Remark:</strong> The proof relies only on algebraic manipulation of the 
+            max/min formulas and the basic properties of limits (linearity, triangle inequality, 
+            and the reverse triangle inequality). The argument works for any real sequences.
+            </p>
+        </div>
+    </div>  
+        <div class="step py-8 border-t border-slate-100">
+    <div class="inline-flex items-center gap-2 bg-purple-50 px-3 py-1.5 rounded-xl border border-purple-200 mb-4">
+        <i class="fa-solid fa-arrows-split-up-and-left text-purple-600"></i>
+        <span class="text-sm font-semibold text-purple-800">Deep-Dive Proof</span>
+    </div>
+    <h2 class="heading text-3xl text-slate-900 mb-2">The Bolzano–Weierstrass Theorem (BW)</h2>
+    <p class="text-slate-600 mb-6">
+        Every bounded sequence contains a convergent subsequence. Below is the complete proof using the interval bisection method and the Nested Interval Property (NIP).
+    </p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-1 space-y-4">
+            <div class="card-purple shadow-sm">
+                <div class="font-bold text-lg text-purple-950 mb-2">
+                    <i class="fa-solid fa-bullseye mr-1.5"></i>Theorem Statement
+                </div>
+                <p class="text-base text-purple-900 leading-relaxed">
+                    Let \((a_n)\) be a sequence of real numbers. If \((a_n)\) is bounded, then there exists a subsequence \((a_{n_k})\) that converges to a limit point in \(\mathbb{R}\).
+                </p>
+            </div>
+            
+            <div class="card-slate shadow-sm">
+                <div class="font-bold text-base text-slate-800 mb-2">Core Machinery: NIP</div>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    The <strong>Nested Interval Property (NIP)</strong> guarantees that a sequence of nested closed intervals whose lengths shrink to zero intercepts at a unique real point.
+                </p>
+            </div>
+        </div>
+
+        <div class="lg:col-span-2">
+            <div class="proof-block bg-white shadow-sm border-l-4 border-purple-600 pl-5">
+                <div class="font-bold text-xl text-slate-800 mb-3">Proof via Interval Bisection</div>
+                
+                <p class="text-sm text-slate-700 mb-3">
+                    Let \((a_n)\) be a bounded sequence; namely, there exists a number \(M > 0\) such that \(|a_n| \le M\) for all \(n \in \mathbb{N}\). This implies the entire sequence is trapped inside the initial closed interval \([-M, M]\).
+                </p>
+                
+                <div class="mb-4">
+                    <span class="badge badge-blue mb-2">1. Inductive Construction</span>
+                    <p class="text-sm text-slate-700 mb-2">
+                        Bisect the closed interval \([-M, M]\) into two closed intervals \([-M, 0]\) and \([0, M]\). At least one of these two intervals must contain an infinite number of terms of \((a_n)\). Select one interval for which this is the case and call it \(I_1\). Let \(a_{n_1}\) be a term such that \(a_{n_1} \in I_1\).
+                    </p>
+                    <p class="text-sm text-slate-700 mb-2">
+                        Next, bisect \(I_1\) into two closed intervals meeting at the mid-point of \(I_1\). Let \(I_2\) be one half that again contains an infinite number of terms of the original sequence. There must be a term \(a_{n_2} \in I_2\) with \(n_2 > n_1\). If not, \(I_2\) would contain only a finite number of terms \(a_k\) with \(k \le n_1\), reaching a contradiction.
+                    </p>
+                    <p class="text-sm text-slate-700 mb-2">
+                        Continue in this way, and we construct the closed interval \(I_k\) by taking a half of \(I_{k-1}\) that contains an infinite number of terms of \((a_n)\) and then select a term \(a_{n_k} \in I_k\), where:
+                        \[n_k > n_{k-1} > \dots > n_1\]
+                        Therefore, we successfully isolate a subsequence \((a_{n_k})\) of \((a_n)\).
+                    </p>
+                </div>
+
+                <hr class="section-rule my-4">
+
+                <div>
+                    <span class="badge badge-green mb-2">2. Proving Convergence</span>
+                    <p class="text-sm text-slate-700 mb-2">
+                        First, using the Nested Interval Property, we have a common point \(a \in I_k\) for all \(k \in \mathbb{N}\). Since both \(a\) and \(a_{n_k}\) are inside the same interval \(I_k\), it directly follows that:
+                        \[|a_{n_k} - a| \le \text{length}(I_k)\]
+                    </p>
+                    <p class="text-sm text-slate-700 mb-2">
+                        Note that because each step halves the space, the length of \(I_k\) is exactly:
+                        \[\text{length}(I_k) = M \left(\frac{1}{2}\right)^{k-1}\]
+                    </p>
+                    <p class="text-sm text-slate-700">
+                        Hence, given any \(\varepsilon > 0\), since \(\lim_{k\to\infty} M(1/2)^{k-1} = 0\), there exists an index threshold \(N \in \mathbb{N}\) such that for all \(k \ge N\):
+                        \[|a_{n_k} - a| \le M \left(\frac{1}{2}\right)^{k-1} < \varepsilon\]
+                    </p>
+                    <p class="text-sm text-slate-700 mt-2 font-semibold text-emerald-700">
+                        This rigorously proves that \(\lim_{k \to \infty} a_{n_k} = a\). \(\blacksquare\)
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div><!-- /.container -->
+
+<!-- ═══════════════════════════════════════
+     FIXED CONTROLS BAR
+═══════════════════════════════════════ -->
+<div class="controls">
+    <span class="key-hint">Press <kbd>Enter</kbd> or <kbd>&rarr;</kbd> to advance</span>
+    <div class="progress-wrap">
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+        <span class="progress-label" id="progressLabel">0 / 0</span>
+    </div>
+    <button class="btn-next" id="btnNext" onclick="revealNext()">Next &#9654;</button>
+</div>
+
+<script>
+    const steps   = document.querySelectorAll('.step');
+    const fill    = document.getElementById('progressFill');
+    const label   = document.getElementById('progressLabel');
+    const btn     = document.getElementById('btnNext');
+    let   current = 0;
+
+    function updateUI() {
+        const pct = (current / steps.length) * 100;
+        fill.style.width  = pct + '%';
+        label.textContent = current + ' / ' + steps.length;
+        btn.disabled      = current >= steps.length;
+        btn.textContent   = current >= steps.length ? 'Done \u2713' : 'Next \u25ba';
+    }
+
+    function revealNext() {
+        if (current >= steps.length) return;
+        const el = steps[current];
+        el.classList.add('visible');
+        if (window.MathJax) MathJax.typesetPromise([el]);
+        current++;
+        updateUI();
+        setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight') {
+            e.preventDefault();
+            revealNext();
+        }
+    });
+
+    window.addEventListener('load', function() {
+        updateUI();
+        revealNext();
+    });
+</script>
+
+</body>
+</html>

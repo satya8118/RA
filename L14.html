@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cauchy Sequences — Complete Masterclass</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        window.MathJax = {
+            tex: { inlineMath:[['\\(','\\)'],['$','$']], displayMath:[['\\[','\\]'],['$$','$$']] },
+            svg: { fontCache:'global' }
+        };
+    </script>
+    <script id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Sans+3:wght@300;400;500;600&display=swap');
+
+        :root { --primary:#0f172a; }
+        body  { font-family:'Source Sans 3',system-ui,sans-serif; }
+        .heading { font-family:'Playfair Display',Georgia,serif; font-weight:700; letter-spacing:-0.025em; }
+
+        /* Step reveal */
+        .step { opacity:0; max-height:0; overflow:hidden;
+                transition:opacity .45s ease, max-height .65s ease; }
+        .step.visible { opacity:1; max-height:9000px; margin-bottom:0; }
+
+        /* Controls bar */
+        .ctrl-bar {
+            position:fixed; bottom:0; left:0; right:0;
+            background:#0f172a; border-top:1px solid #334155;
+            padding:12px 32px; display:flex; align-items:center;
+            justify-content:space-between; gap:20px; z-index:9999;
+            box-shadow:0 -4px 20px rgba(0,0,0,.35);
+        }
+        .prog-bg { flex:1; height:4px; background:#334155; border-radius:2px; overflow:hidden; }
+        .prog-fill { height:100%; background:#10b981; border-radius:2px; width:0%; transition:width .4s; }
+        .prog-lbl { font-size:13px; color:#94a3b8; white-space:nowrap; min-width:52px; text-align:right; }
+        .btn-next {
+            background:#10b981; color:#fff; border:none;
+            padding:9px 26px; border-radius:8px; cursor:pointer;
+            font-size:14px; font-weight:600; letter-spacing:.04em;
+            transition:background .2s;
+        }
+        .btn-next:hover:not(:disabled) { background:#059669; }
+        .btn-next:disabled { background:#334155; color:#64748b; cursor:default; }
+        .key-hint { font-size:12px; color:#475569; font-style:italic; white-space:nowrap; }
+
+        /* card styles */
+        .card { background:#fff; border:1px solid #e2e8f0; border-radius:20px; padding:1.5rem; }
+        .card-dark { background:#0f172a; color:#e2e8f0; border-radius:20px; padding:1.5rem; }
+        .card-red  { background:#fff1f2; border:1px solid #fecdd3; border-radius:20px; padding:1.5rem; }
+        .card-green{ background:#f0fdf4; border:1px solid #bbf7d0; border-radius:20px; padding:1.5rem; }
+        .card-amber{ background:#fffbeb; border:1px solid #fde68a; border-radius:20px; padding:1.5rem; }
+        .card-blue { background:#eff6ff; border:1px solid #bfdbfe; border-radius:20px; padding:1.5rem; }
+        .card-purple{ background:#faf5ff; border:1px solid #e9d5ff; border-radius:20px; padding:1.5rem; }
+        .card-slate{ background:#f8fafc; border:1px solid #e2e8f0; border-radius:20px; padding:1.5rem; }
+
+        .proof-block {
+            border-left:3px solid #64748b;
+            background:#f8fafc; padding:1.25rem 1.5rem;
+            border-radius:0 12px 12px 0; margin:1rem 0;
+        }
+        .math-box {
+            background:#f8fafc; border:1px solid #e2e8f0;
+            border-radius:12px; padding:1rem 1.25rem; margin:.75rem 0;
+            overflow-x:auto;
+        }
+        .section-rule { border:none; border-top:1px dashed #cbd5e1; margin:1.75rem 0; }
+        .badge { display:inline-block; padding:2px 10px; border-radius:99px; font-size:11px; font-weight:600; }
+        .badge-green { background:#dcfce7; color:#15803d; }
+        .badge-red   { background:#fee2e2; color:#b91c1c; }
+        .badge-amber { background:#fef3c7; color:#92400e; }
+        .badge-blue  { background:#dbeafe; color:#1d4ed8; }
+
+        /* quiz */
+        .quiz-card { border:1px solid #e2e8f0; border-left:4px solid #3b82f6; background:#fff;
+                     border-radius:12px; padding:1.25rem 1.5rem; margin:.85rem 0; }
+        .btn-sol { background:transparent; border:1.5px solid #3b82f6; color:#3b82f6;
+                   padding:5px 14px; border-radius:6px; cursor:pointer; font-size:.85rem;
+                   font-weight:600; transition:all .2s; margin-top:8px; }
+        .btn-sol:hover { background:#3b82f6; color:#fff; }
+        .solution { display:none; margin-top:10px; padding:12px 14px;
+                    background:#f8fafc; border-top:1px dashed #e2e8f0;
+                    border-radius:8px; color:#475569; font-size:.95rem; }
+
+        ul.tight li { margin-bottom:.3rem; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 pb-24">
+
+<!-- ── Sticky nav ─────────────────────────────── -->
+<nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-8 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 bg-slate-900 flex items-center justify-center rounded-xl">
+                <i class="fa-solid fa-infinity text-white text-xl"></i>
+            </div>
+            <span class="font-semibold text-xl tracking-tight">Cauchy Sequences</span>
+            <span class="font-light text-xl text-slate-400 tracking-tight">Masterclass</span>
+        </div>
+        <div class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-500">
+            <span>Real Analysis</span>
+            <span class="text-slate-300">|</span>
+            <span>Press <kbd class="bg-slate-100 px-1.5 py-0.5 rounded text-xs">Enter</kbd> or <kbd class="bg-slate-100 px-1.5 py-0.5 rounded text-xs">→</kbd> to advance</span>
+        </div>
+    </div>
+</nav>
+
+<div class="max-w-7xl mx-auto px-8">
+
+<!-- ══════════════════════════════════════════════
+     STEP 1 — Hero + Definition
+══════════════════════════════════════════════ -->
+<div class="step pt-14 pb-8">
+    <div class="mb-8">
+        <div class="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-2xl border border-slate-200 shadow-sm mb-5">
+            <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+            <span class="text-sm font-medium text-slate-600">Real Analysis · 2026 Edition</span>
+        </div>
+        <h1 class="heading text-5xl leading-tight text-slate-900 mb-4">
+            Cauchy Sequences in \(\mathbb{R}\)
+        </h1>
+        <p class="text-lg text-slate-600 max-w-2xl">
+            A complete treatment: definition, convergence equivalence, completeness of \(\mathbb{R}\),
+            examples, counterexamples, and self-assessment.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Definition card -->
+        <div class="lg:col-span-2 card-dark p-8">
+            <span class="badge badge-green mb-4">Formal Definition</span>
+            <p class="text-slate-300 leading-relaxed mb-4">
+                A sequence \((x_n)\) of real numbers is called a
+                <strong class="text-white">Cauchy sequence</strong> if:
+            </p>
+            <div class="math-box bg-white/10 border-white/20 text-white">
+                \[\forall\,\varepsilon > 0,\;\exists\,N\in\mathbb{N}:\quad m,n \ge N
+                  \;\Longrightarrow\; |x_m - x_n| < \varepsilon.\]
+            </div>
+            <p class="text-slate-400 text-sm mt-3">
+                Key point: terms become <em>mutually</em> close —
+                no reference to a limit is needed in the definition.
+            </p>
+        </div>
+
+        <!-- Intuition panel -->
+        <div class="card flex flex-col gap-4">
+            <div class="font-semibold text-slate-700">Intuition</div>
+            <div class="flex items-start gap-3">
+                <span class="text-emerald-500 mt-0.5">✦</span>
+                <span class="text-sm text-slate-600">Terms cluster arbitrarily close together as \(n\to\infty\).</span>
+            </div>
+            <div class="flex items-start gap-3">
+                <span class="text-emerald-500 mt-0.5">✦</span>
+                <span class="text-sm text-slate-600">No "peeking" at the limit required — purely intrinsic.</span>
+            </div>
+            <div class="flex items-start gap-3">
+                <span class="text-emerald-500 mt-0.5">✦</span>
+                <span class="text-sm text-slate-600">In \(\mathbb{R}\): Cauchy \(\Leftrightarrow\) convergent (Completeness).</span>
+            </div>
+            <div class="flex items-start gap-3">
+                <span class="text-emerald-500 mt-0.5">✦</span>
+                <span class="text-sm text-slate-600">In \(\mathbb{Q}\): Cauchy does \(\not\Rightarrow\) convergent (gaps!).</span>
+            </div>
+        </div>
+    </div>
+</div><!-- /step 1 -->
+
+<!-- ══════════════════════════════════════════════
+     STEP 2 — Basic Examples
+══════════════════════════════════════════════ -->
+<div class="step py-8 border-t border-slate-100">
+    <h2 class="heading text-3xl text-slate-900 mb-6">Examples and Non-Examples</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 mb-6">
+        <div class="card">
+            <div class="flex items-center justify-between mb-3">
+                <span class="font-semibold">Constant Sequence</span>
+                <span class="badge badge-green">Cauchy ✓</span>
+            </div>
+            <div class="font-mono text-xs text-slate-500 mb-2">x_n = c</div>
+            <p class="text-sm text-slate-600">
+                \(|x_m - x_n| = 0 < \varepsilon\) for all \(m,n\) and any \(N=1\).
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="flex items-center justify-between mb-3">
+                <span class="font-semibold">\(x_n = 1/n\)</span>
+                <span class="badge badge-green">Cauchy ✓</span>
+            </div>
+            <div class="font-mono text-xs text-slate-500 mb-2">Converges to 0</div>
+            <p class="text-sm text-slate-600">
+                \(|x_m - x_n| \le \tfrac{1}{m}+\tfrac{1}{n} \le \tfrac{2}{N} < \varepsilon\)
+                once \(N > 2/\varepsilon\).
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="flex items-center justify-between mb-3">
+                <span class="font-semibold">Alternating \((-1)^n\)</span>
+                <span class="badge badge-red">Not Cauchy ✗</span>
+            </div>
+            <div class="font-mono text-xs text-slate-500 mb-2">Diverges</div>
+            <p class="text-sm text-slate-600">
+                \(|x_{n+1}-x_n| = 2\) for all \(n\). With \(\varepsilon=1\), no \(N\) works.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="flex items-center justify-between mb-3">
+                <span class="font-semibold">\(x_n = n\)</span>
+                <span class="badge badge-red">Not Cauchy ✗</span>
+            </div>
+            <div class="font-mono text-xs text-slate-500 mb-2">Diverges to ∞</div>
+            <p class="text-sm text-slate-600">
+                \(|x_m - x_n| = m-n\) can be made arbitrarily large.
+                Take \(\varepsilon=1,\,m=n+2\).
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="flex items-center justify-between mb-3">
+                <span class="font-semibold">Geometric \(r^n\), \(|r|<1\)</span>
+                <span class="badge badge-green">Cauchy ✓</span>
+            </div>
+            <div class="font-mono text-xs text-slate-500 mb-2">Converges to 0</div>
+            <p class="text-sm text-slate-600">
+                \(|r^m - r^n| \le r^N\cdot\tfrac{1}{1-r}\); choose \(N\) large enough via \(r^N\to 0\).
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="flex items-center justify-between mb-3">
+                <span class="font-semibold">Harmonic Partial Sums</span>
+                <span class="badge badge-red">Not Cauchy ✗</span>
+            </div>
+            <div class="font-mono text-xs text-slate-500 mb-2">\(H_n = \sum_{k=1}^n 1/k\)</div>
+            <p class="text-sm text-slate-600">
+                \(H_{2n}-H_n > \tfrac{1}{2}\) for all \(n\). Fails Cauchy with \(\varepsilon=\tfrac{1}{2}\).
+            </p>
+        </div>
+    </div>
+
+    <!-- Harmonic proof detail -->
+    <div class="card-red">
+        <div class="font-semibold text-red-700 mb-3">Proof: Harmonic Partial Sums are Not Cauchy</div>
+        <p class="text-sm text-slate-700 mb-3">
+            Suppose \((H_n)\) were Cauchy. Take \(\varepsilon = \tfrac{1}{2}\).
+            Then for \(n \ge N\) and \(m = 2n\):
+        </p>
+        <div class="math-box">
+            \[H_{2n} - H_n = \sum_{k=n+1}^{2n}\frac{1}{k}
+              \;\ge\; \sum_{k=n+1}^{2n}\frac{1}{2n} = \frac{n}{2n} = \frac{1}{2}.\]
+        </div>
+        <p class="text-sm text-slate-700 mt-3">
+            This gives \(|H_{2n}-H_n| \ge \tfrac{1}{2} = \varepsilon\) for <em>all</em> \(n\),
+            contradicting the Cauchy property. \(\blacksquare\)
+        </p>
+    </div>
+</div><!-- /step 2 -->
+
+<!-- ══════════════════════════════════════════════
+     STEP 3 — Convergent ⇒ Cauchy
+══════════════════════════════════════════════ -->
+<div class="step py-8 border-t border-slate-100">
+    <h2 class="heading text-3xl text-slate-900 mb-2">Theorem 1: Every Convergent Sequence is Cauchy</h2>
+    <p class="text-slate-600 mb-6">This is the easy direction and uses only the triangle inequality.</p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div>
+            <div class="proof-block">
+                <div class="font-semibold text-slate-700 mb-3">Proof</div>
+                <p class="text-sm text-slate-700 mb-3">
+                    Suppose \(x_n \to L\). Let \(\varepsilon > 0\).
+                    By convergence, \(\exists\,N\) such that
+                    \(n \ge N \Rightarrow |x_n - L| < \varepsilon/2\).
+                </p>
+                <p class="text-sm text-slate-700 mb-3">For \(m,n \ge N\):</p>
+                <div class="math-box">
+                    \[|x_m - x_n| \le |x_m - L| + |L - x_n|
+                      < \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon.\]
+                </div>
+                <p class="text-sm text-slate-700 mt-3">
+                    Hence \((x_n)\) is Cauchy. \(\blacksquare\)
+                </p>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-4">
+            <div class="card-amber">
+                <div class="font-semibold text-amber-800 mb-2">The \(\varepsilon/2\) Trick</div>
+                <p class="text-sm text-slate-700">
+                    We use \(\varepsilon/2\) for each term so the two errors
+                    sum to \(\varepsilon\). This is the standard method whenever
+                    two approximations are combined by the triangle inequality.
+                </p>
+            </div>
+            <div class="card-slate">
+                <div class="font-semibold text-slate-700 mb-2">Key Diagram</div>
+                <div class="text-sm text-slate-600 font-mono">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L<br>
+                    &emsp;&emsp;&emsp;◄─ ε/2 ─►&nbsp;&nbsp;◄─ ε/2 ─►<br>
+                    ···&ensp;&ensp;x_n&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;x_m&ensp;&ensp;···
+                </div>
+                <p class="text-xs text-slate-500 mt-2">Both \(x_m\) and \(x_n\) within \(\varepsilon/2\) of \(L\), hence within \(\varepsilon\) of each other.</p>
+            </div>
+        </div>
+    </div>
+</div><!-- /step 3 -->
+
+<!-- ══════════════════════════════════════════════
+     STEP 4 — Cauchy ⇒ Bounded
+══════════════════════════════════════════════ -->
+<div class="step py-8 border-t border-slate-100">
+    <h2 class="heading text-3xl text-slate-900 mb-2">Lemma: Every Cauchy Sequence is Bounded</h2>
+    <p class="text-slate-600 mb-6">
+        This is the first step toward proving that Cauchy sequences converge in \(\mathbb{R}\).
+    </p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="proof-block">
+            <div class="font-semibold text-slate-700 mb-3">Proof</div>
+            <p class="text-sm text-slate-700 mb-2">
+                Let \((x_n)\) be Cauchy. Take \(\varepsilon = 1\).
+                There exists \(N\) such that for all \(m,n \ge N\):
+                \(|x_m - x_n| < 1\).
+            </p>
+            <p class="text-sm text-slate-700 mb-2">
+                Fix \(m = N\). Then for all \(n \ge N\):
+                \(|x_n| \le |x_n - x_N| + |x_N| < 1 + |x_N|.\)
+            </p>
+            <p class="text-sm text-slate-700 mb-3">Set</p>
+            <div class="math-box">
+                \[M = \max\bigl(|x_1|,\,|x_2|,\,\ldots,\,|x_{N-1}|,\;1+|x_N|\bigr).\]
+            </div>
+            <p class="text-sm text-slate-700 mt-2">
+                Then \(|x_n| \le M\) for <em>all</em> \(n\). \(\blacksquare\)
+            </p>
+        </div>
+
+        <div class="card-blue">
+            <div class="font-semibold text-blue-800 mb-3">Why Boundedness Matters</div>
+            <p class="text-sm text-slate-700 mb-3">
+                Knowing \((x_n)\) is bounded allows us to apply the
+                <strong>Bolzano–Weierstrass Theorem</strong>:
+            </p>
+            <div class="bg-white rounded-xl p-4 border border-blue-200 mb-3">
+                <p class="text-sm font-semibold text-blue-800 mb-1">Bolzano–Weierstrass</p>
+                <p class="text-sm text-slate-700">
+                    Every bounded sequence of real numbers has a convergent subsequence.
+                </p>
+            </div>
+            <p class="text-sm text-slate-700">
+                This gives us a subsequence \((x_{n_k})\) converging to some \(L\in\mathbb{R}\).
+                The next step shows the <em>whole</em> sequence then converges to \(L\).
+            </p>
+        </div>
+    </div>
+</div><!-- /step 4 -->
+
+<!-- ══════════════════════════════════════════════
+     STEP 5 — Completeness: Cauchy ⇒ Convergent
+══════════════════════════════════════════════ -->
+<div class="step py-8 border-t border-slate-100">
+    <h2 class="heading text-3xl text-slate-900 mb-2">Theorem 2 (Completeness of \(\mathbb{R}\)): Every Cauchy Sequence Converges</h2>
+    <p class="text-slate-600 mb-6">
+        This is the deep theorem. It characterises the completeness of \(\mathbb{R}\).
+        The proof has three steps. (Proof-1: using Bolzano–Weierstrass Theorem)
+    </p>
+
+    <!-- Three steps overview -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="card text-center">
+            <div class="w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center mx-auto mb-3 font-bold text-lg">1</div>
+            <div class="font-semibold mb-1">Bounded</div>
+            <div class="text-sm text-slate-500">Cauchy \(\Rightarrow\) bounded<br>(proved in Lemma)</div>
+        </div>
+        <div class="card text-center">
+            <div class="w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center mx-auto mb-3 font-bold text-lg">2</div>
+            <div class="font-semibold mb-1">Subsequence</div>
+            <div class="text-sm text-slate-500">Bolzano–Weierstrass gives<br>\(x_{n_k}\to L\)</div>
+        </div>
+        <div class="card text-center">
+            <div class="w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center mx-auto mb-3 font-bold text-lg">3</div>
+            <div class="font-semibold mb-1">Full Convergence</div>
+            <div class="text-sm text-slate-500">Cauchy property forces<br>\(x_n\to L\)</div>
+        </div>
+    </div>
+
+    <div class="proof-block mb-4">
+        <div class="font-semibold text-slate-700 mb-3">Full Proof</div>
+        <p class="text-sm text-slate-700 mb-3">
+            <strong>Step 1.</strong> By the Lemma, \((x_n)\) is bounded.
+        </p>
+        <p class="text-sm text-slate-700 mb-3">
+            <strong>Step 2.</strong> By the Bolzano–Weierstrass Theorem, there exists a
+            subsequence \((x_{n_k})\) and \(L\in\mathbb{R}\) with \(x_{n_k}\to L\).
+        </p>
+        <p class="text-sm text-slate-700 mb-3">
+            <strong>Step 3.</strong> We claim \(x_n\to L\). Let \(\varepsilon > 0\).
+        </p>
+        <ul class="list-disc ml-5 text-sm text-slate-700 space-y-2 mb-3">
+            <li>
+                Since \((x_n)\) is Cauchy, \(\exists\,N_1\) such that
+                \(m,n\ge N_1 \Rightarrow |x_m - x_n| < \varepsilon/2\).
+            </li>
+            <li>
+                Since \(x_{n_k}\to L\), \(\exists\,N_2\) such that
+                \(k \ge N_2 \Rightarrow |x_{n_k} - L| < \varepsilon/2\).
+            </li>
+        </ul>
+        <p class="text-sm text-slate-700 mb-3">
+            Choose \(K\ge N_2\) large enough that \(n_K \ge N_1\).
+            For any \(n \ge N_1\):
+        </p>
+        <div class="math-box">
+            \[|x_n - L| \le |x_n - x_{n_K}| + |x_{n_K} - L|
+              < \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon.\]
+        </div>
+        <p class="text-sm text-slate-700 mt-3">
+            (The first term uses the Cauchy property with \(n, n_K \ge N_1\);
+            the second uses the subsequence convergence with \(K \ge N_2\).)
+            Since \(\varepsilon>0\) was arbitrary, \(x_n\to L\). \(\blacksquare\)
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="card-amber">
+            <div class="font-semibold text-amber-800 mb-2">Why \(\mathbb{Q}\) Fails</div>
+            <p class="text-sm text-slate-700">
+                The sequence of rational decimal approximations to \(\sqrt{2}\):
+                \(1,\,1.4,\,1.41,\,1.414,\ldots\)
+                is Cauchy in \(\mathbb{Q}\) but its limit \(\sqrt{2}\notin\mathbb{Q}\).
+                Completeness fails in \(\mathbb{Q}\).
+            </p>
+        </div>
+        <div class="card-green">
+            <div class="font-semibold text-green-800 mb-2">The Key Equivalence in \(\mathbb{R}\)</div>
+            <div class="math-box">
+                \[(x_n) \text{ converges in } \mathbb{R}
+                  \;\Longleftrightarrow\;
+                  (x_n) \text{ is Cauchy.}\]
+            </div>
+            <p class="text-sm text-slate-700 mt-2">
+                \((\Rightarrow)\) Theorem 1 &emsp; \((\Leftarrow)\) Theorem 2 (Completeness)
+            </p>
+        </div>
+    </div>
+</div><!-- /step 5 -->
+
+<!-- /step 6 -->
+
+<div class="step py-6 border-t border-slate-200">
+    <div class="bg-indigo-900 text-white rounded-3xl p-8 mb-8 shadow-xl">
+        <span class="badge bg-emerald-500 text-white font-bold mb-4 px-3 py-1.5 text-xs uppercase tracking-wider shadow-sm">Deep Core Theorem</span>
+        <h2 class="heading text-4xl text-white mb-3">Theorem 2: The Completeness of \(\mathbb{R}\)</h2>
+        <p class="text-xl text-indigo-200 max-w-4xl leading-relaxed">
+            Every Cauchy sequence in \(\mathbb{R}\) converges to a limit inside \(\mathbb{R}.\) We prove this fundamentally via the **Least Upper Bound (LUB) Property** of real numbers.
+        </p>
+    </div>
+
+    <div class="space-y-6">
+        
+        <div class="card bg-white shadow-md border border-slate-200">
+            <h3 class="font-bold text-xl text-slate-900 mb-3"><i class="fa-solid fa-layer-group text-indigo-600 mr-2"></i>Proof Configuration: Defining the "Clump" Set</h3>
+            <p class="text-base text-slate-700 mb-4">
+                Let \((x_n)\) (or simply x) be a Cauchy sequence in \(\mathbb{R}\). We define an auxiliary collection \(E_x \subset \mathbb{R}\) consisting of all real numbers such that after some stage all terms of the sequence  greater than those numbers.
+            </p>
+            <div class="math-box bg-slate-50 font-mono border-dashed border-indigo-200">
+                \(E_x = \bigl\{ y \in \mathbb{R} : \exists N \in \mathbb{N} \;\; \forall n\ge N\; (y< x_n)  \bigr\}\)
+            </div>
+            <p class="text-base text-slate-700 mt-2">
+                We will leverage the completeness of \(\mathbb{R}\) by showing that \(E_x\) is non-empty and bounded above, meaning its lub \(\alpha = lub(E_x)\) exists and serves as the  limit of our sequence.
+            </p>
+        </div>
+
+        <div class="card bg-white shadow-md border-t-4 border-t-amber-500">
+            <h4 class="font-bold text-lg text-amber-950 mb-2"><span class="bg-amber-100 text-amber-800 text-sm px-2.5 py-1 rounded-md mr-2 font-mono">Part 1</span>Entering the Small Interval</h4>
+            <p class="text-base text-slate-700 mb-3">
+                Let \(\varepsilon > 0\) be chosen arbitrarily. Since \((x_n)\) is Cauchy, there is an index anchor \(N \in \mathbb{N}\) such that for all trailing indices \(n, m \ge N\):
+                \[|x_n - x_m| < \frac{\varepsilon}{2}\]
+            </p>
+            <p class="text-base text-slate-700 mb-3">
+                Let's pin the pointer at \(m = N\). For all remaining elements inside the tail sequence (\(n \ge N\)), the configuration simplifies to:
+                \[|x_n - x_N| < \frac{\varepsilon}{2} \iff x_N - \frac{\varepsilon}{2} < x_n < x_N + \frac{\varepsilon}{2}\]
+            </p>
+            
+            <div class="my-6 bg-slate-50 border border-slate-200 rounded-2xl p-6 text-center">
+                <div class="text-base font-bold text-slate-700 mb-4 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-chart-line text-amber-500"></i> Geometric Layout: The Real Line Tail Concentration
+                </div>
+                <div class="inline-block w-full max-w-2xl">
+                    <svg viewBox="0 0 700 160" width="100%" class="mx-auto overflow-visible">
+                        <line x1="50" y1="90" x2="650" y2="90" stroke="#94a3b8" stroke-width="3" stroke-linecap="round"/>
+                        <polygon points="655,90 645,84 645,96" fill="#94a3b8"/>
+                        
+                        <rect x="220" y="55" width="260" height="70" fill="#fde68a" fill-opacity="0.35" rx="8"/>
+                        <line x1="220" y1="90" x2="480" y2="90" stroke="#d97706" stroke-width="4"/>
+                        
+                        <line x1="220" y1="70" x2="220" y2="110" stroke="#d97706" stroke-width="2.5" stroke-dasharray="3,3"/>
+                        <line x1="480" y1="70" x2="480" y2="110" stroke="#d97706" stroke-width="2.5" stroke-dasharray="3,3"/>
+                        
+                        <circle cx="350" y="90" r="7" fill="#b91c1c"/> <circle cx="260" y="90" r="4.5" fill="#047857"/> <circle cx="310" y="90" r="4.5" fill="#047857"/>
+                        <circle cx="410" y="90" r="4.5" fill="#047857"/>
+                        <circle cx="450" y="90" r="4.5" fill="#047857"/>
+                        <circle cx="120" y="90" r="4" fill="#94a3b8"/> <circle cx="170" y="90" r="4" fill="#94a3b8"/>
+                        
+                        <text x="350" y="42" font-family="Source Sans 3, system-ui" font-size="15" font-weight="bold" fill="#b91c1c" text-anchor="middle">x_N (Anchor)</text>
+                        <text x="220" y="142" font-family="Source Sans 3, system-ui" font-size="14" font-weight="600" fill="#d97706" text-anchor="middle">x_N - ε/2</text>
+                        <text x="480" y="142" font-family="Source Sans 3, system-ui" font-size="14" font-weight="600" fill="#d97706" text-anchor="middle">x_N + ε/2</text>
+                        <text x="350" y="115" font-family="Source Sans 3, system-ui" font-size="13" font-style="italic" fill="#047857" text-anchor="middle">All points x_n (n ≥ N) clumped here</text>
+                        <text x="145" y="115" font-family="Source Sans 3, system-ui" font-size="13" fill="#64748b" text-anchor="middle">Finite prefix (n &lt; N)</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="card bg-white shadow-md border-l-4 border-l-emerald-500">
+                <h4 class="font-bold text-lg text-emerald-950 mb-2"><span class="bg-emerald-100 text-emerald-800 text-sm px-2.5 py-1 rounded-md mr-2 font-mono">Part 2</span>E_x is Non-Empty</h4>
+                <p class="text-base text-slate-700 leading-relaxed">
+                    From our interval clump bounds, we know that for every index coordinate \(n \ge N\), the evaluation yields \(x_n > x_N - \frac{\varepsilon}{2}\).
+                    <br><br>
+                    Because this statement applies to the entire infinite tail of the sequence, there are undeniably infinitely many terms greater than \(x_N - \frac{\varepsilon}{2}\). Consequently, by definition of the set criteria:
+                    \[x_N - \frac{\varepsilon}{2} \in E_x \;\Longrightarrow\; E_x \neq \emptyset.\]
+                </p>
+            </div>
+
+            <div class="card bg-white shadow-md border-l-4 border-l-rose-500">
+                <h4 class="font-bold text-lg text-rose-950 mb-2"><span class="bg-rose-100 text-rose-800 text-sm px-2.5 py-1 rounded-md mr-2 font-mono">Part 3</span> \(E_x\) is Bounded Above</h4>
+                <p class="text-base text-slate-700 leading-relaxed">
+                    We claim that \(x_N + \frac{\varepsilon}{2}\) acts as a  upper bound for \(S\). Let's prove via contradiction:
+                    <br><br>
+                    Assume there exists an element \(y \in E_x\) such that \(y > x_N + \frac{\varepsilon}{2}\). Since \(y \in E_x\), there must be infinitely many elements where \(x_n \ge y > x_N + \frac{\varepsilon}{2}\). 
+                    <br><br>
+                    However, this clearly contradicts our step result stating that <em>all</em> indices satisfying \(n \ge N\) must drop strictly underneath \(x_N + \frac{\varepsilon}{2}\). Thus, our assumption fails, confirming that:
+                    \[\forall y \in E_x, \;\; y \le x_N + \frac{\varepsilon}{2}.\]
+                </p>
+            </div>
+        </div>
+
+        <div class="card bg-slate-900 text-slate-100 shadow-xl p-8">
+            <h4 class="font-bold text-xl text-white mb-3"><span class="bg-indigo-500/30 text-indigo-300 text-sm px-2.5 py-1 rounded-md mr-2 font-mono">Part 4 &amp; 5</span>lub Trap &amp; Convergence Concluding Phase</h4>
+            <p class="text-base text-slate-300 mb-4">
+                Since \(E_x\) is proven non-empty and bounded from above within \(\mathbb{R}\), the **Least Upper Bound Property** dictates that a precise real supremum value exists: \(\alpha = lub(E_x) \in \mathbb{R}\).
+            </p>
+            <p class="text-base text-slate-300 mb-4">
+                Let's bracket this value between our established boundary coordinates:
+            </p>
+            <ul class="list-disc pl-6 space-y-2 text-base text-slate-300 mb-4">
+                <li>Since \(x_N - \frac{\varepsilon}{2} \in E_x\), we must have: \(x_N - \frac{\varepsilon}{2} \le \alpha\)</li>
+                <li>Since \(x_N + \frac{\varepsilon}{2}\) is a certified upper bound for \(E_x\), we must have: \(\alpha \le x_N + \frac{\varepsilon}{2}\)</li>
+            </ul>
+            <p class="text-base text-slate-300 mb-4">
+                Combining these inequalities yields an error bracket around the anchor value:
+                \[x_N - \frac{\varepsilon}{2} \le \alpha \le x_N + \frac{\varepsilon}{2} \;\Longrightarrow\; |x_N - \alpha| \le \frac{\varepsilon}{2}.\]
+            </p>
+            <p class="text-base text-slate-300 mb-2">
+                Finally, we can lock down the limit test. For any tracking tail index index \(n \ge N\), apply the triangle inequality once more:
+            </p>
+            <div class="math-box bg-white/5 border-white/10 text-white font-mono text-lg py-3">
+                \[|x_n - \alpha| \le |x_n - x_N| + |x_N - \alpha| < \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon.\]
+            </div>
+            <p class="text-base text-emerald-400 font-semibold mt-3">
+                <i class="fa-solid fa-square-check mr-1.5"></i> This proves rigorously that \(\lim_{n\to\infty} x_n = \alpha\). Every Cauchy sequence in \(\mathbb{R}\) converges perfectly. \(\blacksquare\)
+            </p>
+        </div>
+
+    </div>
+
+
+
+<!-- ══════════════════════════════════════════════
+     STEP 7 — Cauchy EASIER than finding limit
+══════════════════════════════════════════════ -->
+<div class="step py-8 border-t border-slate-100">
+    <h2 class="heading text-3xl text-slate-900 mb-2">When Showing Cauchy is Easier Than Finding the Limit</h2>
+    <p class="text-slate-600 mb-6">
+        The Cauchy criterion is most powerful when we <em>don't know</em> the limit.
+        We prove convergence without ever identifying \(L\) — then use algebra to find \(L\) afterwards.
+    </p>
+
+    <!-- Example 1: Contractions -->
+    <div class="mb-5">
+        <h3 class="text-lg font-semibold text-slate-800 mb-3">
+            <span class="badge badge-blue mr-2">Example A</span>
+            Contraction Mappings — \(x_{n+1} = \tfrac{x_n}{2} + \tfrac{1}{x_n}\)
+        </h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <div class="card">
+                <p class="text-sm text-slate-700 mb-3">
+                    Define \(x_1 = 2\) and \(x_{n+1} = \tfrac{x_n}{2}+\tfrac{1}{x_n}\).
+                    <br><strong>The limit is \(\sqrt{2}\) — but we don't need to know this to prove convergence!</strong>
+                </p>
+                <p class="text-sm text-slate-700 mb-2">Key estimate: for \(x_n > 0\),</p>
+                <div class="math-box text-sm">
+                    \[x_{n+1} - x_n = \frac{1}{x_n} - \frac{x_n}{2}
+                      = \frac{2 - x_n^2}{2x_n}.\]
+                </div>
+                <p class="text-sm text-slate-700 mt-2">
+                    One shows \(x_n \ge \sqrt{2}\) for all \(n\ge 2\) (AM–GM),
+                    so the sequence decreases and is bounded below — convergent by MCT.
+                    Alternatively, the contraction argument below avoids MCT.
+                </p>
+            </div>
+            <div class="proof-block">
+                <div class="font-semibold text-slate-700 mb-2">Contraction Argument</div>
+                <p class="text-sm text-slate-700 mb-2">
+                    Let \(f(x)=\tfrac{x}{2}+\tfrac{1}{x}\). Then \(|f'(x)|=|\tfrac{1}{2}-\tfrac{1}{x^2}|\).
+                    For \(x \ge \sqrt{2}\): \(|f'(x)| \le \tfrac{1}{2} =: k < 1\).
+                </p>
+                <p class="text-sm text-slate-700 mb-2">By the Mean Value Theorem:</p>
+                <div class="math-box text-sm">
+                    \[|x_{n+1}-x_n| \le k|x_n - x_{n-1}| \le \cdots \le k^{n-1}|x_2-x_1|.\]
+                </div>
+                <p class="text-sm text-slate-700 mt-2">For \(m > n\ge N\):</p>
+                <div class="math-box text-sm">
+                    \[|x_m - x_n| \le \frac{k^{N-1}}{1-k}|x_2-x_1| \to 0.\]
+                </div>
+                <p class="text-sm text-slate-700 mt-2">Cauchy criterion satisfied. \(\blacksquare\)</p>
+            </div>
+        </div>
+    </div>
+
+    <hr class="section-rule">
+
+    <!-- Example 2: Series -->
+    <div class="mb-5">
+        <h3 class="text-lg font-semibold text-slate-800 mb-3">
+            <span class="badge badge-blue mr-2">Example B</span>
+            Series with Decreasing Terms — \(S_n = \displaystyle\sum_{k=1}^n \frac{\sin k}{k^2}\)
+        </h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <div class="card">
+                <p class="text-sm text-slate-700 mb-2">
+                    The limit \(S = \sum_{k=1}^\infty \frac{\sin k}{k^2}\) has no
+                    simple closed form. Yet convergence is easy to prove:
+                </p>
+                <div class="math-box">
+                    \[|S_m - S_n| = \left|\sum_{k=n+1}^{m}\frac{\sin k}{k^2}\right|
+                      \le \sum_{k=n+1}^m \frac{|\sin k|}{k^2}
+                      \le \sum_{k=n+1}^m \frac{1}{k^2}.\]
+                </div>
+                <p class="text-sm text-slate-700 mt-3">
+                    Since \(\sum 1/k^2\) converges (its partial sums are Cauchy),
+                    the right side \(\to 0\). Hence \((S_n)\) is Cauchy, hence convergent.
+                    <span class="font-semibold">No explicit value of \(S\) needed.</span>
+                </p>
+            </div>
+            <div class="card-blue">
+                <div class="font-semibold text-blue-800 mb-2">The General Principle</div>
+                <p class="text-sm text-slate-700 mb-3">
+                    A series \(\sum a_k\) converges \(\Leftrightarrow\) its partial sums are Cauchy:
+                </p>
+                <div class="math-box">
+                    \[\left|\sum_{k=n+1}^m a_k\right| < \varepsilon
+                      \quad\text{for all }m>n\ge N.\]
+                </div>
+                <p class="text-sm text-slate-700 mt-2">
+                    If \(\sum |a_k|\) converges (<em>absolute convergence</em>), this is immediate:
+                    \(|S_m-S_n|\le\sum_{k=n+1}^m|a_k|\to 0\).
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <hr class="section-rule">
+
+    <!-- Example 3: General contraction -->
+    <div>
+        <h3 class="text-lg font-semibold text-slate-800 mb-3">
+            <span class="badge badge-blue mr-2">Example C</span>
+            General Contractive Sequence
+        </h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <div class="proof-block">
+                <div class="font-semibold text-slate-700 mb-2">Theorem</div>
+                <p class="text-sm text-slate-700 mb-2">
+                    If \(|x_{n+1}-x_n|\le k|x_n-x_{n-1}|\) for some fixed \(0 < k < 1\)
+                    and all \(n\ge 2\), then \((x_n)\) is Cauchy (hence convergent in \(\mathbb{R}\)).
+                </p>
+                <div class="font-semibold text-slate-700 mb-2 mt-3">Proof</div>
+                <p class="text-sm text-slate-700 mb-2">
+                    Let \(d = |x_2 - x_1|\). Then \(|x_{n+1}-x_n|\le k^{n-1}d\).
+                    For \(m > n\):
+                </p>
+                <div class="math-box text-sm">
+                    \[|x_m - x_n| \le \sum_{j=n}^{m-1}|x_{j+1}-x_j|
+                      \le d\sum_{j=n}^{\infty}k^{j-1}
+                      = \frac{dk^{n-1}}{1-k}\to 0.\]
+                </div>
+                <p class="text-sm text-slate-700 mt-2">Hence Cauchy. \(\blacksquare\)</p>
+            </div>
+            <div class="card-amber">
+                <div class="font-semibold text-amber-800 mb-2">Why this is powerful</div>
+                <p class="text-sm text-slate-700 mb-3">
+                    The sequence \(x_{n+1}=f(x_n)\) defined by a contraction
+                    \(f\) (with \(|f'|<1\)) converges to a <em>fixed point</em>
+                    \(f(L)=L\), proved purely by the Cauchy criterion —
+                    without knowing \(L\) in advance.
+                </p>
+                <div class="text-sm text-slate-700">
+                    <strong>Examples of contractions:</strong>
+                    <ul class="tight mt-2 ml-4 list-disc text-slate-600">
+                        <li>\(f(x)=\cos x\) on \([0,1]\) (|f'|=|\sin x|\le\sin 1<1)</li>
+                        <li>\(f(x)=\frac{x}{2}+\frac{1}{x}\) for \(x\ge\sqrt{2}\)</li>
+                        <li>\(f(x)=1-\frac{x^2}{2}\) near \(x=0\)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- /step 6 -->
+
+<!-- ══════════════════════════════════════════════
+     STEP 8 — Not Cauchy easier than not convergent
+══════════════════════════════════════════════ -->
+<div class="step py-8 border-t border-slate-100">
+    <h2 class="heading text-3xl text-slate-900 mb-2">When Showing Not-Cauchy is Easier Than Not-Convergent</h2>
+    <p class="text-slate-600 mb-6">
+        For divergence, showing the Cauchy property fails is often cleaner than
+        finding two subsequences with different limits.
+        We need: \(\exists\,\varepsilon_0>0\) such that \(\forall N,\;\exists\,m,n\ge N\)
+        with \(|x_m-x_n|\ge\varepsilon_0\).
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 mb-5">
+        <!-- Not Cauchy 1 -->
+        <div class="card-red">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="badge badge-red">Not Cauchy</span>
+                <span class="font-semibold">\(H_n = \sum_{k=1}^n\frac{1}{k}\)</span>
+            </div>
+            <p class="text-sm text-slate-700 mb-2">Take \(\varepsilon_0=\tfrac12\), \(m=2n\):</p>
+            <div class="math-box text-xs">
+                \[H_{2n}-H_n>\tfrac{1}{2}\quad\text{for all }n.\]
+            </div>
+            <p class="text-xs text-slate-600 mt-2">
+                <em>Easier than</em> showing \(H_n\to\infty\) from scratch.
+            </p>
+        </div>
+
+        <!-- Not Cauchy 2 -->
+        <div class="card-red">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="badge badge-red">Not Cauchy</span>
+                <span class="font-semibold">\(x_n = \sqrt{n}\)</span>
+            </div>
+            <p class="text-sm text-slate-700 mb-2">Take \(m=4n\), \(\varepsilon_0=1\):</p>
+            <div class="math-box text-xs">
+                \[|x_{4n}-x_n|=\sqrt{4n}-\sqrt{n}=\sqrt{n}\ge 1\;\text{for }n\ge 1.\]
+            </div>
+            <p class="text-xs text-slate-600 mt-2">
+                Direct from definition; no subsequence argument.
+            </p>
+        </div>
+
+        <!-- Not Cauchy 3 -->
+        <div class="card-red">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="badge badge-red">Not Cauchy</span>
+                <span class="font-semibold">\(x_n=(-1)^n n\)</span>
+            </div>
+            <p class="text-sm text-slate-700 mb-2">Take consecutive \(m=n+1\):</p>
+            <div class="math-box text-xs">
+                \[|x_{n+1}-x_n|=n+1+(n)=2n+1\to\infty.\]
+            </div>
+            <p class="text-xs text-slate-600 mt-2">
+                Immediately not Cauchy; even \(\varepsilon_0=1\) works.
+            </p>
+        </div>
+
+        <!-- Not Cauchy 4 -->
+        <div class="card-red">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="badge badge-red">Not Cauchy</span>
+                <span class="font-semibold">\(x_n=\ln n\)</span>
+            </div>
+            <p class="text-sm text-slate-700 mb-2">Take \(m=en\) (integer part), \(\varepsilon_0=\tfrac12\):</p>
+            <div class="math-box text-xs">
+                \[|\ln(en)-\ln n|=\ln e = 1 > \tfrac{1}{2}.\]
+            </div>
+            <p class="text-xs text-slate-600 mt-2">
+                No need to prove \(\ln n\to\infty\) separately.
+            </p>
+        </div>
+
+        <!-- Not Cauchy 5 -->
+        <div class="card-red">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="badge badge-red">Not Cauchy</span>
+                <span class="font-semibold">Partial sums \(\sum(-1)^k\)</span>
+            </div>
+            <p class="text-sm text-slate-700 mb-2">Consecutive difference is always \(1\):</p>
+            <div class="math-box text-xs">
+                \[|S_{n+1}-S_n|=|(-1)^{n+1}|=1.\]
+            </div>
+            <p class="text-xs text-slate-600 mt-2">
+                Cannot be Cauchy; trivially verified.
+            </p>
+        </div>
+
+        <!-- Summary column -->
+        <div class="card-slate">
+            <div class="font-semibold text-slate-700 mb-3">The Negation Strategy</div>
+            <p class="text-sm text-slate-700 mb-3">To show <em>not Cauchy</em>:</p>
+            <ol class="list-decimal ml-4 text-sm text-slate-700 space-y-1">
+                <li>Fix a specific \(\varepsilon_0>0\).</li>
+                <li>For each \(N\), exhibit \(m,n\ge N\) (often \(m=cn\)) with \(|x_m-x_n|\ge\varepsilon_0\).</li>
+                <li>This witnesses the failure for every \(N\).</li>
+            </ol>
+            <hr class="section-rule">
+            <p class="text-xs text-slate-500">
+                Since Cauchy \(\Leftrightarrow\) convergent in \(\mathbb{R}\),
+                not-Cauchy always implies divergence — but the Cauchy route is often shorter.
+            </p>
+        </div>
+    </div>
+
+    <!-- Detailed: not Cauchy via tail sums -->
+    <div class="proof-block">
+        <div class="font-semibold text-slate-700 mb-3">The Tail-Sum Criterion for Series</div>
+        <p class="text-sm text-slate-700 mb-2">
+            A series \(\sum a_k\) with partial sums \(S_n\) <em>diverges</em>
+            if and only if \((S_n)\) is not Cauchy:
+        </p>
+        <div class="math-box">
+            \[\exists\,\varepsilon_0>0:\;\forall N,\;\exists\,m>n\ge N:\;
+              \left|\sum_{k=n+1}^m a_k\right|\ge\varepsilon_0.\]
+        </div>
+        <p class="text-sm text-slate-700 mt-3">
+            <strong>Necessary condition for convergence (contrapositive):</strong>
+            If \(\sum a_k\) converges, then \(a_n\to 0\).
+            (<em>Proof:</em> take \(m=n+1\); then \(|a_{n+1}|=|S_{n+1}-S_n|\to 0.\))
+        </p>
+    </div>
+</div><!-- /step 7 -->
+
+<!-- ══════════════════════════════════════════════
+     STEP 9 — Self-Assessment
+══════════════════════════════════════════════ -->
+<div class="step py-8 border-t border-slate-100">
+    <h2 class="heading text-3xl text-slate-900 mb-6">Self-Assessment</h2>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-8">
+    <div>
+    <h3 class="font-semibold text-slate-700 mb-3">Part A — Definitions &amp; Basic Proofs</h3>
+
+    <div class="quiz-card">
+        <p class="text-sm font-medium"><strong>Q1.</strong>
+            Write out the definition of a Cauchy sequence and its negation (sequence that is <em>not</em> Cauchy).
+        </p>
+        <button class="btn-sol" onclick="tog('q1')">Solution</button>
+        <div class="solution" id="q1">
+            <strong>Cauchy:</strong> \(\forall\varepsilon>0,\;\exists N:\;m,n\ge N\Rightarrow|x_m-x_n|<\varepsilon.\)
+            <br><strong>Not Cauchy:</strong> \(\exists\varepsilon_0>0:\;\forall N,\;\exists\,m,n\ge N\text{ with }|x_m-x_n|\ge\varepsilon_0.\)
+        </div>
+    </div>
+
+    <div class="quiz-card">
+        <p class="text-sm font-medium"><strong>Q2.</strong>
+            Prove directly from the definition that \(x_n = 1/n^2\) is Cauchy.
+        </p>
+        <button class="btn-sol" onclick="tog('q2')">Solution</button>
+        <div class="solution" id="q2">
+            For \(m>n\ge N\): \(|x_m-x_n|\le\frac{1}{n^2}+\frac{1}{m^2}\le\frac{2}{N^2}.\)
+            Choose \(N>\sqrt{2/\varepsilon}\). Then \(|x_m-x_n|<\varepsilon.\;\blacksquare\)
+        </div>
+    </div>
+
+    <div class="quiz-card">
+        <p class="text-sm font-medium"><strong>Q3.</strong>
+            Show \(x_n=(-1)^n/\sqrt{n}\) is Cauchy.
+        </p>
+        <button class="btn-sol" onclick="tog('q3')">Solution</button>
+        <div class="solution" id="q3">
+            \(|x_m-x_n|\le|x_m|+|x_n|=\frac{1}{\sqrt{m}}+\frac{1}{\sqrt{n}}\le\frac{2}{\sqrt{N}}.\)
+            Choose \(N>(2/\varepsilon)^2\). \(\blacksquare\)
+        </div>
+    </div>
+
+    <div class="quiz-card">
+        <p class="text-sm font-medium"><strong>Q4.</strong>
+            Prove the partial sums of \(\sum_{k=1}^\infty\frac{1}{k^2}\) form a Cauchy sequence.
+        </p>
+        <button class="btn-sol" onclick="tog('q4')">Solution</button>
+        <div class="solution" id="q4">
+            For \(m>n\ge N\): \(|S_m-S_n|=\sum_{k=n+1}^m\frac{1}{k^2}\le\sum_{k=n+1}^\infty\frac{1}{k(k-1)}=\frac{1}{n}.\)
+            (Telescoping: \(\frac{1}{k(k-1)}=\frac{1}{k-1}-\frac{1}{k}\).)
+            Choose \(N>1/\varepsilon\). \(\blacksquare\)
+        </div>
+    </div>
+
+    <div class="quiz-card">
+        <p class="text-sm font-medium"><strong>Q5.</strong>
+            Show directly that \(x_n = n^2/(n+1)\) is <em>not</em> Cauchy.
+        </p>
+        <button class="btn-sol" onclick="tog('q5')">Solution</button>
+        <div class="solution" id="q5">
+            Take \(\varepsilon_0=1\), \(m=n+1\). Then
+            \(|x_{n+1}-x_n|=\frac{(n+1)^2}{n+2}-\frac{n^2}{n+1}=\frac{n^2+2n+1}{n+2}-\frac{n^2}{n+1}\to\infty.\)
+            In particular \(\ge 1\) for large \(n\), so not Cauchy.
+        </div>
+    </div>
+    </div><!-- /left col -->
+
+    <div>
+    <h3 class="font-semibold text-slate-700 mb-3">Part B — Deeper Results</h3>
+
+    <div class="quiz-card">
+        <p class="text-sm font-medium"><strong>Q6.</strong>
+            If \((x_n)\) and \((y_n)\) are Cauchy, prove \((x_n+y_n)\) is Cauchy.
+        </p>
+        <button class="btn-sol" onclick="tog('q6')">Solution</button>
+        <div class="solution" id="q6">
+            Given \(\varepsilon>0\), choose \(N_1,N_2\) for \((x_n),(y_n)\) respectively with \(\varepsilon/2\).
+            For \(m,n\ge\max(N_1,N_2)\):
+            \(|(x_m+y_m)-(x_n+y_n)|\le|x_m-x_n|+|y_m-y_n|<\varepsilon/2+\varepsilon/2=\varepsilon.\;\blacksquare\)
+        </div>
+    </div>
+
+    <div class="quiz-card">
+        <p class="text-sm font-medium"><strong>Q7.</strong>
+            Prove: if \((x_n)\) is Cauchy, then every subsequence \((x_{n_k})\) is also Cauchy.
+        </p>
+        <button class="btn-sol" onclick="tog('q7')">Solution</button>
+        <div class="solution" id="q7">
+            Given \(\varepsilon>0\), let \(N\) work for the Cauchy criterion of \((x_n)\).
+            Since \(n_k\ge k\), for \(k,j\ge N\) we have \(n_k,n_j\ge N\), so
+            \(|x_{n_k}-x_{n_j}|<\varepsilon\). Hence \((x_{n_k})\) is Cauchy. \(\blacksquare\)
+        </div>
+    </div>
+
+    <div class="quiz-card">
+        <p class="text-sm font-medium"><strong>Q8.</strong>
+            Let \(x_{n+1}=\cos(x_n)\), \(x_1=1\). Show \((x_n)\) is Cauchy without finding the limit.
+        </p>
+        <button class="btn-sol" onclick="tog('q8')">Solution</button>
+        <div class="solution" id="q8">
+            \(|\cos x - \cos y|\le|x-y||\sin c|\le(\sin 1)|x-y|\) for some \(c\).
+            Set \(k=\sin 1\approx 0.841<1\).
+            Then \(|x_{n+1}-x_n|\le k^{n-1}|x_2-x_1|\).
+            For \(m>n\): \(|x_m-x_n|\le\frac{k^{n-1}}{1-k}|x_2-x_1|\to 0\).
+            Cauchy, hence convergent to the fixed point of cosine (\(\approx 0.739\)). \(\blacksquare\)
+        </div>
+    </div>
+
+    <div class="quiz-card">
+        <p class="text-sm font-medium"><strong>Q9.</strong>
+            If \((x_n)\) is Cauchy and has a subsequence converging to \(L\), prove \(x_n\to L\).
+        </p>
+        <button class="btn-sol" onclick="tog('q9')">Solution</button>
+        <div class="solution" id="q9">
+            Let \(\varepsilon>0\). Choose \(N_1\) so \(m,n\ge N_1\Rightarrow|x_m-x_n|<\varepsilon/2\).
+            Choose \(N_2\) so \(k\ge N_2\Rightarrow|x_{n_k}-L|<\varepsilon/2\).
+            Pick \(K\ge N_2\) with \(n_K\ge N_1\). For \(n\ge N_1\):
+            \(|x_n-L|\le|x_n-x_{n_K}|+|x_{n_K}-L|<\varepsilon/2+\varepsilon/2=\varepsilon.\;\blacksquare\)
+        </div>
+    </div>
+
+    <div class="quiz-card">
+        <p class="text-sm font-medium"><strong>Q10 (Challenge).</strong>
+            Show the partial sums \(T_n=\sum_{k=1}^n\frac{(-1)^{k+1}}{k}\) are Cauchy,
+            hence the alternating harmonic series converges.
+        </p>
+        <button class="btn-sol" onclick="tog('q10')">Solution</button>
+        <div class="solution" id="q10">
+            For \(m>n\ge N\): \(|T_m-T_n|=\left|\sum_{k=n+1}^m\frac{(-1)^{k+1}}{k}\right|\le\frac{1}{n+1}\le\frac{1}{N}.\)
+            (The alternating sum telescopes and is bounded by the first term.)
+            Choose \(N>1/\varepsilon\). Hence Cauchy, hence convergent (to \(\ln 2\)). \(\blacksquare\)
+        </div>
+    </div>
+    </div><!-- /right col -->
+    </div><!-- /grid -->
+</div><!-- /step 8 -->
+
+<!-- ══════════════════════════════════════════════
+     STEP 9 — Summary Table
+══════════════════════════════════════════════ -->
+<div class="step py-8 border-t border-slate-100">
+    <h2 class="heading text-3xl text-slate-900 mb-6">Summary</h2>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div class="card-dark">
+            <div class="font-semibold text-white mb-4">The Four Key Results</div>
+            <div class="space-y-3 text-sm">
+                <div class="flex gap-3 items-start">
+                    <span class="text-emerald-400 font-bold mt-0.5">1</span>
+                    <span class="text-slate-300">Convergent \(\Rightarrow\) Cauchy &emsp; (triangle inequality + \(\varepsilon/2\))</span>
+                </div>
+                <div class="flex gap-3 items-start">
+                    <span class="text-emerald-400 font-bold mt-0.5">2</span>
+                    <span class="text-slate-300">Cauchy \(\Rightarrow\) Bounded &emsp; (take \(\varepsilon=1\), finite max)</span>
+                </div>
+                <div class="flex gap-3 items-start">
+                    <span class="text-emerald-400 font-bold mt-0.5">3</span>
+                    <span class="text-slate-300">Cauchy + Bounded \(\Rightarrow\) Convergent subsequence &emsp; (Bolzano–Weierstrass)</span>
+                </div>
+                <div class="flex gap-3 items-start">
+                    <span class="text-emerald-400 font-bold mt-0.5">4</span>
+                    <span class="text-slate-300">Cauchy + Convergent subsequence \(\Rightarrow\) Full convergence &emsp; (\(\varepsilon/2\) again)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="font-semibold text-slate-700 mb-4">When to Use Cauchy vs Direct</div>
+            <table class="text-xs w-full">
+                <thead>
+                    <tr class="bg-slate-50">
+                        <th class="text-left p-2 border border-slate-200">Situation</th>
+                        <th class="text-left p-2 border border-slate-200">Preferred tool</th>
+                    </tr>
+                </thead>
+                <tbody class="text-slate-600">
+                    <tr><td class="p-2 border border-slate-200">Limit known explicitly</td>
+                        <td class="p-2 border border-slate-200">Direct \(\varepsilon\text{-}N\)</td></tr>
+                    <tr><td class="p-2 border border-slate-200">Recursive / contraction</td>
+                        <td class="p-2 border border-slate-200"><strong>Cauchy criterion</strong></td></tr>
+                    <tr><td class="p-2 border border-slate-200">Series without closed form</td>
+                        <td class="p-2 border border-slate-200"><strong>Cauchy / absolute convergence</strong></td></tr>
+                    <tr><td class="p-2 border border-slate-200">Proving divergence</td>
+                        <td class="p-2 border border-slate-200"><strong>Negate Cauchy</strong></td></tr>
+                    <tr><td class="p-2 border border-slate-200">Bounded monotone</td>
+                        <td class="p-2 border border-slate-200">Monotone Convergence Thm</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card-green">
+        <div class="font-semibold text-green-800 mb-3">Completeness of \(\mathbb{R}\) — The Big Picture</div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-slate-700">
+            <div>
+                <div class="font-semibold mb-1">LUB Property</div>
+                <div class="text-xs text-slate-600">Every nonempty bounded-above set has a least upper bound.</div>
+            </div>
+            <div class="flex items-center justify-center text-slate-400 font-bold text-2xl hidden md:flex">⟺</div>
+            <div>
+                <div class="font-semibold mb-1">Cauchy Completeness</div>
+                <div class="text-xs text-slate-600">Every Cauchy sequence in \(\mathbb{R}\) converges in \(\mathbb{R}\).</div>
+            </div>
+        </div>
+        <p class="text-xs text-slate-500 mt-4">
+            These two formulations of completeness are equivalent.
+            They both fail for \(\mathbb{Q}\) and both hold for \(\mathbb{R}\).
+            This is what distinguishes the real numbers.
+        </p>
+    </div>
+</div><!-- /step 9 -->
+
+</div><!-- /max-w-7xl -->
+
+<!-- ── Footer ─────────────────────────────────── -->
+<footer class="border-t border-slate-200 mt-4 py-6">
+    <div class="max-w-7xl mx-auto px-8 text-xs text-slate-400 flex items-center justify-between">
+        <div>Real Analysis · Cauchy Sequences · Rigorous Foundations</div>
+        <div>© 2026</div>
+    </div>
+</footer>
+
+<!-- ── Controls Bar ───────────────────────────── -->
+<div class="ctrl-bar">
+    <span class="key-hint">Press <kbd class="bg-slate-700 px-1.5 py-0.5 rounded text-xs text-slate-300">Enter</kbd> or <kbd class="bg-slate-700 px-1.5 py-0.5 rounded text-xs text-slate-300">→</kbd></span>
+    <div class="prog-bg"><div class="prog-fill" id="pFill"></div></div>
+    <span class="prog-lbl" id="pLbl">0 / 0</span>
+    <button class="btn-next" id="btnNext" onclick="revealNext()">Next ▶</button>
+</div>
+
+<script>
+const steps   = document.querySelectorAll('.step');
+const fill    = document.getElementById('pFill');
+const lbl     = document.getElementById('pLbl');
+const btn     = document.getElementById('btnNext');
+let   current = 0;
+
+function updateUI(){
+    fill.style.width = (current/steps.length*100)+'%';
+    lbl.textContent  = current+' / '+steps.length;
+    btn.disabled     = current >= steps.length;
+    btn.textContent  = current >= steps.length ? 'Done ✓' : 'Next ▶';
+}
+function revealNext(){
+    if(current >= steps.length) return;
+    const el = steps[current];
+    el.classList.add('visible');
+    if(window.MathJax) MathJax.typesetPromise([el]);
+    current++;
+    updateUI();
+    setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),80);
+}
+function tog(id){
+    const s = document.getElementById(id);
+    const show = s.style.display !== 'block';
+    s.style.display = show ? 'block' : 'none';
+    if(show && window.MathJax) MathJax.typesetPromise([s]);
+}
+document.addEventListener('keydown',function(e){
+    if((e.key==='Enter'||e.key==='ArrowRight')&&e.target.tagName!=='BUTTON'){
+        e.preventDefault(); revealNext();
+    }
+});
+window.addEventListener('load',function(){ updateUI(); revealNext(); });
+</script>
+</body>
+</html>

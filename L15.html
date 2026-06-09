@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Continuity — Examples, Counterexamples &amp; Proofs</title>
+
+<script>
+    window.MathJax = {
+        tex: { inlineMath:[['$','$'],['\\(','\\)']], displayMath:[['$$','$$']] },
+        svg: { fontCache:'global' }
+    };
+</script>
+<script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+:root{
+    --primary:#2c3e50; --secondary:#3498db; --bg:#f4f7f6;
+    --green:#27ae60; --orange:#e67e22; --red:#c0392b;
+    --purple:#6a1b9a; --teal:#00695c;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+    line-height:1.78; color:var(--primary);
+    background:var(--bg); padding:20px 20px 110px;
+}
+.container{
+    max-width:920px; margin:auto; background:#fff;
+    padding:40px; border-radius:8px;
+    box-shadow:0 4px 18px rgba(0,0,0,.1);
+}
+h1{font-size:2rem;color:var(--primary);
+   border-bottom:3px solid var(--secondary);
+   padding-bottom:10px;margin-bottom:6px;}
+.subtitle{color:#7f8c8d;font-size:1rem;margin-bottom:28px;}
+h2{font-size:1.5rem;color:var(--primary);
+   border-bottom:1px solid #eee;padding-bottom:7px;margin-bottom:14px;}
+h3{font-size:1.15rem;color:var(--secondary);margin:16px 0 8px;}
+p{margin-bottom:1rem;}
+
+/* ── tcolorbox ───────────────────── */
+.tcolorbox{border-radius:6px;margin:14px 0;overflow:hidden;border:1px solid #ccc;}
+.tcolorbox-header{padding:9px 16px;font-weight:bold;font-size:1rem;color:#fff;}
+.tcolorbox-content{padding:15px 18px;}
+.tcolorbox.blue   .tcolorbox-header{background:#1565c0;}
+.tcolorbox.blue   .tcolorbox-content{background:#e3f2fd;}
+.tcolorbox.green  .tcolorbox-header{background:#2e7d32;}
+.tcolorbox.green  .tcolorbox-content{background:#e8f5e9;}
+.tcolorbox.orange .tcolorbox-header{background:#e65100;}
+.tcolorbox.orange .tcolorbox-content{background:#fff3e0;}
+.tcolorbox.purple .tcolorbox-header{background:#6a1b9a;}
+.tcolorbox.purple .tcolorbox-content{background:#f3e5f5;}
+.tcolorbox.red    .tcolorbox-header{background:#c62828;}
+.tcolorbox.red    .tcolorbox-content{background:#ffebee;}
+.tcolorbox.teal   .tcolorbox-header{background:#00695c;}
+.tcolorbox.teal   .tcolorbox-content{background:#e0f2f1;}
+.tcolorbox.indigo .tcolorbox-header{background:#283593;}
+.tcolorbox.indigo .tcolorbox-content{background:#e8eaf6;}
+.tcolorbox.brown  .tcolorbox-header{background:#4e342e;}
+.tcolorbox.brown  .tcolorbox-content{background:#efebe9;}
+.tcolorbox.amber  .tcolorbox-header{background:#f57f17;}
+.tcolorbox.amber  .tcolorbox-content{background:#fff8e1;}
+.tcolorbox.grey   .tcolorbox-header{background:#424242;}
+.tcolorbox.grey   .tcolorbox-content{background:#f5f5f5;}
+.tcolorbox.cyan   .tcolorbox-header{background:#00838f;}
+.tcolorbox.tcolorbox.cyan .tcolorbox-content{background:#e0f7fa;}
+.tcolorbox.cyan   .tcolorbox-content{background:#e0f7fa;}
+.tcolorbox.lime   .tcolorbox-header{background:#558b2f;}
+.tcolorbox.lime   .tcolorbox-content{background:#f1f8e9;}
+.tcolorbox.pink   .tcolorbox-header{background:#ad1457;}
+.tcolorbox.pink   .tcolorbox-content{background:#fce4ec;}
+.tcolorbox.slate  .tcolorbox-header{background:#37474f;}
+.tcolorbox.slate  .tcolorbox-content{background:#eceff1;}
+
+/* ── proof block ─────────────────── */
+.proof-block{
+    background:#f9f9f9;border-left:4px solid #7a6e64;
+    padding:14px 18px;margin:12px 0;border-radius:0 4px 4px 0;
+}
+.proof-label{font-weight:bold;color:#4e342e;display:block;margin-bottom:8px;}
+.qed{float:right;font-weight:bold;font-size:1.1rem;}
+
+/* ── math / rough boxes ──────────── */
+.math-box{
+    background:#e8f4fd;border-left:5px solid var(--secondary);
+    padding:14px 18px;margin:16px 0;border-radius:4px;
+}
+.rough-box{
+    background:#fffde7;border:2px dashed #f9a825;
+    border-radius:6px;padding:14px 18px;margin:16px 0;
+}
+.rough-title{font-weight:bold;color:#e65100;
+             margin-bottom:8px;font-size:.95rem;display:block;}
+
+/* ── table ───────────────────────── */
+table{width:100%;border-collapse:collapse;margin:14px 0;}
+th,td{border:1px solid #ddd;padding:10px 13px;text-align:left;}
+th{background:#f2f2f2;font-weight:600;}
+
+/* ── lists ───────────────────────── */
+ul,ol{margin-left:1.5rem;margin-bottom:1rem;}
+li{margin-bottom:.42rem;}
+
+/* ── two-column ──────────────────── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0;}
+@media(max-width:620px){.two-col{grid-template-columns:1fr;}}
+
+/* ── diagram ─────────────────────── */
+.diagram-wrap{
+    background:#fafafa;border:1px solid #ddd;
+    border-radius:8px;padding:12px;margin:18px 0;
+    text-align:center;overflow-x:auto;
+}
+.diagram-caption{font-size:.88rem;color:#555;margin-top:8px;font-style:italic;}
+
+/* ── quiz card ───────────────────── */
+.quiz-card{
+    background:#fdfefe;border:1px solid #e2e8f0;
+    border-left:5px solid var(--secondary);
+    padding:18px 20px;margin:14px 0;border-radius:5px;
+}
+.btn-sol{
+    background:transparent;border:1.5px solid var(--secondary);
+    color:var(--secondary);padding:7px 16px;border-radius:4px;
+    cursor:pointer;font-size:.88rem;font-weight:600;
+    transition:all .2s;margin-top:10px;
+}
+.btn-sol:hover{background:var(--secondary);color:#fff;}
+.solution{
+    display:none;margin-top:12px;padding:12px 14px;
+    background:#f8fafc;border-top:1px dashed #e2e8f0;
+    border-radius:4px;color:#4a5568;
+}
+.sol-label{font-weight:700;color:var(--primary);
+           display:block;margin-bottom:6px;}
+
+/* ── section rule ────────────────── */
+.section-rule{border:none;border-top:2px dashed #c8b99a;margin:30px 0 22px;}
+
+/* ── STEP REVEAL ─────────────────── */
+.step{opacity:0;max-height:0;overflow:hidden;
+      transition:opacity .4s ease,max-height .65s ease;}
+.step.visible{opacity:1;max-height:9000px;margin-bottom:8px;}
+
+/* ── CONTROLS BAR ────────────────── */
+.controls{
+    position:fixed;bottom:0;left:0;right:0;
+    background:#ede5d8;border-top:2px solid #c8b99a;
+    padding:12px 40px;display:flex;align-items:center;
+    justify-content:space-between;gap:20px;z-index:1000;
+    box-shadow:0 -2px 8px rgba(0,0,0,.08);
+}
+.progress-wrap{flex:1;display:flex;align-items:center;gap:12px;}
+.progress-bar-bg{flex:1;height:5px;background:#c8b99a;
+                 border-radius:3px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:#8b2500;border-radius:3px;
+                   width:0%;transition:width .4s ease;}
+.progress-label{font-size:14px;color:#8b2500;font-weight:700;
+                white-space:nowrap;min-width:55px;text-align:right;}
+.btn-next{background:var(--primary);color:#fff;border:none;
+          padding:10px 28px;font-size:15px;cursor:pointer;
+          border-radius:4px;transition:background .2s;}
+.btn-next:hover:not(:disabled){background:var(--secondary);}
+.btn-next:disabled{background:#c8b99a;cursor:default;}
+.key-hint{font-size:13px;color:#7a6e64;font-style:italic;white-space:nowrap;}
+</style>
+</head>
+<body>
+
+<nav style="max-width:920px;margin:0 auto 12px;font-size:.9rem;">
+    <a href="main.html">&larr; Course Home</a>
+</nav>
+
+<div class="container">
+<h1>Continuity — Examples, Counterexamples &amp; Proofs</h1>
+<p class="subtitle">
+    A collection of carefully worked examples illustrating the sequential definition of
+    continuity: functions that are nowhere continuous, continuous everywhere except one point,
+    and continuous everywhere — together with two structural theorems.
+</p>
+
+<!-- ══════════════════════════════════════
+     STEP 0 — Recall the sequential definition
+══════════════════════════════════════ -->
+<div class="step">
+<h2>Recall — The Sequential Definition of Continuity</h2>
+
+<div class="tcolorbox blue">
+    <div class="tcolorbox-header">Sequential Definition</div>
+    <div class="tcolorbox-content">
+    <ol>
+    <li> Let $J$ be a nonempty subset of $\mathbb{R}.$</p>
+        $f:J\to\mathbb{R}$ is <strong>continuous at $a\in J$</strong> if:
+        $$\text{for every sequence }(x_n)\text{ in }J\text{ with }x_n\to a,
+          \quad f(x_n)\to f(a).$$ </li>
+       <li> <strong>Discontinuity at $a$:</strong> there exists a sequence $(x_n)$
+        in $J$ with $x_n\to a$ but $f(x_n)\not\to f(a).$<br>  What do you mean by $f(x_n)\not\to f(a)?$ either $f(x_n)$ not converge or even if it converges it is not converges to $f(a).$ </li>
+        </ol>
+        <ul>
+        <li> If $f$ is continous at every point in $J,$ then we say <strong> $f$ is continous on $J.$</strong></li>
+        <li> This way of defining is very useful, as we use our previous knowledge on sequences. </li>
+        <li> Note that this definition is a local definition: Continous at a point.</li>  
+        <li> Finally focus on the domain: $J$ is a nonempty set. It can be a singleton set, entire $\mathbb{R}$ or interval or union of sets etc. 
+        For example, if $J=\{0\},$ then constant function $f(x)=0,$ or $f(x)=x, x^2, \sin x , x^3-x,$ etc all are equal.  </li> </ul>
+    </div>
+</div>
+
+<div class="math-box">
+
+    <strong>Two tools we use repeatedly.</strong>
+    <ul>
+        <li>
+            <em>Density:</em> For any $a\in\mathbb{R},$ there exist sequences of rationals
+            $r_n\to a$ and sequences of irrationals $s_n\to a.$
+        </li>
+        <li>
+            <em>Sign persistence:</em> If $x_n\to a$ and $a&gt;0,$ then eventually $x_n&gt;0.$
+            If $a&lt;0,$ eventually $x_n&lt;0.$
+        </li>
+    </ul>
+</div>
+
+<div class="tcolorbox amber">
+    <div class="tcolorbox-header">Strategy for proofs</div>
+    <div class="tcolorbox-content">
+        <strong>To prove continuous at $a$:</strong> take any sequence $x_n\to a$ and show
+        $f(x_n)\to f(a)$ — often using limit laws or a sandwich argument.
+        <br><br>
+        <strong>To prove discontinuous at $a$:</strong> exhibit a <em>single specific</em> sequence
+        $x_n\to a$ for which $f(x_n)\not\to f(a).$
+        <br><br>
+        You may also exhibit two sequences both converging to $a$ but with $f$-values converging
+        to different limits — the uniqueness of limits then gives the contradiction.
+    </div>
+</div>
+</div>
+<!-- /step 0 -->
+
+<!-- ══════════════════════════════════════
+     STEP 1 — Recall the sequential definition
+══════════════════════════════════════ -->
+<div class="step">
+<h2>Independent of domains</h2>
+
+<div class="tcolorbox blue">
+    <div class="tcolorbox-header">What ever may be the domain, these functions are continuous.</div>
+    <div class="tcolorbox-content">
+    <p> Check the following.
+    <ul> 
+    <li> <strong>Every constant function is continous.</strong><br>
+      Let $\forall x\in J,\; \;f(x)=c$ and  $a\in J.$ <br>
+       Let $(x_n)$ be a sequence in $J$ converges to $a.$<br>
+        Then $f(x_1)=f(x_2)=\dots=c$ that is $(f(x_n))$ is the constant sequence $(c).$ Hence  $f(x_n)\to c=f(a).$ <br>
+        Here $a$ is arbitrary, thus $f$ is continous on $J.$ </li>
+    <li>  Since $J\subseteq \mathbb{R},$ <strong>the restriction of identity map $f(x)=x$ to $J$ is continous.</strong> <br>Let $a\in J.$ Let $(x_n)$ be a sequence in J converges to $a.$ Then $f(x_1)=x_1, f(x_2)=x_2,\ldots$ that is $(f(x_n))$ is  same as the sequence $(x_n)$ and  it converges to $a=f(a).$ Hence  $f(x_n)\to f(a).$
+    Here $a$ is arbitrary, thus $f$ is continous on $J.$
+     </li>
+    <li> Show $f(x)=x^2$ in general $f(x)=x^n$ is continuous. 
+    </ul>
+    
+    </p>
+    </div>
+</div>
+<!-- /step 1 -->
+<!-- ══════════════════════════════════════
+     STEP 2 — Sign function
+══════════════════════════════════════ -->
+<div class="step">
+<h2>Example 1 — The Sign Function: Continuous Everywhere Except $0$</h2>
+
+<div class="tcolorbox purple">
+    <div class="tcolorbox-header">The Sign Function</div>
+    <div class="tcolorbox-content">
+        $$\text{sgn}:\mathbb{R}\to\mathbb{R},\qquad
+          \text{sgn}(x) = \begin{cases} 1 & x&gt;0\\ 0 & x=0\\ -1 & x&lt;0. \end{cases}$$
+        <strong>Claim:</strong> $\text{sgn}$ is continuous at every $a\ne 0$
+        and discontinuous at $a=0.$
+    </div>
+</div>
+
+<!-- Sign function diagram -->
+<div class="diagram-wrap">
+<svg viewBox="0 0 560 190" width="100%" xmlns="http://www.w3.org/2000/svg"
+     style="max-height:190px;">
+<defs>
+    <marker id="sa" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+        <path d="M0,0 L7,2.5 L0,5 Z" fill="#607d8b"/>
+    </marker>
+</defs>
+<line x1="20"  y1="95"  x2="540" y2="95"  stroke="#607d8b" stroke-width="1.5"
+      marker-end="url(#sa)"/>
+<line x1="280" y1="175" x2="280" y2="15"  stroke="#607d8b" stroke-width="1.5"
+      marker-end="url(#sa)"/>
+<text x="542" y="103" font-size="10" fill="#555">$x$</text>
+<text x="284" y="14"  font-size="10" fill="#555">$y$</text>
+<!-- y = 1 line (x > 0) -->
+<line x1="280" y1="40" x2="520" y2="40" stroke="#6a1b9a" stroke-width="3"/>
+<circle cx="280" cy="40" r="6" fill="white" stroke="#6a1b9a" stroke-width="2"/>
+<!-- y = -1 line (x < 0) -->
+<line x1="40"  y1="150" x2="280" y2="150" stroke="#6a1b9a" stroke-width="3"/>
+<circle cx="280" cy="150" r="6" fill="white" stroke="#6a1b9a" stroke-width="2"/>
+<!-- y = 0 at x = 0 -->
+<circle cx="280" cy="95" r="6" fill="#6a1b9a"/>
+<!-- axis labels -->
+<text x="270" y="115" font-size="10" fill="#555">$0$</text>
+<text x="22"  y="38"  font-size="10" fill="#555">$1$</text>
+<text x="14"  y="153" font-size="10" fill="#555">$-1$</text>
+<line x1="274" y1="40"  x2="284" y2="40"  stroke="#aaa" stroke-width="1"/>
+<line x1="274" y1="150" x2="284" y2="150" stroke="#aaa" stroke-width="1"/>
+<!-- sequence from right -->
+<circle cx="420" cy="40" r="4" fill="#e67e22" opacity=".7"/>
+<circle cx="360" cy="40" r="4" fill="#e67e22" opacity=".78"/>
+<circle cx="318" cy="40" r="4" fill="#e67e22" opacity=".88"/>
+<text x="350" y="25" font-size="9" fill="#e67e22">$x_n=1/n\to 0$: $f(x_n)=1\to 1\ne 0$</text>
+<!-- sequence from left -->
+<circle cx="140" cy="150" r="4" fill="#c0392b" opacity=".7"/>
+<circle cx="200" cy="150" r="4" fill="#c0392b" opacity=".78"/>
+<circle cx="242" cy="150" r="4" fill="#c0392b" opacity=".88"/>
+<text x="140" y="168" font-size="9" fill="#c0392b">$y_n=-1/n\to 0$: $f(y_n)=-1\to -1\ne 0$</text>
+<!-- f(0)=0 label -->
+<text x="296" y="92" font-size="10" fill="#6a1b9a">$f(0)=0$</text>
+</svg>
+<div class="diagram-caption">
+    The sign function has jumps at $0.$
+    Sequences from the right give images tending to $1;$ from the left to $-1;$
+    neither equals $f(0)=0.$ For $a\ne 0$ the graph is locally flat — continuous.
+</div>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof — Continuity at $a\ne 0.$</span>
+    <strong>Case $a&gt;0$:</strong>
+    Let $(x_n)$ be any sequence with $x_n\to a&gt;0.$
+    By sign persistence, there exists $N\in\mathbb{N}$ such that $x_k&gt;0$ for all $k\ge N.$
+    Hence $\text{sgn}(x_k)=1=\text{sgn}(a)$ for all $k\ge N.$
+    So $\text{sgn}(x_n)\to 1=\text{sgn}(a).$ $\checkmark$
+    <br><br>
+    <strong>Case $a&lt;0$:</strong>
+    Similarly, eventually $x_k&lt;0,$ so $\text{sgn}(x_k)=-1=\text{sgn}(a)$ for all large $k.$
+    Hence $\text{sgn}(x_n)\to -1=\text{sgn}(a).$ $\checkmark$
+    <span class="qed">$\blacksquare$</span>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof — Discontinuity at $a=0.$</span>
+    We exhibit three sequences converging to $0$ with incompatible $f$-images:
+    <br><br>
+    Let $x_n=\tfrac{1}{n},\; y_n=-\tfrac{1}{n},\; z_n=\tfrac{(-1)^n}{n}.$
+    All three satisfy $x_n,y_n,z_n\to 0.$
+    <ul>
+        <li>$\text{sgn}(x_n)=1$ for all $n,$ so $f(x_n)\to 1\ne 0=f(0).$</li>
+        <li>$\text{sgn}(y_n)=-1$ for all $n,$ so $f(y_n)\to -1\ne 0=f(0).$</li>
+        <li>$(f(z_n))=(1,-1,1,-1,\ldots)$ diverges — certainly not converging to $f(0).$</li>
+    </ul>
+    Each of these alone suffices to prove discontinuity at $0.$ $\blacksquare$
+    <span class="qed"></span>
+</div>
+
+<div class="tcolorbox teal">
+    <div class="tcolorbox-header">Summary</div>
+    <div class="tcolorbox-content">
+        $\text{sgn}$ is continuous on $\mathbb{R}\setminus\{0\}=(-\infty,0)\cup(0,\infty)$
+        and discontinuous at $0.$
+        It has a <em>jump discontinuity</em> at $0$: the left limit is $-1,$
+        the right limit is $1,$ and the function value is $0$ — all three differ.
+    </div>
+</div>
+</div><!-- /step 2 -->
+
+
+
+<!-- ══════════════════════════════════════
+     STEP 3 — Dirichlet's function
+══════════════════════════════════════ -->
+<div class="step">
+<h2>Example 2 — Dirichlet's Function: Nowhere Continuous</h2>
+
+<div class="tcolorbox red">
+    <div class="tcolorbox-header">Dirichlet's Function</div>
+    <div class="tcolorbox-content">
+        $$f:\mathbb{R}\to\mathbb{R}, \qquad
+          f(x) = \begin{cases} 1 & x\in\mathbb{Q}\\ 0 & x\notin\mathbb{Q}. \end{cases}$$
+        <strong>Claim:</strong> $f$ is not continuous at any point $a\in\mathbb{R}.$
+    </div>
+</div>
+
+<!-- Dirichlet diagram -->
+<div class="diagram-wrap">
+<svg viewBox="0 0 680 160" width="100%" xmlns="http://www.w3.org/2000/svg"
+     style="max-height:160px;">
+<defs>
+    <marker id="da" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+        <path d="M0,0 L7,2.5 L0,5 Z" fill="#607d8b"/>
+    </marker>
+</defs>
+<line x1="30"  y1="80"  x2="650" y2="80"  stroke="#607d8b" stroke-width="1.5"
+      marker-end="url(#da)"/>
+<line x1="60"  y1="145" x2="60"  y2="15"  stroke="#607d8b" stroke-width="1.5"
+      marker-end="url(#da)"/>
+<text x="652" y="88"  font-size="10" fill="#555">$x$</text>
+<text x="64"  y="14"  font-size="10" fill="#555">$y$</text>
+<text x="40"  y="77"  font-size="9"  fill="#555">$0$</text>
+<text x="38"  y="37"  font-size="9"  fill="#555">$1$</text>
+<line x1="55" y1="35" x2="65" y2="35" stroke="#aaa" stroke-width="1"/>
+
+<!-- Dense cloud of dots at y=1 (rationals) -->
+<text x="340" y="22" text-anchor="middle" font-size="10" fill="#1565c0">
+    $f(x)=1$ for $x\in\mathbb{Q}$ (dense)
+</text>
+<!-- simulate dense rational dots at y=35 -->
+<g fill="#1565c0" opacity=".55">
+<circle cx="90"  cy="35" r="1.8"/><circle cx="98"  cy="35" r="1.8"/>
+<circle cx="111" cy="35" r="1.8"/><circle cx="120" cy="35" r="1.8"/>
+<circle cx="133" cy="35" r="1.8"/><circle cx="145" cy="35" r="1.8"/>
+<circle cx="158" cy="35" r="1.8"/><circle cx="170" cy="35" r="1.8"/>
+<circle cx="183" cy="35" r="1.8"/><circle cx="194" cy="35" r="1.8"/>
+<circle cx="207" cy="35" r="1.8"/><circle cx="219" cy="35" r="1.8"/>
+<circle cx="232" cy="35" r="1.8"/><circle cx="244" cy="35" r="1.8"/>
+<circle cx="257" cy="35" r="1.8"/><circle cx="270" cy="35" r="1.8"/>
+<circle cx="283" cy="35" r="1.8"/><circle cx="295" cy="35" r="1.8"/>
+<circle cx="308" cy="35" r="1.8"/><circle cx="320" cy="35" r="1.8"/>
+<circle cx="333" cy="35" r="1.8"/><circle cx="346" cy="35" r="1.8"/>
+<circle cx="359" cy="35" r="1.8"/><circle cx="372" cy="35" r="1.8"/>
+<circle cx="385" cy="35" r="1.8"/><circle cx="398" cy="35" r="1.8"/>
+<circle cx="411" cy="35" r="1.8"/><circle cx="424" cy="35" r="1.8"/>
+<circle cx="437" cy="35" r="1.8"/><circle cx="450" cy="35" r="1.8"/>
+<circle cx="463" cy="35" r="1.8"/><circle cx="476" cy="35" r="1.8"/>
+<circle cx="489" cy="35" r="1.8"/><circle cx="502" cy="35" r="1.8"/>
+<circle cx="515" cy="35" r="1.8"/><circle cx="528" cy="35" r="1.8"/>
+<circle cx="541" cy="35" r="1.8"/><circle cx="554" cy="35" r="1.8"/>
+<circle cx="567" cy="35" r="1.8"/><circle cx="580" cy="35" r="1.8"/>
+<circle cx="593" cy="35" r="1.8"/><circle cx="606" cy="35" r="1.8"/>
+<circle cx="619" cy="35" r="1.8"/><circle cx="632" cy="35" r="1.8"/>
+</g>
+
+<!-- Dense cloud at y=0 (irrationals) -->
+<text x="340" y="100" text-anchor="middle" font-size="10" fill="#c0392b">
+    $f(x)=0$ for $x\notin\mathbb{Q}$ (dense)
+</text>
+<g fill="#c0392b" opacity=".55">
+<circle cx="93"  cy="80" r="1.8"/><circle cx="105" cy="80" r="1.8"/>
+<circle cx="116" cy="80" r="1.8"/><circle cx="127" cy="80" r="1.8"/>
+<circle cx="138" cy="80" r="1.8"/><circle cx="151" cy="80" r="1.8"/>
+<circle cx="163" cy="80" r="1.8"/><circle cx="176" cy="80" r="1.8"/>
+<circle cx="188" cy="80" r="1.8"/><circle cx="201" cy="80" r="1.8"/>
+<circle cx="213" cy="80" r="1.8"/><circle cx="226" cy="80" r="1.8"/>
+<circle cx="238" cy="80" r="1.8"/><circle cx="251" cy="80" r="1.8"/>
+<circle cx="263" cy="80" r="1.8"/><circle cx="276" cy="80" r="1.8"/>
+<circle cx="288" cy="80" r="1.8"/><circle cx="301" cy="80" r="1.8"/>
+<circle cx="313" cy="80" r="1.8"/><circle cx="326" cy="80" r="1.8"/>
+<circle cx="338" cy="80" r="1.8"/><circle cx="351" cy="80" r="1.8"/>
+<circle cx="363" cy="80" r="1.8"/><circle cx="376" cy="80" r="1.8"/>
+<circle cx="389" cy="80" r="1.8"/><circle cx="402" cy="80" r="1.8"/>
+<circle cx="415" cy="80" r="1.8"/><circle cx="428" cy="80" r="1.8"/>
+<circle cx="441" cy="80" r="1.8"/><circle cx="454" cy="80" r="1.8"/>
+<circle cx="467" cy="80" r="1.8"/><circle cx="480" cy="80" r="1.8"/>
+<circle cx="493" cy="80" r="1.8"/><circle cx="506" cy="80" r="1.8"/>
+<circle cx="519" cy="80" r="1.8"/><circle cx="532" cy="80" r="1.8"/>
+<circle cx="545" cy="80" r="1.8"/><circle cx="558" cy="80" r="1.8"/>
+<circle cx="571" cy="80" r="1.8"/><circle cx="584" cy="80" r="1.8"/>
+<circle cx="597" cy="80" r="1.8"/><circle cx="610" cy="80" r="1.8"/>
+<circle cx="623" cy="80" r="1.8"/><circle cx="636" cy="80" r="1.8"/>
+</g>
+</svg>
+<div class="diagram-caption">
+    Dirichlet's function oscillates densely between $0$ and $1$ at every scale —
+    no connected graph is possible. It is discontinuous at every real number.
+</div>
+</div>
+
+<h3>Proof at $a = 0$ (three illuminating approaches)</h3>
+
+<div class="proof-block">
+    <span class="proof-label">Approach 1 — Two sequences giving different limits.</span>
+    Note $f(0) = 1$ (since $0\in\mathbb{Q}$).
+    <br><br>
+    Let $x_n = \tfrac{1}{n}\in\mathbb{Q}.$ Then $x_n\to 0$ and $f(x_n)=1$ for all $n,$
+    so $f(x_n)\to 1 = f(0).$ So far so good.
+    <br><br>
+    Let $y_n = \tfrac{\sqrt{2}}{n}\notin\mathbb{Q}.$ Then $y_n\to 0$ and $f(y_n)=0$ for all $n,$
+    so $f(y_n)\to 0 \ne 1 = f(0).$
+    <br><br>
+    Since there exists a sequence converging to $0$ whose images do not converge to $f(0),$
+    $f$ is discontinuous at $0.$ $\blacksquare$
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Approach 2 — A single sequence whose image diverges.</span>
+    Define
+    $$x_n = \begin{cases}\tfrac{1}{n} & n\text{ odd}\\\tfrac{\sqrt{2}}{n} & n\text{ even.}\end{cases}$$
+    Then $|x_n|\le\tfrac{\sqrt{2}}{n}\to 0,$ so $x_n\to 0.$
+    But $(f(x_n)) = (1,\,0,\,1,\,0,\,\ldots),$ which <em>diverges</em>.
+    Since a divergent sequence certainly does not converge to $f(0)=1,$
+    $f$ is discontinuous at $0.$ $\blacksquare$
+</div>
+
+<div class="tcolorbox amber">
+    <div class="tcolorbox-header">Key insight from Approach 2</div>
+    <div class="tcolorbox-content">
+        Finding a <em>single</em> sequence $x_n\to a$ for which $(f(x_n))$ fails to converge
+        to $f(a)$ — whether because it diverges or converges to the wrong value — is sufficient
+        to prove discontinuity. You do not need the images to converge to two different values.
+    </div>
+</div>
+
+<h3>Proof at a General Point $a\in\mathbb{R}$</h3>
+
+<div class="proof-block">
+    <span class="proof-label">Proof.</span>
+    Let $a\in\mathbb{R}$ be arbitrary.
+    <br><br>
+    By the density of $\mathbb{Q}$ and $\mathbb{R}\setminus\mathbb{Q}$ in $\mathbb{R},$
+    there exist sequences:
+    $(r_n)$ with $r_n\in\mathbb{Q}$ and $r_n\to a,$ and
+    $(s_n)$ with $s_n\notin\mathbb{Q}$ and $s_n\to a.$
+    <br><br>
+    We have $f(r_n)=1$ for all $n$ so $f(r_n)\to 1,$
+    and $f(s_n)=0$ for all $n$ so $f(s_n)\to 0.$
+    <br><br>
+    <strong>Case $a\in\mathbb{Q}$:</strong> $f(a)=1.$ The sequence $(s_n)$ satisfies
+    $s_n\to a$ but $f(s_n)\to 0\ne 1=f(a).$ Discontinuous.
+    <br><br>
+    <strong>Case $a\notin\mathbb{Q}$:</strong> $f(a)=0.$ The sequence $(r_n)$ satisfies
+    $r_n\to a$ but $f(r_n)\to 1\ne 0=f(a).$ Discontinuous.
+    <br><br>
+    In both cases $f$ is discontinuous at $a.$ Since $a$ was arbitrary, $f$ is continuous
+    <em>nowhere</em> on $\mathbb{R}.$ $\blacksquare$
+    <span class="qed"></span>
+    
+    <div class="tcolorbox amber">
+    <div class="tcolorbox-header">Continuous only at one point</div>
+    <div class="tcolorbox-content">
+        $$f:\mathbb{R}\to\mathbb{R}, \qquad
+          f(x) = \begin{cases} x & x\in\mathbb{Q}\\ 0 & x\notin\mathbb{Q}. \end{cases}$$ Check this function is continuous only at $x=0.$
+    </div>
+</div>
+</div>
+</div><!-- /step 3 -->
+<!-- ══════════════════════════════════════
+     NEW STEP — Example: f(x)=x (rational), f(x)=1-x (irrational)
+══════════════════════════════════════ -->
+<div class="step">
+<hr class="section-rule">
+<h2>Example — $f(x)=x$ on $\mathbb{Q}$ and $f(x)=1-x$ on $\mathbb{R}\setminus\mathbb{Q}$</h2>
+
+<div class="tcolorbox blue">
+    <div class="tcolorbox-header">The Function</div>
+    <div class="tcolorbox-content">
+        $$f:\mathbb{R}\to\mathbb{R},\qquad
+          f(x)=\begin{cases} x & x\in\mathbb{Q},\\ 1-x & x\notin\mathbb{Q}.\end{cases}$$
+        <strong>Question:</strong> At which points $a\in\mathbb{R}$ is $f$ continuous?
+    </div>
+</div>
+
+<div class="rough-box">
+    <span class="rough-title">Rough Work — Spotting the Key</span>
+    At a point $a,$ two types of sequences approach $a$: rational sequences and irrational
+    sequences. For continuity we need <em>every</em> sequence to give the same limit $f(a).$
+    <ul style="margin-top:6px;">
+        <li>A rational sequence $(r_n)\to a$ forces $f(r_n)=r_n\to a.$</li>
+        <li>An irrational sequence $(s_n)\to a$ forces $f(s_n)=1-s_n\to 1-a.$</li>
+    </ul>
+    For both limits to agree with $f(a)$ we need $a=1-a,$ i.e., $a=1/2.$
+    So the <em>only candidate</em> for continuity is $a=1/2.$
+    We then verify separately: $f$ is continuous at $1/2$ and discontinuous everywhere else.
+</div>
+
+<!-- ── Case 1: a ≠ 1/2  ── -->
+<div class="tcolorbox red">
+    <div class="tcolorbox-header">Claim — $f$ is discontinuous at every $a\ne\tfrac{1}{2}$</div>
+    <div class="tcolorbox-content">
+        If $a\ne\tfrac{1}{2},$ then $a\ne 1-a,$ so by density of $\mathbb{Q}$ and
+        $\mathbb{R}\setminus\mathbb{Q}$ in $\mathbb{R},$ the two types of sequences
+        converging to $a$ produce different image limits — neither equals $f(a)$ in general.
+    </div>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof — Discontinuity at $a\ne\tfrac{1}{2}.$</span>
+    By density, there exist sequences $(r_n)$ in $\mathbb{Q}$ and $(s_n)$ in
+    $\mathbb{R}\setminus\mathbb{Q},$ both converging to $a.$
+    <br><br>
+    <strong>Rational sequence:</strong>
+    $f(r_n)=r_n\to a.$
+    <br>
+    <strong>Irrational sequence:</strong>
+    $f(s_n)=1-s_n\to 1-a.$
+    <br><br>
+    Since $a\ne\tfrac{1}{2},$ we have $a\ne 1-a.$
+    So these two sequences converge to $a$ but give $f$-values tending to two
+    <em>different</em> limits $a$ and $1-a.$ By uniqueness of limits, $f$ cannot
+    be continuous at $a.$ $\blacksquare$
+</div>
+
+<!-- ── Case 2: a = 1/2  ── -->
+<div class="tcolorbox green">
+    <div class="tcolorbox-header">Claim — $f$ is continuous at $a=\tfrac{1}{2}$</div>
+    <div class="tcolorbox-content">
+        At $x=\tfrac{1}{2}:$ both branches give the same value:
+        $f\!\left(\tfrac{1}{2}\right)=\tfrac{1}{2}$ (since $\tfrac{1}{2}\in\mathbb{Q}$)
+        and $1-\tfrac{1}{2}=\tfrac{1}{2}.$
+        So $f(x)\to\tfrac{1}{2}$ along <em>any</em> sequence tending to $\tfrac{1}{2}.$
+    </div>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof — Continuity at $a=\tfrac{1}{2}.$</span>
+    Note $f\!\left(\tfrac{1}{2}\right)=\tfrac{1}{2}$ (since $\tfrac{1}{2}\in\mathbb{Q}$).
+    Let $(x_n)$ be any sequence in $\mathbb{R}$ with $x_n\to\tfrac{1}{2}.$
+    <br><br>
+    For each $n,$ exactly one of two cases holds:
+    <ul>
+        <li>If $x_n\in\mathbb{Q}$: $f(x_n)=x_n.$</li>
+        <li>If $x_n\notin\mathbb{Q}$: $f(x_n)=1-x_n.$</li>
+    </ul>
+    In <em>either</em> case,
+    $$\left|f(x_n)-\tfrac{1}{2}\right|
+      =\begin{cases}|x_n-\tfrac{1}{2}| & x_n\in\mathbb{Q},\\
+                    |1-x_n-\tfrac{1}{2}|=|x_n-\tfrac{1}{2}| & x_n\notin\mathbb{Q}.\end{cases}$$
+    Hence $\left|f(x_n)-\tfrac{1}{2}\right|=\left|x_n-\tfrac{1}{2}\right|\to 0.$
+    By the Sandwich Theorem, $f(x_n)\to\tfrac{1}{2}=f\!\left(\tfrac{1}{2}\right).$
+    Since $(x_n)$ was arbitrary, $f$ is continuous at $\tfrac{1}{2}.$ $\blacksquare$
+    <span class="qed"></span>
+</div>
+
+<!-- Diagram -->
+<div class="diagram-wrap">
+<svg viewBox="0 0 680 220" width="100%" xmlns="http://www.w3.org/2000/svg" style="max-height:220px;">
+<defs>
+    <marker id="fxa" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+        <path d="M0,0 L7,2.5 L0,5 Z" fill="#607d8b"/>
+    </marker>
+</defs>
+<!-- axes -->
+<line x1="30"  y1="160" x2="650" y2="160" stroke="#607d8b" stroke-width="1.5" marker-end="url(#fxa)"/>
+<line x1="80"  y1="195" x2="80"  y2="15"  stroke="#607d8b" stroke-width="1.5" marker-end="url(#fxa)"/>
+<text x="652" y="168" font-size="10" fill="#555">$x$</text>
+<text x="84"  y="14"  font-size="10" fill="#555">$y$</text>
+
+<!-- y=x line (rational branch) — blue dashed -->
+<line x1="80" y1="160" x2="620" y2="40" stroke="#1565c0" stroke-width="2"
+      stroke-dasharray="6,4" opacity=".75"/>
+<text x="570" y="35" font-size="10" fill="#1565c0">$y=x$</text>
+<text x="570" y="47" font-size="9" fill="#1565c0">(rationals)</text>
+
+<!-- y=1-x line (irrational branch) — red dashed -->
+<!-- when x=0, y=1; when x=1, y=0; scaled: x=80→y=117, x=580→y=42 -->
+<!-- axis origin at (80,160), scale: 1 unit = 120px in x, 1 unit = 120px in y -->
+<!-- y=1-x: at x=0 → y=1 (screen y=160-120=40); at x=1 → y=0 (screen y=160) -->
+<line x1="80" y1="40" x2="620" y2="160" stroke="#c62828" stroke-width="2"
+      stroke-dasharray="4,4" opacity=".75"/>
+<text x="80"  y="32" font-size="10" fill="#c62828">$y=1{-}x$</text>
+<text x="80"  y="44" font-size="9"  fill="#c62828">(irrationals)</text>
+
+<!-- intersection at x=1/2, y=1/2 -->
+<!-- screen: x=80+0.5*540=350, y=160-0.5*120=100 -->
+<circle cx="350" cy="100" r="8" fill="#27ae60" stroke="#fff" stroke-width="2"/>
+<text x="360" y="95"  font-size="11" fill="#27ae60" font-weight="bold">$({\tfrac{1}{2}},{\tfrac{1}{2}})$</text>
+<text x="360" y="109" font-size="9"  fill="#27ae60">continuous here only</text>
+
+<!-- dotted drop lines to axes -->
+<line x1="350" y1="100" x2="350" y2="160" stroke="#27ae60" stroke-width="1" stroke-dasharray="3,3"/>
+<line x1="350" y1="100" x2="80"  y2="100" stroke="#27ae60" stroke-width="1" stroke-dasharray="3,3"/>
+<text x="342" y="175" font-size="9" fill="#27ae60" text-anchor="middle">$\tfrac{1}{2}$</text>
+<text x="62"  y="103" font-size="9" fill="#27ae60" text-anchor="end">$\tfrac{1}{2}$</text>
+
+<!-- tick marks on axes -->
+<!-- x=1: screen 80+540=620 -->
+<line x1="620" y1="155" x2="620" y2="165" stroke="#888" stroke-width="1"/>
+<text x="618" y="178" font-size="9" fill="#555" text-anchor="middle">$1$</text>
+<!-- y=1: screen 160-120=40 -->
+<line x1="75" y1="40" x2="85" y2="40" stroke="#888" stroke-width="1"/>
+<text x="60" y="43" font-size="9" fill="#555" text-anchor="end">$1$</text>
+
+<!-- caption for two sequences at a generic point a ≠ 1/2 -->
+<!-- pick a = 0.75: screen x = 80+0.75*540=485 -->
+<circle cx="485" cy="67"  r="4" fill="#1565c0" opacity=".8"/><!-- y=x branch -->
+<circle cx="485" cy="115" r="4" fill="#c62828" opacity=".8"/><!-- y=1-x branch -->
+<line x1="485" y1="67" x2="485" y2="115" stroke="#888" stroke-width="1" stroke-dasharray="3,3"/>
+<text x="495" y="82"  font-size="9" fill="#1565c0">$f(r_n)\to a$</text>
+<text x="495" y="112" font-size="9" fill="#c62828">$f(s_n)\to 1{-}a$</text>
+<text x="487" y="178" font-size="9" fill="#888" text-anchor="middle">$a\ne\tfrac{1}{2}$</text>
+<line x1="485" y1="155" x2="485" y2="165" stroke="#888" stroke-width="1"/>
+</svg>
+<div class="diagram-caption">
+    The two branches $y=x$ (rational, blue) and $y=1-x$ (irrational, red) are both drawn as lines,
+    but each is only "sampled" on a dense subset. They meet at exactly one point $\bigl(\tfrac{1}{2},\tfrac{1}{2}\bigr)$
+    — the unique point of continuity.
+</div>
+</div>
+
+<!-- Observation box -->
+<div class="tcolorbox amber">
+    <div class="tcolorbox-header">Key Observation</div>
+    <div class="tcolorbox-content">
+        Notice: $f(x)=x$ and $g(x)=1-x$ are both continuous functions on $\mathbb{R}.$
+        They agree precisely when $x=1-x,$ i.e., at $x=\tfrac{1}{2}.$
+        The piecewise function $f$ is continuous exactly at the points where its two
+        "branch functions" have equal values — which is only $x=\tfrac{1}{2}.$
+        <br><br>
+        This is a general principle: a function defined piecewise by continuous branch
+        functions can be continuous at a point $a$ only if all branches agree at $a.$
+    </div>
+</div>
+
+<!-- Summary -->
+<div class="tcolorbox teal">
+    <div class="tcolorbox-header">Conclusion</div>
+    <div class="tcolorbox-content">
+        $f$ is continuous at exactly one point: $x=\tfrac{1}{2}.$
+        <br>
+        $f$ is discontinuous at every $x\ne\tfrac{1}{2}.$
+        <br><br>
+        The set of continuity is the singleton $\bigl\{\tfrac{1}{2}\bigr\}.$
+    </div>
+</div>
+
+</div><!-- /step -->
+
+<!-- ══════════════════════════════════════
+     STEP 4 — Piecewise f(x) = x^2 / x
+══════════════════════════════════════ -->
+<div class="step">
+<h2>Example 3 — A Piecewise Function Continuous Everywhere</h2>
+
+<div class="tcolorbox indigo">
+    <div class="tcolorbox-header">The Piecewise Function</div>
+    <div class="tcolorbox-content">
+        $$f:\mathbb{R}\to\mathbb{R},\qquad
+          f(x) = \begin{cases} x^2 & x\ge 0\\ x & x&lt;0. \end{cases}$$
+        <strong>Claim:</strong> $f$ is continuous at every $a\in\mathbb{R}.$
+    </div>
+</div>
+
+<!-- Piecewise diagram -->
+<div class="diagram-wrap">
+<svg viewBox="0 0 560 210" width="100%" xmlns="http://www.w3.org/2000/svg"
+     style="max-height:210px;">
+<defs>
+    <marker id="pa" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+        <path d="M0,0 L7,2.5 L0,5 Z" fill="#607d8b"/>
+    </marker>
+</defs>
+<line x1="20"  y1="115" x2="540" y2="115" stroke="#607d8b" stroke-width="1.5"
+      marker-end="url(#pa)"/>
+<line x1="220" y1="200" x2="220" y2="20"  stroke="#607d8b" stroke-width="1.5"
+      marker-end="url(#pa)"/>
+<text x="542" y="123" font-size="10" fill="#555">$x$</text>
+<text x="224" y="18"  font-size="10" fill="#555">$y$</text>
+<!-- x < 0 branch: y = x (line with slope 1 going down-left) -->
+<line x1="40" y1="177" x2="220" y2="115" stroke="#283593" stroke-width="2.5"/>
+<!-- x >= 0 branch: y = x^2 (parabola) -->
+<path d="M 220,115 Q 340,115 440,55" fill="none" stroke="#283593" stroke-width="2.5"/>
+<!-- they meet at origin smoothly -->
+<circle cx="220" cy="115" r="5" fill="#283593"/>
+<!-- labels -->
+<text x="60" y="195" font-size="11" fill="#283593">$y=x$</text>
+<text x="430" y="50" font-size="11" fill="#283593">$y=x^2$</text>
+<text x="210" y="135" font-size="9" fill="#555">$0$</text>
+<!-- tangent continuity label -->
+<text x="220" y="10" text-anchor="middle" font-size="10" fill="#2e7d32"
+      font-weight="bold">Continuous everywhere — no break!</text>
+<!-- x_n approaching 0 from right -->
+<circle cx="300" cy="113" r="4" fill="#e67e22" opacity=".7"/>
+<circle cx="260" cy="114" r="4" fill="#e67e22" opacity=".82"/>
+<circle cx="238" cy="115" r="4" fill="#e67e22" opacity=".93"/>
+<!-- x_n approaching 0 from left -->
+<circle cx="140" cy="127" r="4" fill="#c0392b" opacity=".7"/>
+<circle cx="180" cy="121" r="4" fill="#c0392b" opacity=".82"/>
+<circle cx="205" cy="116" r="4" fill="#c0392b" opacity=".93"/>
+</svg>
+<div class="diagram-caption">
+    The graph is connected at the origin: $f(x)=x$ (left branch) meets $f(x)=x^2$
+    (right branch) smoothly at $(0,0).$
+    Both branches arrive at $0$ as $x\to 0.$
+</div>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof — Continuity at $a\ne 0.$</span>
+    <strong>Case $a&gt;0$:</strong>
+    There exists $N$ such that $x_k&gt;0$ for all $k\ge N.$
+    So $f(x_k)=x_k^2\to a^2=f(a).$ ✓
+    <br><br>
+    <strong>Case $a&lt;0$:</strong>
+    There exists $N$ such that $x_k&lt;0$ for all $k\ge N.$
+    So $f(x_k)=x_k\to a=f(a).$ ✓
+    <span class="qed">$\blacksquare$</span>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof — Continuity at $a=0$ (the critical case).</span>
+    $f(0)=0^2=0.$ Let $(x_n)$ be any sequence with $x_n\to 0.$
+    We must show $f(x_n)\to 0.$
+    <br><br>
+    Each $x_n$ is either $\ge 0$ (giving $f(x_n)=x_n^2$) or $&lt;0$ (giving $f(x_n)=x_n$).
+    In both cases $|f(x_n)|\le|x_n|$ for $|x_n|\le 1$:
+    <ul>
+        <li>If $x_n\ge 0$: $|f(x_n)|=x_n^2=|x_n|^2\le|x_n|$ (since $|x_n|\le 1$).</li>
+        <li>If $x_n&lt;0$: $|f(x_n)|=|x_n|.$</li>
+    </ul>
+    Since $x_n\to 0,$ there exists $N_0$ such that $|x_k|\le 1$ for all $k\ge N_0.$
+    For such $k$: $0\le|f(x_k)|\le|x_k|.$
+    <br><br>
+    Since $x_n\to 0$ iff $|x_n|\to 0,$ the Sandwich Lemma gives $|f(x_n)|\to 0,$
+    hence $f(x_n)\to 0 = f(0).$ $\blacksquare$
+    <span class="qed"></span>
+</div>
+
+<h3>Generalisation to $f(x) = x^m$ for $x\ge 0$ and $f(x) = x^n$ for $x &lt; 0$</h3>
+
+<div class="tcolorbox teal">
+    <div class="tcolorbox-header">Generalised Piecewise Power Function</div>
+    <div class="tcolorbox-content">
+        Let $m,n\in\mathbb{N}$ and define
+        $$g(x) = \begin{cases} x^m & x\ge 0\\ x^n & x&lt;0. \end{cases}$$
+        <ul>
+            <li>At any $a\ne 0$: continuous by sign persistence (same argument as above).</li>
+            <li>At $a=0$: $g(0)=0.$
+                For $x_n\to 0$:
+                <ul>
+                    <li>$x_n\ge 0$: $|g(x_n)|=|x_n|^m\le|x_n|$ once $|x_n|\le 1.$</li>
+                    <li>$x_n&lt;0$ and $n$ odd: $|g(x_n)|=|x_n|^n\le|x_n|$ once $|x_n|\le 1.$</li>
+                    <li>$x_n&lt;0$ and $n$ even: $g(x_n)=|x_n|^n\ge 0$; same bound.</li>
+                </ul>
+                In all cases $|g(x_n)|\le|x_n|\to 0.$ By Sandwich, $g(x_n)\to 0=g(0).$ ✓
+            </li>
+        </ul>
+        <strong>Conclusion:</strong> $g$ is continuous at $0$ (and everywhere) for any $m,n\in\mathbb{N}.$
+    </div>
+</div>
+</div><!-- /step 4 -->
+
+<!-- ══════════════════════════════════════
+     STEP 5 — f(x) = 1/x on R*
+══════════════════════════════════════ -->
+<div class="step">
+<h2>Example 4 — $f(x)=1/x$ is Continuous on $\mathbb{R}^*$</h2>
+
+<div class="tcolorbox green">
+    <div class="tcolorbox-header">Proposition</div>
+    <div class="tcolorbox-content">
+        Let $\mathbb{R}^*=\mathbb{R}\setminus\{0\}.$ Define $f:\mathbb{R}^*\to\mathbb{R}^*$
+        by $f(x)=\dfrac{1}{x}.$ Then $f$ is continuous on $\mathbb{R}^*.$
+    </div>
+</div>
+
+<!-- 1/x diagram -->
+<div class="diagram-wrap">
+<svg viewBox="0 0 580 220" width="100%" xmlns="http://www.w3.org/2000/svg"
+     style="max-height:220px;">
+<defs>
+    <marker id="ha" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+        <path d="M0,0 L7,2.5 L0,5 Z" fill="#607d8b"/>
+    </marker>
+</defs>
+<line x1="20"  y1="110" x2="560" y2="110" stroke="#607d8b" stroke-width="1.5"
+      marker-end="url(#ha)"/>
+<line x1="290" y1="210" x2="290" y2="15"  stroke="#607d8b" stroke-width="1.5"
+      marker-end="url(#ha)"/>
+<text x="562" y="118" font-size="10" fill="#555">$x$</text>
+<text x="294" y="14"  font-size="10" fill="#555">$y$</text>
+<!-- asymptote at x=0 -->
+<line x1="290" y1="25" x2="290" y2="200" stroke="#e74c3c"
+      stroke-width="1" stroke-dasharray="5,4"/>
+<text x="293" y="22" font-size="9" fill="#e74c3c">$x=0$ (not in domain)</text>
+<!-- positive branch: y = 1/x -->
+<path d="M 315,22 Q 340,30 360,52 Q 400,80 440,97 Q 480,106 540,110"
+      fill="none" stroke="#2e7d32" stroke-width="2.5"/>
+<!-- negative branch: y = 1/x -->
+<path d="M 265,200 Q 240,190 220,170 Q 180,140 140,120 Q 100,113 40,110"
+      fill="none" stroke="#2e7d32" stroke-width="2.5"/>
+<!-- labels -->
+<text x="500" y="106" font-size="11" fill="#2e7d32">$y=\frac{1}{x}$</text>
+<text x="30"  y="108" font-size="11" fill="#2e7d32">$y=\frac{1}{x}$</text>
+<text x="290" y="205" text-anchor="middle" font-size="10" fill="#2e7d32">
+    Continuous on each branch — discontinuous-looking gap is just missing domain
+</text>
+</svg>
+<div class="diagram-caption">
+    $y=1/x$: continuous on $(0,\infty)$ and on $(-\infty,0).$
+    The "gap" at $x=0$ is not a discontinuity — $0$ is simply not in the domain.
+</div>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof.</span>
+    Let $a\in\mathbb{R}^*$ (so $a\ne 0$) and let $(x_n)$ be any sequence in $\mathbb{R}^*$
+    with $x_n\to a.$
+    <br><br>
+    Since $x_n\to a\ne 0,$ by sign persistence there exists $N_0$ such that $x_k\ne 0$
+    for all $k\ge N_0$ (in fact, $x_k$ has the same sign as $a$).
+    So $1/x_n$ is eventually defined.
+    <br><br>
+    By the algebra of convergent sequences (quotient rule):
+    $$f(x_n) = \frac{1}{x_n} \;\to\; \frac{1}{a} = f(a),$$
+    since $x_n\to a$ and $a\ne 0.$
+    <br><br>
+    Since $(x_n)$ was arbitrary, $f$ is continuous at $a.$
+    Since $a\in\mathbb{R}^*$ was arbitrary, $f$ is continuous on $\mathbb{R}^*.$ $\blacksquare$
+    <span class="qed"></span>
+</div>
+
+<div class="tcolorbox amber">
+    <div class="tcolorbox-header">Remark on the domain</div>
+    <div class="tcolorbox-content">
+        Continuity is always with respect to the domain of $f.$
+        Asking whether $f(x)=1/x$ is continuous at $0$ is <em>meaningless</em>
+        — $f$ is simply not defined at $0.$
+        The function is continuous everywhere it is defined.
+    </div>
+</div>
+</div><!-- /step 5 -->
+
+<!-- ══════════════════════════════════════
+     STEP 6 — Two structural theorems
+══════════════════════════════════════ -->
+<div class="step">
+<h2>Structural Theorems</h2>
+
+<h3>Theorem A — Two Continuous Functions Agreeing on $\mathbb{Q}$ Must Be Equal</h3>
+
+<div class="tcolorbox blue">
+    <div class="tcolorbox-header">Theorem</div>
+    <div class="tcolorbox-content">
+        Let $f,g:\mathbb{R}\to\mathbb{R}$ be continuous. If $f(x)=g(x)$ for all $x\in\mathbb{Q},$
+        then $f=g$ on all of $\mathbb{R}.$
+    </div>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof.</span>
+    Let $a\in\mathbb{R}.$ By the density of $\mathbb{Q}$ in $\mathbb{R},$ there exists a sequence
+    of rationals $(r_n)$ with $r_n\to a.$
+    <br><br>
+    Since $r_n\in\mathbb{Q}$ for all $n$ and $f(r_n)=g(r_n)$ for all $n$ (by hypothesis):
+    <br>
+    By continuity of $f$: $f(r_n)\to f(a).$
+    <br>
+    By continuity of $g$: $g(r_n)\to g(a).$
+    <br><br>
+    But $f(r_n)=g(r_n)$ for all $n,$ so both sequences are identical.
+    By uniqueness of limits: $f(a)=g(a).$
+    <br><br>
+    Since $a\in\mathbb{R}$ was arbitrary, $f=g$ on $\mathbb{R}.$ $\blacksquare$
+    <span class="qed"></span>
+</div>
+
+<div class="math-box">
+    <strong>Interpretation.</strong>
+    A continuous function $f:\mathbb{R}\to\mathbb{R}$ is completely determined by its values
+    on $\mathbb{Q}$ — a countable set. This is because $\mathbb{Q}$ is <em>dense</em> in $\mathbb{R}$
+    and continuity forces the values at irrational points to be limits of values at nearby rationals.
+    <br><br>
+    In other words: you cannot have two different continuous functions that agree at every rational number.
+</div>
+
+<div class="tcolorbox orange">
+    <div class="tcolorbox-header">A useful corollary</div>
+    <div class="tcolorbox-content">
+        If $f:\mathbb{R}\to\mathbb{R}$ is continuous and $f(r)=0$ for every $r\in\mathbb{Q},$
+        then $f\equiv 0.$
+        <br><br>
+        <em>Proof:</em> Apply the theorem with $g\equiv 0.$ $\blacksquare$
+    </div>
+</div>
+
+<h3>Theorem B — Continuous Additive Homomorphisms are Linear</h3>
+
+<div class="tcolorbox purple">
+    <div class="tcolorbox-header">Theorem</div>
+    <div class="tcolorbox-content">
+        Let $f:\mathbb{R}\to\mathbb{R}$ be continuous and satisfy
+        $$f(x+y) = f(x)+f(y)\qquad\text{for all }x,y\in\mathbb{R}.$$
+        Then $f(x)=\lambda x$ for all $x\in\mathbb{R},$ where $\lambda=f(1).$
+    </div>
+</div>
+
+<div class="proof-block">
+    <span class="proof-label">Proof.</span>
+    <strong>Step 1 — Values at integers.</strong>
+    Setting $x=y=0$: $f(0)=f(0)+f(0),$ so $f(0)=0.$
+    <br>
+    For $n\in\mathbb{N}$ by induction: $f(n)=nf(1)=n\lambda.$
+    <br>
+    Setting $y=-x$: $f(0)=f(x)+f(-x),$ so $f(-x)=-f(x).$
+    Hence $f(-n)=-n\lambda$ for all $n\in\mathbb{N}.$
+    So $f(n)=n\lambda$ for all $n\in\mathbb{Z}.$
+    <br><br>
+    <strong>Step 2 — Values at rationals.</strong>
+    For $p/q\in\mathbb{Q}$ with $q\in\mathbb{N}$:
+    $$f(p) = f\!\left(\underbrace{\frac{p}{q}+\frac{p}{q}+\cdots+\frac{p}{q}}_{q\text{ times}}\right)
+      = q\,f\!\left(\frac{p}{q}\right).$$
+    So $f\!\left(\dfrac{p}{q}\right)=\dfrac{f(p)}{q}=\dfrac{p\lambda}{q}=\lambda\cdot\dfrac{p}{q}.$
+    <br><br>
+    Hence $f(r)=\lambda r$ for all $r\in\mathbb{Q}.$
+    <br><br>
+    <strong>Step 3 — Extension to all reals by continuity.</strong>
+    Define $g(x)=\lambda x.$ Then $g$ is continuous and $f(r)=g(r)$ for all $r\in\mathbb{Q}.$
+    By Theorem A, $f=g$ on all of $\mathbb{R}.$ Hence $f(x)=\lambda x$ for all $x\in\mathbb{R}.$ $\blacksquare$
+    <span class="qed"></span>
+</div>
+
+<div class="math-box">
+    <strong>Without the continuity assumption</strong> — the Cauchy equation $f(x+y)=f(x)+f(y)$
+    has infinitely many strange solutions (using Hamel bases of $\mathbb{R}$ over $\mathbb{Q}$,
+    whose existence requires the Axiom of Choice). These pathological solutions are
+    unbounded on every interval and nowhere continuous.
+    <strong>Continuity alone forces linearity.</strong>
+</div>
+</div><!-- /step 6 -->
+
+<!-- ══════════════════════════════════════
+     STEP 7 — Summary diagram
+══════════════════════════════════════ -->
+<div class="step">
+<h2>Summary — Continuity Properties at a Glance</h2>
+
+<div class="diagram-wrap">
+<svg viewBox="0 0 720 290" width="100%" xmlns="http://www.w3.org/2000/svg"
+     style="max-height:290px;">
+<!-- Header row -->
+<rect x="10" y="10" width="700" height="32" rx="4" fill="#2c3e50"/>
+<text x="55"  y="31" font-size="11" fill="#fff" font-weight="bold">Function</text>
+<text x="230" y="31" font-size="11" fill="#fff" font-weight="bold">Continuous where?</text>
+<text x="420" y="31" font-size="11" fill="#fff" font-weight="bold">Key sequence argument</text>
+
+<!-- Row 1 -->
+<rect x="10" y="44" width="700" height="42" rx="2" fill="#ffebee"/>
+<text x="15"  y="60" font-size="10" fill="#c62828">Dirichlet</text>
+<text x="15"  y="78" font-size="9"  fill="#555">$f=1_\mathbb{Q}$</text>
+<text x="230" y="68" font-size="10" fill="#c62828">Nowhere</text>
+<text x="420" y="60" font-size="9"  fill="#555">Rational seq. $\to$ images $=1$;</text>
+<text x="420" y="76" font-size="9"  fill="#555">irrational seq. $\to$ images $=0$</text>
+
+<!-- Row 2 -->
+<rect x="10" y="88" width="700" height="42" rx="2" fill="#fff3e0"/>
+<text x="15"  y="104" font-size="10" fill="#e65100">Sign function</text>
+<text x="15"  y="122" font-size="9"  fill="#555">$\text{sgn}(x)$</text>
+<text x="230" y="112" font-size="10" fill="#e65100">$\mathbb{R}\setminus\{0\}$</text>
+<text x="420" y="104" font-size="9"  fill="#555">Sign persistence at $a\ne 0$;</text>
+<text x="420" y="120" font-size="9"  fill="#555">$1/n\to 0$ but images $\to 1\ne 0=f(0)$</text>
+
+<!-- Row 3 -->
+<rect x="10" y="132" width="700" height="42" rx="2" fill="#e8f5e9"/>
+<text x="15"  y="148" font-size="10" fill="#2e7d32">Piecewise powers</text>
+<text x="15"  y="166" font-size="9"  fill="#555">$x^m$ / $x^n$</text>
+<text x="230" y="157" font-size="10" fill="#2e7d32">All of $\mathbb{R}$</text>
+<text x="420" y="148" font-size="9"  fill="#555">At $a\ne 0$: sign persistence;</text>
+<text x="420" y="164" font-size="9"  fill="#555">at $0$: $|f(x_n)|\le|x_n|\to 0$ (Sandwich)</text>
+
+<!-- Row 4 -->
+<rect x="10" y="176" width="700" height="42" rx="2" fill="#e3f2fd"/>
+<text x="15"  y="192" font-size="10" fill="#1565c0">Reciprocal $1/x$</text>
+<text x="230" y="202" font-size="10" fill="#1565c0">$\mathbb{R}^*=\mathbb{R}\setminus\{0\}$</text>
+<text x="420" y="192" font-size="9"  fill="#555">Quotient rule for sequences:</text>
+<text x="420" y="208" font-size="9"  fill="#555">$x_n\to a\ne 0\Rightarrow 1/x_n\to 1/a$</text>
+
+<!-- Row 5 -->
+<rect x="10" y="220" width="700" height="42" rx="2" fill="#f3e5f5"/>
+<text x="15"  y="236" font-size="10" fill="#6a1b9a">Theorem A</text>
+<text x="15"  y="254" font-size="9"  fill="#555">$f=g$ on $\mathbb{Q}$</text>
+<text x="230" y="244" font-size="10" fill="#6a1b9a">$\Rightarrow f=g$ on $\mathbb{R}$</text>
+<text x="420" y="236" font-size="9"  fill="#555">Density of $\mathbb{Q}$: rational seq. $r_n\to a$;</text>
+<text x="420" y="252" font-size="9"  fill="#555">$f(r_n)=g(r_n)\to f(a)=g(a)$</text>
+
+<!-- Row 6 -->
+<rect x="10" y="264" width="700" height="20" rx="2" fill="#ede7f6"/>
+<text x="15"  y="278" font-size="10" fill="#4527a0">Theorem B</text>
+<text x="230" y="278" font-size="10" fill="#4527a0">Cts. additive $\Rightarrow f(x)=\lambda x$</text>
+<text x="420" y="278" font-size="9"  fill="#555">Rational values by induction; extend by Thm A</text>
+</svg>
+<div class="diagram-caption">
+    Overview of all examples in this lecture.
+</div>
+</div>
+</div><!-- /step 7 -->
+
+<!-- ══════════════════════════════════════
+     STEP 8 — Self-Assessment Part A
+══════════════════════════════════════ -->
+<div class="step">
+<hr class="section-rule">
+<h2>Self-Assessment — Part A: Basic Questions</h2>
+
+<!-- Q1 -->
+<div class="quiz-card">
+    <p><strong>Q1.</strong>
+        State precisely what it means for $f:\mathbb{R}\to\mathbb{R}$ to be
+        <em>discontinuous</em> at $a$ using the sequential definition.
+        Write out the negation symbol by symbol.
+    </p>
+    <button class="btn-sol" onclick="tog('a1')">Show / Hide Solution</button>
+    <div class="solution" id="a1">
+        <span class="sol-label">Answer.</span>
+        $f$ is discontinuous at $a$ if:
+        $$\exists\,(x_n)\text{ in }D \text{ with }x_n\to a
+          \text{ such that }f(x_n)\not\to f(a).$$
+        Spelling out "$f(x_n)\not\to f(a)$":
+        $\exists\,\varepsilon_0&gt;0$ such that for every $N\in\mathbb{N},$
+        $\exists\,n&gt;N$ with $|f(x_n)-f(a)|\ge\varepsilon_0.$
+    </div>
+</div>
+
+<!-- Q2 -->
+<div class="quiz-card">
+    <p><strong>Q2.</strong>
+        Show that the function
+        $f(x)=\begin{cases}x&amp;x\in\mathbb{Q}\\0&amp;x\notin\mathbb{Q}\end{cases}$
+        is continuous at $0$ and discontinuous at every $a\ne 0.$
+    </p>
+    <button class="btn-sol" onclick="tog('a2')">Show / Hide Solution</button>
+    <div class="solution" id="a2">
+        <span class="sol-label">Proof.</span>
+        <strong>At $0$:</strong> $f(0)=0.$ For any $x_n\to 0$:
+        $|f(x_n)|\le|x_n|\to 0$ (since $|f(x_n)|=|x_n|$ if rational, $=0$ if irrational).
+        By Sandwich, $f(x_n)\to 0=f(0).$ ✓
+        <br><br>
+        <strong>At $a\ne 0$ rational:</strong> Choose irrationals $s_n\to a.$ Then
+        $f(s_n)=0\not\to a=f(a).$
+        <br><br>
+        <strong>At $a\ne 0$ irrational:</strong> Choose rationals $r_n\to a.$ Then
+        $f(r_n)=r_n\to a\ne 0=f(a).$ $\blacksquare$
+    </div>
+</div>
+
+<!-- Q3 -->
+<div class="quiz-card">
+    <p><strong>Q3.</strong>
+        Let $f(x)=\begin{cases}x+1&amp;x\ge 0\\x-1&amp;x&lt;0.\end{cases}$
+        Is $f$ continuous at $0$? At $a=1$?
+    </p>
+    <button class="btn-sol" onclick="tog('a3')">Show / Hide Solution</button>
+    <div class="solution" id="a3">
+        <span class="sol-label">Answer.</span>
+        <strong>At $a=0$:</strong> $f(0)=1.$
+        Take $x_n=-1/n\to 0.$ Then $x_n&lt;0,$ so $f(x_n)=x_n-1=-1/n-1\to -1\ne 1=f(0).$
+        Discontinuous at $0.$ ✗
+        <br><br>
+        <strong>At $a=1$:</strong> $a=1&gt;0,$ so by sign persistence, eventually $x_k&gt;0$
+        for any $x_k\to 1.$ Then $f(x_k)=x_k+1\to 1+1=2=f(1).$ Continuous at $1.$ ✓
+    </div>
+</div>
+
+<!-- Q4 -->
+<div class="quiz-card">
+    <p><strong>Q4.</strong>
+        Using the sequential definition, prove directly that $f(x)=x^2$ is continuous
+        at every $a\in\mathbb{R}.$
+    </p>
+    <button class="btn-sol" onclick="tog('a4')">Show / Hide Solution</button>
+    <div class="solution" id="a4">
+        <span class="sol-label">Proof.</span>
+        Let $x_n\to a.$ By the product rule for sequence limits:
+        $f(x_n)=x_n^2=x_n\cdot x_n\to a\cdot a=a^2=f(a).$ $\blacksquare$
+        <br><br>
+        Alternatively: $|x_n^2-a^2|=|x_n-a||x_n+a|\le|x_n-a|(|x_n|+|a|).$
+        Since $(x_n)$ is convergent it is bounded: $|x_n|\le M.$ So
+        $|x_n^2-a^2|\le(M+|a|)|x_n-a|\to 0.$ $\blacksquare$
+    </div>
+</div>
+
+<!-- Q5 -->
+<div class="quiz-card">
+    <p><strong>Q5.</strong>
+        If $J=\{a\},$ then any function from $J\to \mathbb{R}$ is continous.
+    </p>
+    <button class="btn-sol" onclick="tog('a5')">Show / Hide Solution</button>
+    <div class="solution" id="a5">
+        <span class="sol-label">Proof.</span>
+        It is clear that every such function constant.  $\blacksquare$
+    </div>
+</div>
+
+<!-- Q6 -->
+<div class="quiz-card">
+    <p><strong>Q6.</strong>
+    <ol>
+      <li>  If $J=\{a_1,a_2,\ldots,a_n\},$ then any function from $J\to \mathbb{R}$ is continous. </li>
+        <li> If $J=\mathbb{N}$ then any function from $J\to \mathbb{R}$ is continous. </li>
+        <li> If $J\subset \mathbb{R},$ suth that $min\{\{x,y\}\subset J: |x-y|\ge \delta>0\}$ then any function from $J\to \mathbb{R}$ is continous. </li>
+        </ol>
+    </p>
+    <button class="btn-sol" onclick="tog('a6')">Show / Hide Solution</button>
+    <div class="solution" id="a6">
+        <span class="sol-label">Proof of Part-1 (Remaining are similar).</span>
+        It is clear that every such function eventually constant. <br>
+        Let $a\in J.$ <br>
+        Without loss of genrality assume $a=a_1.$<br>
+        Consider $S=\{|a-a_i|: i\in \{2,3,\ldots n\}\}.$ Let $min(S)=\delta.$ If we choose $\epsilon=\delta/3$ $x_n\to a$ forces all $x_n$ after some stage is equal to $a.$        
+         $\blacksquare$
+    </div>
+</div>
+
+
+<!-- Q7 -->
+<div class="quiz-card">
+    <p><strong>Q7.</strong>
+        Prove: if $f:\mathbb{R}\to\mathbb{R}$ is continuous at $a$ and $f(a)&gt;0,$
+        then there is an open interval $(a-\delta,a+\delta)$ on which $f&gt;0.$
+        (<em>Hint:</em> suppose not and construct a sequence.)
+    </p>
+    <button class="btn-sol" onclick="tog('a7')">Show / Hide Solution</button>
+    <div class="solution" id="a7">
+        <span class="sol-label">Proof.</span>
+        Suppose no such $\delta$ exists. Then for each $n\in\mathbb{N},$ taking $\delta=1/n,$
+        there exists $x_n$ with $|x_n-a|&lt;1/n$ and $f(x_n)\le 0.$
+        <br>
+        Since $|x_n-a|&lt;1/n\to 0,$ we have $x_n\to a.$
+        By continuity: $f(x_n)\to f(a)&gt;0.$
+        But $f(x_n)\le 0$ for all $n,$ so $\lim f(x_n)\le 0$ — contradiction. $\blacksquare$
+    </div>
+</div>
+</div><!-- /step 8 -->
+
+<!-- ══════════════════════════════════════
+     STEP 9 — Self-Assessment Part B
+══════════════════════════════════════ -->
+<div class="step">
+<h2>Self-Assessment — Part B: Deeper Questions (do not do now)</h2>
+
+<!-- Q8 -->
+<div class="quiz-card">
+    <p><strong>Q8.</strong>
+        Let $f:\mathbb{R}\to\mathbb{R}$ be continuous with $f(x)\in\mathbb{Q}$ for all $x.$
+        Prove $f$ is constant.
+    </p>
+    <button class="btn-sol" onclick="tog('b1')">Show / Hide Solution</button>
+    <div class="solution" id="b1">
+        <span class="sol-label">Proof.</span>
+        Suppose $f(a)\ne f(b)$ for some $a,b.$ WLOG $f(a)&lt;f(b).$
+        By the Intermediate Value Theorem (which follows from sequential continuity),
+        $f$ takes every value between $f(a)$ and $f(b)$ — in particular some irrational value,
+        since $\mathbb{R}\setminus\mathbb{Q}$ is dense in every interval.
+        But this contradicts $f(x)\in\mathbb{Q}$ for all $x.$ Hence $f$ is constant. $\blacksquare$
+        <br><br>
+        <em>Alternative without IVT:</em> Suppose not constant. Then there exist $a,b$ with $f(a)\ne f(b).$
+        Define $g:[0,1]\to\mathbb{R}$ by $g(t)=f((1-t)a+tb)-f(a).$ Then $g$ is continuous,
+        $g(0)=0$ and $g(1)=f(b)-f(a)\ne 0.$ By IVT applied to $g,$ $g$ takes irrational values — contradiction.
+    </div>
+</div>
+
+<!-- Q9 -->
+<div class="quiz-card">
+    <p><strong>Q9.</strong>
+        Suppose $f:\mathbb{R}\to\mathbb{R}$ satisfies $f(x+y)=f(x)+f(y)$ for all $x,y.$
+        Without assuming continuity, prove: (a) $f(0)=0;$ (b) $f(-x)=-f(x);$
+        (c) $f(nx)=nf(x)$ for $n\in\mathbb{Z};$ (d) $f(p/q)=(p/q)f(1)$ for $p/q\in\mathbb{Q}.$
+    </p>
+    <button class="btn-sol" onclick="tog('b2')">Show / Hide Solution</button>
+    <div class="solution" id="b2">
+        <span class="sol-label">Proof.</span>
+        <strong>(a)</strong> $f(0)=f(0+0)=f(0)+f(0)\Rightarrow f(0)=0.$
+        <br>
+        <strong>(b)</strong> $0=f(0)=f(x+(-x))=f(x)+f(-x)\Rightarrow f(-x)=-f(x).$
+        <br>
+        <strong>(c)</strong> Induction: $f(nx)=f((n-1)x+x)=f((n-1)x)+f(x)=nf(x).$
+        For negative $n$: $f(-nx)=-f(nx)=-nf(x),$ so $f(nx)=nf(x).$
+        <br>
+        <strong>(d)</strong> $qf(p/q)=f(q\cdot p/q)=f(p)=pf(1),$ so $f(p/q)=(p/q)f(1).$ $\blacksquare$
+    </div>
+</div>
+
+<!-- Q10 -->
+<div class="quiz-card">
+    <p><strong>Q10.</strong>
+        The Dirichlet function $f=1_{\mathbb{Q}}$ is nowhere continuous.
+        Is $f+g$ continuous anywhere if $g(x)=1-1_{\mathbb{Q}}(x)$?
+        What is $f+g$?
+    </p>
+    <button class="btn-sol" onclick="tog('b3')">Show / Hide Solution</button>
+    <div class="solution" id="b3">
+        <span class="sol-label">Answer.</span>
+        $g(x)=\begin{cases}0&amp;x\in\mathbb{Q}\\1&amp;x\notin\mathbb{Q}\end{cases}$
+        is also nowhere continuous (same Dirichlet argument).
+        <br><br>
+        $(f+g)(x)=f(x)+g(x)=1$ for all $x$ — the constant function $1,$ which is continuous
+        everywhere! ✓
+        <br><br>
+        Moral: the <em>sum</em> of two nowhere-continuous functions can be everywhere continuous.
+    </div>
+</div>
+
+<!-- Q11 -->
+<div class="quiz-card">
+    <p><strong>Q11.</strong>
+        Define $f:\mathbb{R}\to\mathbb{R}$ by $f(x)=\begin{cases}x^2\sin(1/x)&amp;x\ne 0\\0&amp;x=0.\end{cases}$
+        Is $f$ continuous at $0$? Is $f$ differentiable at $0$?
+    </p>
+    <button class="btn-sol" onclick="tog('b4')">Show / Hide Solution</button>
+    <div class="solution" id="b4">
+        <span class="sol-label">Answer.</span>
+        <strong>Continuous at $0$:</strong>
+        $|f(x_n)-f(0)|=|x_n^2\sin(1/x_n)|\le x_n^2\to 0.$ By Sandwich, $f(x_n)\to 0=f(0).$ ✓
+        <br><br>
+        <strong>Differentiable at $0$:</strong>
+        $\dfrac{f(x)-f(0)}{x-0}=\dfrac{x^2\sin(1/x)}{x}=x\sin(1/x).$
+        As $x\to 0$: $|x\sin(1/x)|\le|x|\to 0,$ so $f'(0)=0.$ ✓
+        <br><br>
+        $f$ is both continuous and differentiable at $0,$ but $f'$ is not continuous at $0$
+        (since $f'(x)=2x\sin(1/x)-\cos(1/x)$ for $x\ne 0$ oscillates wildly near $0$).
+    </div>
+</div>
+
+<!-- Q12 -->
+<div class="quiz-card">
+    <p><strong>Q12.</strong>
+        Let $f:\mathbb{R}\to\mathbb{R}$ be continuous with $f(f(x))=x$ for all $x.$
+        Prove $f$ is strictly monotone.
+        (<em>Hint:</em> show $f$ is injective, then use the IVT to conclude monotonicity.)
+    </p>
+    <button class="btn-sol" onclick="tog('b5')">Show / Hide Solution</button>
+    <div class="solution" id="b5">
+        <span class="sol-label">Proof sketch.</span>
+        <strong>Injectivity:</strong> If $f(a)=f(b),$ apply $f$ to both sides:
+        $a=f(f(a))=f(f(b))=b.$ So $f$ is injective.
+        <br><br>
+        <strong>Monotonicity:</strong> A continuous injective function $\mathbb{R}\to\mathbb{R}$
+        must be strictly monotone. (If not, there exist $a&lt;b&lt;c$ with $f(b)$ not between
+        $f(a)$ and $f(c)$; then the IVT applied to $f$ on $[a,b]$ and $[b,c]$ gives a
+        repeated value, contradicting injectivity.) $\blacksquare$
+    </div>
+</div>
+
+<!-- Q13 -->
+<div class="quiz-card">
+    <p><strong>Q13 (Challenge).</strong>
+        A function $f:\mathbb{R}\to\mathbb{R}$ is called <em>Lipschitz</em> with constant $L$
+        if $|f(x)-f(y)|\le L|x-y|$ for all $x,y\in\mathbb{R}.$
+        Prove every Lipschitz function is continuous.
+        Show the converse fails: $f(x)=\sqrt{x}$ on $[0,1]$ is continuous but not Lipschitz.
+    </p>
+    <button class="btn-sol" onclick="tog('b6')">Show / Hide Solution</button>
+    <div class="solution" id="b6">
+        <span class="sol-label">Proof.</span>
+        <strong>Lipschitz $\Rightarrow$ continuous:</strong>
+        If $x_n\to a,$ then $|f(x_n)-f(a)|\le L|x_n-a|\to 0.$ $\blacksquare$
+        <br><br>
+        <strong>$\sqrt{x}$ not Lipschitz on $[0,1]$:</strong>
+        If it were: $|\sqrt{x}-\sqrt{0}|\le L|x-0|,$ i.e., $\sqrt{x}\le Lx,$
+        i.e., $1/\sqrt{x}\le L$ for all $x\in(0,1].$ But $1/\sqrt{x}\to\infty$ as $x\to 0^+.$ Contradiction.
+        <br><br>
+        $\sqrt{x}$ is continuous on $[0,1]$ (proved earlier by rationalization) but not Lipschitz.
+    </div>
+</div>
+</div><!-- /step 9 -->
+
+<!-- ══════════════════════════════════════
+     STEP 10 — Final Summary
+══════════════════════════════════════ -->
+<div class="step">
+<hr class="section-rule">
+<h2>Summary — Key Principles</h2>
+
+<div class="tcolorbox lime">
+    <div class="tcolorbox-header">Core Principles at a Glance</div>
+    <div class="tcolorbox-content">
+        <table>
+            <tr>
+                <th>Principle</th><th>Statement</th>
+            </tr>
+            <tr>
+                <td>Sequential continuity</td>
+                <td>$x_n\to a \Rightarrow f(x_n)\to f(a)$ (for all sequences)</td>
+            </tr>
+            <tr>
+                <td>Proving discontinuity</td>
+                <td>One sequence $x_n\to a$ with $f(x_n)\not\to f(a)$ suffices</td>
+            </tr>
+            <tr>
+                <td>Sign persistence</td>
+                <td>$x_n\to a\ne 0\Rightarrow$ eventually $x_n$ has the sign of $a$</td>
+            </tr>
+            <tr>
+                <td>Density argument</td>
+                <td>At any $a$: rational seqs. and irrational seqs. converge to $a$</td>
+            </tr>
+            <tr>
+                <td>Sandwich at $0$</td>
+                <td>$|f(x_n)|\le|x_n|\to 0$ gives $f(x_n)\to 0$ — key for piecewise</td>
+            </tr>
+            <tr>
+                <td>Uniqueness of limits</td>
+                <td>Two seqs. with different image limits $\Rightarrow$ discontinuous</td>
+            </tr>
+            <tr>
+                <td>Dense set determines $f$</td>
+                <td>Two continuous functions equal on $\mathbb{Q}$ are equal on $\mathbb{R}$</td>
+            </tr>
+            <tr>
+                <td>Cauchy equation</td>
+                <td>Continuous + additive $\Rightarrow f(x)=\lambda x$</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="tcolorbox indigo">
+    <div class="tcolorbox-header">The Continuity Zoo</div>
+    <div class="tcolorbox-content">
+        <table>
+            <tr>
+                <th>Type</th><th>Example</th><th>Set of continuity</th>
+            </tr>
+            <tr>
+                <td>Nowhere continuous</td>
+                <td>Dirichlet $1_\mathbb{Q}$</td>
+                <td>$\emptyset$</td>
+            </tr>
+            <tr>
+                <td>One point only</td>
+                <td>$f=x\cdot 1_\mathbb{Q}$</td>
+                <td>$\{0\}$</td>
+            </tr>
+            <tr>
+                <td>Irrationals only</td>
+                <td>Thomae's function</td>
+                <td>$\mathbb{R}\setminus\mathbb{Q}$</td>
+            </tr>
+            <tr>
+                <td>All but one point</td>
+                <td>Sign function</td>
+                <td>$\mathbb{R}\setminus\{0\}$</td>
+            </tr>
+            <tr>
+                <td>Continuous everywhere</td>
+                <td>Polynomials, $e^x,$ $\sin x,$ piecewise powers</td>
+                <td>$\mathbb{R}$</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<p style="text-align:center;margin-top:22px;font-weight:bold;color:var(--secondary);">
+    — End of Lecture —
+</p>
+</div><!-- /step 10 -->
+
+</div><!-- /.container -->
+
+<!-- CONTROLS BAR -->
+<div class="controls">
+    <span class="key-hint">Press <kbd>Enter</kbd> or <kbd>→</kbd> to advance</span>
+    <div class="progress-wrap">
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="pFill"></div>
+        </div>
+        <span class="progress-label" id="pLbl">0 / 0</span>
+    </div>
+    <button class="btn-next" id="btnNext" onclick="revealNext()">Next &#9654;</button>
+</div>
+
+<script>
+const steps   = document.querySelectorAll('.step');
+const fill    = document.getElementById('pFill');
+const lbl     = document.getElementById('pLbl');
+const btn     = document.getElementById('btnNext');
+let   current = 0;
+
+function updateUI(){
+    fill.style.width = (current/steps.length*100)+'%';
+    lbl.textContent  = current+' / '+steps.length;
+    btn.disabled     = current >= steps.length;
+    btn.textContent  = current >= steps.length ? 'Done \u2713' : 'Next \u25B6';
+}
+function revealNext(){
+    if(current >= steps.length) return;
+    const el = steps[current];
+    el.classList.add('visible');
+    if(window.MathJax) MathJax.typesetPromise([el]);
+    current++;
+    updateUI();
+    setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+function tog(id){
+    const s = document.getElementById(id);
+    const show = s.style.display !== 'block';
+    s.style.display = show ? 'block' : 'none';
+    if(show && window.MathJax) MathJax.typesetPromise([s]);
+}
+document.addEventListener('keydown', function(e){
+    if(e.key==='Enter'||e.key==='ArrowRight'||
+       (e.key===' '&&e.target.tagName!=='BUTTON')){
+        e.preventDefault(); revealNext();
+    }
+});
+window.addEventListener('load', function(){ updateUI(); revealNext(); });
+</script>
+</body>
+</html>
